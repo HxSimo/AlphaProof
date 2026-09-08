@@ -1,0 +1,21 @@
+{
+  "name": "@poa/api",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --env-file-if-exists=../../.env --import tsx --watch src/main.ts",
+    "start": "node --env-file-if-exists=../../.env --import tsx src/main.ts",
+    "build": "tsc --noEmit",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@poa/config": "workspace:*",
+    "@poa/domain": "workspace:*",
+    "@poa/storage": "workspace:*",
+    "fastify": "5.12.3"
+  },
+  "devDependencies": {
+    "tsx": "4.23.13"
+  }
+}

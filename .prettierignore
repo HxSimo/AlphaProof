@@ -1,0 +1,8 @@
+pnpm-lock.yaml
+.agents/
+.next/
+**/next-env.d.ts
+node_modules/
+dist/
+schemas/generated/
+config/v1/checksums.json

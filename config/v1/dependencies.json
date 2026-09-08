@@ -1,0 +1,673 @@
+{
+  "schemaVersion": "proof-of-alpha/dependency-manifest/v1",
+  "manifestVersion": "0.1.0",
+  "dependencies": [
+    {
+      "dependencyId": "rpc-ethereum-mainnet",
+      "kind": "RPC",
+      "scope": "MVP_REQUIRED",
+      "networkIds": ["ethereum-mainnet"],
+      "direction": null,
+      "officialSources": [
+        "https://ethereum.org/en/developers/docs/networks/",
+        "https://developers.circle.com/cctp/concepts/supported-chains-and-domains"
+      ],
+      "instructions": "Configure ETHEREUM_MAINNET_RPC_URL; assert eth_chainId, archive a fixed block/header and historical eth_call, verify limits and finality/reorg detection. No latest-state substitution.",
+      "fixture": "tests/fixtures/dependency-unavailable.json",
+      "verification": {
+        "status": "TO_VERIFY",
+        "enabled": false,
+        "checkedAt": null,
+        "checkedBy": null,
+        "requiredEvidence": ["OFFICIAL_SOURCE", "ARCHIVE_READ", "FINALITY"],
+        "evidence": [],
+        "blockers": [
+          "Configure ETHEREUM_MAINNET_RPC_URL; assert eth_chainId, archive a fixed block/header and historical eth_call, verify limits and finality/reorg detection. No latest-state substitution."
+        ]
+      }
+    },
+    {
+      "dependencyId": "rpc-ethereum-sepolia",
+      "kind": "RPC",
+      "scope": "MVP_REQUIRED",
+      "networkIds": ["ethereum-sepolia"],
+      "direction": null,
+      "officialSources": [
+        "https://ethereum.org/en/developers/docs/networks/",
+        "https://developers.circle.com/cctp/concepts/supported-chains-and-domains"
+      ],
+      "instructions": "Configure ETHEREUM_SEPOLIA_RPC_URL; assert eth_chainId, archive a fixed block/header and historical eth_call, verify limits and finality/reorg detection. No latest-state substitution.",
+      "fixture": "tests/fixtures/dependency-unavailable.json",
+      "verification": {
+        "status": "TO_VERIFY",
+        "enabled": false,
+        "checkedAt": null,
+        "checkedBy": null,
+        "requiredEvidence": ["OFFICIAL_SOURCE", "ARCHIVE_READ", "FINALITY"],
+        "evidence": [],
+        "blockers": [
+          "Configure ETHEREUM_SEPOLIA_RPC_URL; assert eth_chainId, archive a fixed block/header and historical eth_call, verify limits and finality/reorg detection. No latest-state substitution."
+        ]
+      }
+    },
+    {
+      "dependencyId": "rpc-arc-testnet",
+      "kind": "RPC",
+      "scope": "MVP_REQUIRED",
+      "networkIds": ["arc-testnet"],
+      "direction": null,
+      "officialSources": [
+        "https://docs.arc.io/arc/references/connect-to-arc",
+        "https://developers.circle.com/cctp/concepts/supported-chains-and-domains"
+      ],
+      "instructions": "Configure ARC_TESTNET_RPC_URL; assert eth_chainId, archive a fixed block/header and historical eth_call, verify limits and finality/reorg detection. No latest-state substitution.",
+      "fixture": "tests/fixtures/dependency-unavailable.json",
+      "verification": {
+        "status": "TO_VERIFY",
+        "enabled": false,
+        "checkedAt": null,
+        "checkedBy": null,
+        "requiredEvidence": ["OFFICIAL_SOURCE", "ARCHIVE_READ", "FINALITY"],
+        "evidence": [],
+        "blockers": [
+          "Configure ARC_TESTNET_RPC_URL; assert eth_chainId, archive a fixed block/header and historical eth_call, verify limits and finality/reorg detection. No latest-state substitution."
+        ]
+      }
+    },
+    {
+      "dependencyId": "rpc-arc-mainnet",
+      "kind": "RPC",
+      "scope": "POST_MVP",
+      "networkIds": ["arc-mainnet"],
+      "direction": null,
+      "officialSources": [
+        "https://docs.arc.io/arc/references/connect-to-arc",
+        "https://developers.circle.com/cctp/concepts/supported-chains-and-domains"
+      ],
+      "instructions": "Configure ARC_MAINNET_RPC_URL; assert eth_chainId, archive a fixed block/header and historical eth_call, verify limits and finality/reorg detection. No latest-state substitution.",
+      "fixture": "tests/fixtures/dependency-unavailable.json",
+      "verification": {
+        "status": "TO_VERIFY",
+        "enabled": false,
+        "checkedAt": null,
+        "checkedBy": null,
+        "requiredEvidence": ["OFFICIAL_SOURCE", "ARCHIVE_READ", "FINALITY"],
+        "evidence": [],
+        "blockers": [
+          "Configure ARC_MAINNET_RPC_URL; assert eth_chainId, archive a fixed block/header and historical eth_call, verify limits and finality/reorg detection. No latest-state substitution."
+        ]
+      }
+    },
+    {
+      "dependencyId": "cash-ethereum-mainnet",
+      "kind": "ADAPTER",
+      "scope": "MVP_REQUIRED",
+      "networkIds": ["ethereum-mainnet"],
+      "direction": null,
+      "officialSources": [
+        "https://developers.circle.com/stablecoins/usdc-contract-addresses",
+        "https://tether.to/en/supported-protocols/"
+      ],
+      "instructions": "Resolve USDC token/interface and decimals, verify bytecode and balance reads. For Arc compare native and ERC-20 views at one block, normalize with retained dust and alias one economic balance. Verify USDT separately where listed.",
+      "fixture": "tests/fixtures/dependency-unavailable.json",
+      "verification": {
+        "status": "TO_VERIFY",
+        "enabled": false,
+        "checkedAt": null,
+        "checkedBy": null,
+        "requiredEvidence": [
+          "OFFICIAL_SOURCE",
+          "ONCHAIN_CODE",
+          "ARCHIVE_READ",
+          "REPLAY"
+        ],
+        "evidence": [],
+        "blockers": [
+          "Resolve USDC token/interface and decimals, verify bytecode and balance reads. For Arc compare native and ERC-20 views at one block, normalize with retained dust and alias one economic balance. Verify USDT separately where listed."
+        ]
+      }
+    },
+    {
+      "dependencyId": "cash-ethereum-sepolia",
+      "kind": "ADAPTER",
+      "scope": "MVP_REQUIRED",
+      "networkIds": ["ethereum-sepolia"],
+      "direction": null,
+      "officialSources": [
+        "https://developers.circle.com/stablecoins/usdc-contract-addresses"
+      ],
+      "instructions": "Resolve USDC token/interface and decimals, verify bytecode and balance reads. For Arc compare native and ERC-20 views at one block, normalize with retained dust and alias one economic balance. Verify USDT separately where listed.",
+      "fixture": "tests/fixtures/dependency-unavailable.json",
+      "verification": {
+        "status": "TO_VERIFY",
+        "enabled": false,
+        "checkedAt": null,
+        "checkedBy": null,
+        "requiredEvidence": [
+          "OFFICIAL_SOURCE",
+          "ONCHAIN_CODE",
+          "ARCHIVE_READ",
+          "REPLAY"
+        ],
+        "evidence": [],
+        "blockers": [
+          "Resolve USDC token/interface and decimals, verify bytecode and balance reads. For Arc compare native and ERC-20 views at one block, normalize with retained dust and alias one economic balance. Verify USDT separately where listed."
+        ]
+      }
+    },
+    {
+      "dependencyId": "cash-arc-testnet",
+      "kind": "ADAPTER",
+      "scope": "MVP_REQUIRED",
+      "networkIds": ["arc-testnet"],
+      "direction": null,
+      "officialSources": [
+        "https://developers.circle.com/stablecoins/usdc-contract-addresses",
+        "https://docs.arc.io/arc/references/connect-to-arc"
+      ],
+      "instructions": "Resolve USDC token/interface and decimals, verify bytecode and balance reads. For Arc compare native and ERC-20 views at one block, normalize with retained dust and alias one economic balance. Verify USDT separately where listed.",
+      "fixture": "tests/fixtures/dependency-unavailable.json",
+      "verification": {
+        "status": "TO_VERIFY",
+        "enabled": false,
+        "checkedAt": null,
+        "checkedBy": null,
+        "requiredEvidence": [
+          "OFFICIAL_SOURCE",
+          "ONCHAIN_CODE",
+          "ARCHIVE_READ",
+          "REPLAY"
+        ],
+        "evidence": [],
+        "blockers": [
+          "Resolve USDC token/interface and decimals, verify bytecode and balance reads. For Arc compare native and ERC-20 views at one block, normalize with retained dust and alias one economic balance. Verify USDT separately where listed."
+        ]
+      }
+    },
+    {
+      "dependencyId": "cash-arc-mainnet",
+      "kind": "ADAPTER",
+      "scope": "POST_MVP",
+      "networkIds": ["arc-mainnet"],
+      "direction": null,
+      "officialSources": [
+        "https://developers.circle.com/stablecoins/usdc-contract-addresses",
+        "https://docs.arc.io/arc/references/connect-to-arc"
+      ],
+      "instructions": "Resolve USDC token/interface and decimals, verify bytecode and balance reads. For Arc compare native and ERC-20 views at one block, normalize with retained dust and alias one economic balance. Verify USDT separately where listed.",
+      "fixture": "tests/fixtures/dependency-unavailable.json",
+      "verification": {
+        "status": "TO_VERIFY",
+        "enabled": false,
+        "checkedAt": null,
+        "checkedBy": null,
+        "requiredEvidence": [
+          "OFFICIAL_SOURCE",
+          "ONCHAIN_CODE",
+          "ARCHIVE_READ",
+          "REPLAY"
+        ],
+        "evidence": [],
+        "blockers": [
+          "Resolve USDC token/interface and decimals, verify bytecode and balance reads. For Arc compare native and ERC-20 views at one block, normalize with retained dust and alias one economic balance. Verify USDT separately where listed."
+        ]
+      }
+    },
+    {
+      "dependencyId": "aave-v3-ethereum",
+      "kind": "ADAPTER",
+      "scope": "MVP_REQUIRED",
+      "networkIds": ["ethereum-mainnet"],
+      "direction": null,
+      "officialSources": [
+        "https://aave.com/docs/resources/addresses",
+        "https://aave.com/docs/aave-v3/markets/data"
+      ],
+      "instructions": "Pin official Aave V3 address book commit, pool, USDC/USDT reserves, receipt token and decimals. Archive reserve index, caps, liquidity, pause/freeze flags and bytecode. Fork supply/accrue/withdraw at a fixed block for all three amounts, limits, gas and failed exits.",
+      "fixture": "tests/fixtures/dependency-unavailable.json",
+      "verification": {
+        "status": "TO_VERIFY",
+        "enabled": false,
+        "checkedAt": null,
+        "checkedBy": null,
+        "requiredEvidence": [
+          "OFFICIAL_SOURCE",
+          "ONCHAIN_CODE",
+          "FIXED_BLOCK_FORK",
+          "ARCHIVE_READ",
+          "GAS_CALIBRATION",
+          "REPLAY"
+        ],
+        "evidence": [],
+        "blockers": [
+          "Pin official Aave V3 address book commit, pool, USDC/USDT reserves, receipt token and decimals. Archive reserve index, caps, liquidity, pause/freeze flags and bytecode. Fork supply/accrue/withdraw at a fixed block for all three amounts, limits, gas and failed exits."
+        ]
+      }
+    },
+    {
+      "dependencyId": "erc4626-ethereum",
+      "kind": "ADAPTER",
+      "scope": "MVP_REQUIRED",
+      "networkIds": ["ethereum-mainnet"],
+      "direction": null,
+      "officialSources": [
+        "https://docs.morpho.org/developers/contracts/addresses/",
+        "https://eips.ethereum.org/EIPS/eip-4626"
+      ],
+      "instructions": "Select one synchronous USDC vault after reviewing Gauntlet Prime/Core candidates. Pin exact version/address/asset and governance dependencies. Verify conversions, all previews/max methods, fees, available exits, virtual-holder capacity, rounding and gas on fixed-block forks; archive raw reads.",
+      "fixture": "tests/fixtures/dependency-unavailable.json",
+      "verification": {
+        "status": "TO_VERIFY",
+        "enabled": false,
+        "checkedAt": null,
+        "checkedBy": null,
+        "requiredEvidence": [
+          "OFFICIAL_SOURCE",
+          "ONCHAIN_CODE",
+          "FIXED_BLOCK_FORK",
+          "ARCHIVE_READ",
+          "GAS_CALIBRATION",
+          "REPLAY"
+        ],
+        "evidence": [],
+        "blockers": [
+          "Select one synchronous USDC vault after reviewing Gauntlet Prime/Core candidates. Pin exact version/address/asset and governance dependencies. Verify conversions, all previews/max methods, fees, available exits, virtual-holder capacity, rounding and gas on fixed-block forks; archive raw reads."
+        ]
+      }
+    },
+    {
+      "dependencyId": "uniswap-v3-ethereum",
+      "kind": "ADAPTER",
+      "scope": "MVP_REQUIRED",
+      "networkIds": ["ethereum-mainnet"],
+      "direction": null,
+      "officialSources": [
+        "https://developers.uniswap.org/docs/protocols/v3/deployments/v3-ethereum-deployments"
+      ],
+      "instructions": "Pin direct USDC/USDT pools, fee tiers, token order, quoter and router. Fork exact-in quotes in both directions at each capital size and capture gas, slippage and failure behavior. Quote includes fee/impact once; choose net-of-gas output with pool-ID tie break.",
+      "fixture": "tests/fixtures/dependency-unavailable.json",
+      "verification": {
+        "status": "TO_VERIFY",
+        "enabled": false,
+        "checkedAt": null,
+        "checkedBy": null,
+        "requiredEvidence": [
+          "OFFICIAL_SOURCE",
+          "ONCHAIN_CODE",
+          "FIXED_BLOCK_FORK",
+          "ARCHIVE_READ",
+          "GAS_CALIBRATION",
+          "REPLAY"
+        ],
+        "evidence": [],
+        "blockers": [
+          "Pin direct USDC/USDT pools, fee tiers, token order, quoter and router. Fork exact-in quotes in both directions at each capital size and capture gas, slippage and failure behavior. Quote includes fee/impact once; choose net-of-gas output with pool-ID tie break."
+        ]
+      }
+    },
+    {
+      "dependencyId": "demo-vault-ethereum-sepolia",
+      "kind": "ADAPTER",
+      "scope": "MVP_REQUIRED",
+      "networkIds": ["ethereum-sepolia"],
+      "direction": null,
+      "officialSources": [
+        "https://eips.ethereum.org/EIPS/eip-4626",
+        "https://docs.arc.io/arc/references/connect-to-arc"
+      ],
+      "instructions": "Deploy or select an ERC-4626 test USDC vault. Archive deployment bytecode/address, admin powers and decimals. Publish finite funded test-yield budget/schedule before X. Record actual deposit/withdraw test-token receipts and limits/rounding fixtures; no commercial APY claim.",
+      "fixture": "tests/fixtures/dependency-unavailable.json",
+      "verification": {
+        "status": "TO_VERIFY",
+        "enabled": false,
+        "checkedAt": null,
+        "checkedBy": null,
+        "requiredEvidence": [
+          "OFFICIAL_SOURCE",
+          "DEPLOYMENT",
+          "ONCHAIN_CODE",
+          "LIVE_ROUND_TRIP",
+          "REPLAY"
+        ],
+        "evidence": [],
+        "blockers": [
+          "Deploy or select an ERC-4626 test USDC vault. Archive deployment bytecode/address, admin powers and decimals. Publish finite funded test-yield budget/schedule before X. Record actual deposit/withdraw test-token receipts and limits/rounding fixtures; no commercial APY claim."
+        ]
+      }
+    },
+    {
+      "dependencyId": "demo-vault-arc-testnet",
+      "kind": "ADAPTER",
+      "scope": "MVP_REQUIRED",
+      "networkIds": ["arc-testnet"],
+      "direction": null,
+      "officialSources": [
+        "https://eips.ethereum.org/EIPS/eip-4626",
+        "https://docs.arc.io/arc/references/connect-to-arc"
+      ],
+      "instructions": "Deploy or select an ERC-4626 test USDC vault. Archive deployment bytecode/address, admin powers and decimals. Publish finite funded test-yield budget/schedule before X. Record actual deposit/withdraw test-token receipts and limits/rounding fixtures; no commercial APY claim.",
+      "fixture": "tests/fixtures/dependency-unavailable.json",
+      "verification": {
+        "status": "TO_VERIFY",
+        "enabled": false,
+        "checkedAt": null,
+        "checkedBy": null,
+        "requiredEvidence": [
+          "OFFICIAL_SOURCE",
+          "DEPLOYMENT",
+          "ONCHAIN_CODE",
+          "LIVE_ROUND_TRIP",
+          "REPLAY"
+        ],
+        "evidence": [],
+        "blockers": [
+          "Deploy or select an ERC-4626 test USDC vault. Archive deployment bytecode/address, admin powers and decimals. Publish finite funded test-yield budget/schedule before X. Record actual deposit/withdraw test-token receipts and limits/rounding fixtures; no commercial APY claim."
+        ]
+      }
+    },
+    {
+      "dependencyId": "yield-arc-mainnet",
+      "kind": "ADAPTER",
+      "scope": "POST_MVP",
+      "networkIds": ["arc-mainnet"],
+      "direction": null,
+      "officialSources": ["https://docs.arc.io/arc/references/connect-to-arc"],
+      "instructions": "Verify current Arc mainnet availability, exact usable USDC market, yield source, synchronous exits, governance, liquidity and historical data. Pin contracts and fixed-block evidence before a new mainnet profile.",
+      "fixture": "tests/fixtures/dependency-unavailable.json",
+      "verification": {
+        "status": "TO_VERIFY",
+        "enabled": false,
+        "checkedAt": null,
+        "checkedBy": null,
+        "requiredEvidence": [
+          "OFFICIAL_SOURCE",
+          "ONCHAIN_CODE",
+          "FIXED_BLOCK_FORK",
+          "ARCHIVE_READ",
+          "REPLAY"
+        ],
+        "evidence": [],
+        "blockers": [
+          "Verify current Arc mainnet availability, exact usable USDC market, yield source, synchronous exits, governance, liquidity and historical data. Pin contracts and fixed-block evidence before a new mainnet profile."
+        ]
+      }
+    },
+    {
+      "dependencyId": "cctp-ethereum-sepolia-to-arc-testnet",
+      "kind": "ADAPTER",
+      "scope": "MVP_REQUIRED",
+      "networkIds": ["ethereum-sepolia", "arc-testnet"],
+      "direction": {
+        "source": "ethereum-sepolia",
+        "destination": "arc-testnet",
+        "assetSymbol": "USDC",
+        "mode": "STANDARD"
+      },
+      "officialSources": [
+        "https://developers.circle.com/cctp/concepts/supported-chains-and-domains",
+        "https://developers.circle.com/cctp/concepts/fees",
+        "https://developers.circle.com/cctp/concepts/finality-and-block-confirmations"
+      ],
+      "instructions": "Verify this exact direction and environment: domains (not chain IDs), current TokenMessenger/MessageTransmitter, attestation endpoint, message derivation, Standard fee switch and net receipt. Record source, destination and retry gas plus relayer charge without double counting. On testnet record actual burn/attestation/mint, duplicate receive rejection and return flow. Calibrate direction-specific shadow delay separately.",
+      "fixture": "tests/fixtures/dependency-unavailable.json",
+      "verification": {
+        "status": "TO_VERIFY",
+        "enabled": false,
+        "checkedAt": null,
+        "checkedBy": null,
+        "requiredEvidence": [
+          "OFFICIAL_SOURCE",
+          "ONCHAIN_CODE",
+          "LIVE_ROUND_TRIP",
+          "FEE_CAPTURE",
+          "GAS_CALIBRATION",
+          "FINALITY",
+          "REPLAY"
+        ],
+        "evidence": [],
+        "blockers": [
+          "Verify this exact direction and environment: domains (not chain IDs), current TokenMessenger/MessageTransmitter, attestation endpoint, message derivation, Standard fee switch and net receipt. Record source, destination and retry gas plus relayer charge without double counting. On testnet record actual burn/attestation/mint, duplicate receive rejection and return flow. Calibrate direction-specific shadow delay separately."
+        ]
+      }
+    },
+    {
+      "dependencyId": "cctp-arc-testnet-to-ethereum-sepolia",
+      "kind": "ADAPTER",
+      "scope": "MVP_REQUIRED",
+      "networkIds": ["arc-testnet", "ethereum-sepolia"],
+      "direction": {
+        "source": "arc-testnet",
+        "destination": "ethereum-sepolia",
+        "assetSymbol": "USDC",
+        "mode": "STANDARD"
+      },
+      "officialSources": [
+        "https://developers.circle.com/cctp/concepts/supported-chains-and-domains",
+        "https://developers.circle.com/cctp/concepts/fees",
+        "https://developers.circle.com/cctp/concepts/finality-and-block-confirmations"
+      ],
+      "instructions": "Verify this exact direction and environment: domains (not chain IDs), current TokenMessenger/MessageTransmitter, attestation endpoint, message derivation, Standard fee switch and net receipt. Record source, destination and retry gas plus relayer charge without double counting. On testnet record actual burn/attestation/mint, duplicate receive rejection and return flow. Calibrate direction-specific shadow delay separately.",
+      "fixture": "tests/fixtures/dependency-unavailable.json",
+      "verification": {
+        "status": "TO_VERIFY",
+        "enabled": false,
+        "checkedAt": null,
+        "checkedBy": null,
+        "requiredEvidence": [
+          "OFFICIAL_SOURCE",
+          "ONCHAIN_CODE",
+          "LIVE_ROUND_TRIP",
+          "FEE_CAPTURE",
+          "GAS_CALIBRATION",
+          "FINALITY",
+          "REPLAY"
+        ],
+        "evidence": [],
+        "blockers": [
+          "Verify this exact direction and environment: domains (not chain IDs), current TokenMessenger/MessageTransmitter, attestation endpoint, message derivation, Standard fee switch and net receipt. Record source, destination and retry gas plus relayer charge without double counting. On testnet record actual burn/attestation/mint, duplicate receive rejection and return flow. Calibrate direction-specific shadow delay separately."
+        ]
+      }
+    },
+    {
+      "dependencyId": "cctp-ethereum-mainnet-to-arc-mainnet",
+      "kind": "ADAPTER",
+      "scope": "POST_MVP",
+      "networkIds": ["ethereum-mainnet", "arc-mainnet"],
+      "direction": {
+        "source": "ethereum-mainnet",
+        "destination": "arc-mainnet",
+        "assetSymbol": "USDC",
+        "mode": "STANDARD"
+      },
+      "officialSources": [
+        "https://developers.circle.com/cctp/concepts/supported-chains-and-domains",
+        "https://developers.circle.com/cctp/concepts/fees",
+        "https://developers.circle.com/cctp/concepts/finality-and-block-confirmations"
+      ],
+      "instructions": "Verify this exact direction and environment: domains (not chain IDs), current TokenMessenger/MessageTransmitter, attestation endpoint, message derivation, Standard fee switch and net receipt. Record source, destination and retry gas plus relayer charge without double counting. On testnet record actual burn/attestation/mint, duplicate receive rejection and return flow. Calibrate direction-specific shadow delay separately.",
+      "fixture": "tests/fixtures/dependency-unavailable.json",
+      "verification": {
+        "status": "TO_VERIFY",
+        "enabled": false,
+        "checkedAt": null,
+        "checkedBy": null,
+        "requiredEvidence": [
+          "OFFICIAL_SOURCE",
+          "ONCHAIN_CODE",
+          "LIVE_ROUND_TRIP",
+          "FEE_CAPTURE",
+          "GAS_CALIBRATION",
+          "FINALITY",
+          "REPLAY"
+        ],
+        "evidence": [],
+        "blockers": [
+          "Verify this exact direction and environment: domains (not chain IDs), current TokenMessenger/MessageTransmitter, attestation endpoint, message derivation, Standard fee switch and net receipt. Record source, destination and retry gas plus relayer charge without double counting. On testnet record actual burn/attestation/mint, duplicate receive rejection and return flow. Calibrate direction-specific shadow delay separately."
+        ]
+      }
+    },
+    {
+      "dependencyId": "cctp-arc-mainnet-to-ethereum-mainnet",
+      "kind": "ADAPTER",
+      "scope": "POST_MVP",
+      "networkIds": ["arc-mainnet", "ethereum-mainnet"],
+      "direction": {
+        "source": "arc-mainnet",
+        "destination": "ethereum-mainnet",
+        "assetSymbol": "USDC",
+        "mode": "STANDARD"
+      },
+      "officialSources": [
+        "https://developers.circle.com/cctp/concepts/supported-chains-and-domains",
+        "https://developers.circle.com/cctp/concepts/fees",
+        "https://developers.circle.com/cctp/concepts/finality-and-block-confirmations"
+      ],
+      "instructions": "Verify this exact direction and environment: domains (not chain IDs), current TokenMessenger/MessageTransmitter, attestation endpoint, message derivation, Standard fee switch and net receipt. Record source, destination and retry gas plus relayer charge without double counting. On testnet record actual burn/attestation/mint, duplicate receive rejection and return flow. Calibrate direction-specific shadow delay separately.",
+      "fixture": "tests/fixtures/dependency-unavailable.json",
+      "verification": {
+        "status": "TO_VERIFY",
+        "enabled": false,
+        "checkedAt": null,
+        "checkedBy": null,
+        "requiredEvidence": [
+          "OFFICIAL_SOURCE",
+          "ONCHAIN_CODE",
+          "LIVE_ROUND_TRIP",
+          "FEE_CAPTURE",
+          "GAS_CALIBRATION",
+          "FINALITY",
+          "REPLAY"
+        ],
+        "evidence": [],
+        "blockers": [
+          "Verify this exact direction and environment: domains (not chain IDs), current TokenMessenger/MessageTransmitter, attestation endpoint, message derivation, Standard fee switch and net receipt. Record source, destination and retry gas plus relayer charge without double counting. On testnet record actual burn/attestation/mint, duplicate receive rejection and return flow. Calibrate direction-specific shadow delay separately."
+        ]
+      }
+    },
+    {
+      "dependencyId": "eth-usdc-conversion",
+      "kind": "FEED",
+      "scope": "MVP_REQUIRED",
+      "networkIds": ["ethereum-mainnet"],
+      "direction": null,
+      "officialSources": [
+        "https://docs.chain.link/data-feeds/price-feeds/addresses"
+      ],
+      "instructions": "Choose exact ETH/USD and USDC/USD feeds or an equivalent defensible ETH/USDC source, pin contracts/decimals/heartbeat and fixed-block round validation. Archive conversion numerator/denominator, freshness and depeg handling; no assumed USDC peg or universal heartbeat.",
+      "fixture": "tests/fixtures/dependency-unavailable.json",
+      "verification": {
+        "status": "TO_VERIFY",
+        "enabled": false,
+        "checkedAt": null,
+        "checkedBy": null,
+        "requiredEvidence": [
+          "OFFICIAL_SOURCE",
+          "ONCHAIN_CODE",
+          "ARCHIVE_READ",
+          "REPLAY"
+        ],
+        "evidence": [],
+        "blockers": [
+          "Choose exact ETH/USD and USDC/USD feeds or an equivalent defensible ETH/USDC source, pin contracts/decimals/heartbeat and fixed-block round validation. Archive conversion numerator/denominator, freshness and depeg handling; no assumed USDC peg or universal heartbeat."
+        ]
+      }
+    },
+    {
+      "dependencyId": "testnet-gas-conversion",
+      "kind": "FEED",
+      "scope": "MVP_REQUIRED",
+      "networkIds": ["ethereum-sepolia", "arc-testnet"],
+      "direction": null,
+      "officialSources": ["https://docs.arc.io/arc/references/gas-and-fees"],
+      "instructions": "Lock an explicitly synthetic testnet ETH/USDC conversion fixture and finite relayer funding convention; calibrate actual testnet native gas separately. Fixture ratios are technical assumptions, never mainnet quotes.",
+      "fixture": "tests/fixtures/dependency-unavailable.json",
+      "verification": {
+        "status": "TO_VERIFY",
+        "enabled": false,
+        "checkedAt": null,
+        "checkedBy": null,
+        "requiredEvidence": ["OFFICIAL_SOURCE", "GAS_CALIBRATION", "REPLAY"],
+        "evidence": [],
+        "blockers": [
+          "Lock an explicitly synthetic testnet ETH/USDC conversion fixture and finite relayer funding convention; calibrate actual testnet native gas separately. Fixture ratios are technical assumptions, never mainnet quotes."
+        ]
+      }
+    },
+    {
+      "dependencyId": "registry-arc-testnet",
+      "kind": "REGISTRY",
+      "scope": "MVP_REQUIRED",
+      "networkIds": ["arc-testnet"],
+      "direction": null,
+      "officialSources": [
+        "https://docs.arc.io/arc/references/connect-to-arc",
+        "https://eips.ethereum.org/EIPS/eip-712"
+      ],
+      "instructions": "Build/test registry in M6, deploy to Arc Testnet and archive address, code hash, publisher role, chain ID, finality, source and deployment receipt. Bind EIP-712 domain to this exact registry; publication must preserve batch continuity and old roots.",
+      "fixture": "tests/fixtures/dependency-unavailable.json",
+      "verification": {
+        "status": "TO_VERIFY",
+        "enabled": false,
+        "checkedAt": null,
+        "checkedBy": null,
+        "requiredEvidence": [
+          "OFFICIAL_SOURCE",
+          "DEPLOYMENT",
+          "ONCHAIN_CODE",
+          "FINALITY",
+          "REPLAY"
+        ],
+        "evidence": [],
+        "blockers": [
+          "Build/test registry in M6, deploy to Arc Testnet and archive address, code hash, publisher role, chain ID, finality, source and deployment receipt. Bind EIP-712 domain to this exact registry; publication must preserve batch continuity and old roots."
+        ]
+      }
+    },
+    {
+      "dependencyId": "archive-storage",
+      "kind": "STORAGE",
+      "scope": "MVP_REQUIRED",
+      "networkIds": [],
+      "direction": null,
+      "officialSources": [
+        "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html"
+      ],
+      "instructions": "Provision S3-compatible archive with credentials outside Git; verify content hash on write/read, retention at least 90 days after closure, restore/export and no accidental overwrite. M0 uses PostgreSQL config snapshots only; raw-market object archival belongs to M2.",
+      "fixture": "tests/fixtures/dependency-unavailable.json",
+      "verification": {
+        "status": "TO_VERIFY",
+        "enabled": false,
+        "checkedAt": null,
+        "checkedBy": null,
+        "requiredEvidence": ["RETENTION_RESTORE", "REPLAY"],
+        "evidence": [],
+        "blockers": [
+          "Provision S3-compatible archive with credentials outside Git; verify content hash on write/read, retention at least 90 days after closure, restore/export and no accidental overwrite. M0 uses PostgreSQL config snapshots only; raw-market object archival belongs to M2."
+        ]
+      }
+    },
+    {
+      "dependencyId": "graph-selected-history",
+      "kind": "INDEXER",
+      "scope": "OPTIONAL",
+      "networkIds": ["ethereum-mainnet"],
+      "direction": null,
+      "officialSources": [
+        "https://thegraph.com/docs/en/subgraphs/querying/introduction/"
+      ],
+      "instructions": "Only select if indexed history materially helps the agent. Pin subgraph deployment ID/schema, API access, indexing block and lag limits; archive payloads. Never replace an execution-critical RPC state or exact-size quote with indexed data.",
+      "fixture": "tests/fixtures/dependency-unavailable.json",
+      "verification": {
+        "status": "TO_VERIFY",
+        "enabled": false,
+        "checkedAt": null,
+        "checkedBy": null,
+        "requiredEvidence": ["OFFICIAL_SOURCE", "ARCHIVE_READ", "REPLAY"],
+        "evidence": [],
+        "blockers": [
+          "Only select if indexed history materially helps the agent. Pin subgraph deployment ID/schema, API access, indexing block and lag limits; archive payloads. Never replace an execution-critical RPC state or exact-size quote with indexed data."
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+schemaVersion: "proof-of-alpha/experiment-policy/v1"
+status: "PROPOSED_NOT_PRODUCTION"
+policyId: "stablecoin-treasury-v1"
+mandate: "STABLECOIN_TREASURY"
+networkProfile: "CROSS_CHAIN_TESTNET"
+resultProvenance: "CROSS_CHAIN_TESTNET"
+unitOfAccount: "USDC"
+automaticFundingEnabled: false
+
+experiment:
+  startsAt: "SET_BEFORE_LOCK"
+  endsAt: "SET_BEFORE_LOCK"
+  commitmentMode: "PERIODIC_AFTER_RECEIPT"
+  engineVersion: "PIN_COMMIT_OR_RELEASE"
+  adapterManifestHash: "COMPUTE_BEFORE_LOCK"
+
+capitalScenarios:
+  - id: "capital-1k"
+    initialAmountUsdcMinor: "1000000000"
+  - id: "capital-10k"
+    initialAmountUsdcMinor: "10000000000"
+  - id: "capital-100k"
+    initialAmountUsdcMinor: "100000000000"
+
+initialDistribution:
+  - networkId: "ethereum-sepolia"
+    instrumentId: "cash-test-usdc"
+    weightBps: 10000
+
+references:
+  - type: "CASH"
+    instrumentId: "cash-test-usdc"
+  - type: "CONSERVATIVE_YIELD_TEST_REFERENCE"
+    instrumentId: "VERIFY_SEPOLIA_TEST_VAULT"
+
+constraints:
+  minimumTargetAvailableCashBps: 1000
+  maximumInstrumentWeightBps: 4000
+  maximumUnderlyingProtocolWeightBps: 6000
+  maximumUsdtExposureBps: 2500
+  maximumInTransitBps: 4000
+  maximumSwapSlippageBps: 10
+  borrowingAllowed: false
+  leverageAllowed: false
+  oneIntentInProgressPerScenario: true
+
+cadence:
+  valuationCheckpointSeconds: 300
+  descriptiveObservationSeconds: 3600
+  commitmentBatchSeconds: 300
+
+statistics:
+  status: "NOT_ASSESSED"
+  methodVersion: null
+
+retention:
+  reproducibilityDataDaysAfterClosure: 90
+
+verification:
+  currentOfficialSourcesCheckedAt: null
+  crossChainRealCapitalEligibility: false

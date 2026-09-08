@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "proof-of-alpha/config-seal/v1",
+  "algorithm": "KECCAK256_POA_CJSON_1",
+  "files": {
+    "networks.json": "0x7b898281bb375d2e9a3ba86f39dd187121425b26c51025c0918af24f1e86a215",
+    "instruments.json": "0xdbe55dddbb640e2e39a5a0a3c267c020067831244182b66c0becfbc8b89806a6",
+    "dependencies.json": "0x0aa55f460225ed3372d61f15c9cfe19ff73d917b724c159d9d6a1ac8b8d159a5",
+    "profiles.json": "0x8a0fb2f6ec79410c62b89200dfd9356449c52fa8469f3289f8f813f06919c1d3"
+  },
+  "bundleHash": "0xe56799da87c300fd434d550069a0bbb6d742d85b488360a241868e827495ab54"
+}

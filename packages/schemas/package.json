@@ -1,0 +1,17 @@
+{
+  "name": "@poa/schemas",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsc --noEmit",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@poa/domain": "workspace:*",
+    "zod": "4.5.4"
+  }
+}

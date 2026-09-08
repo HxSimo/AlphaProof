@@ -1,0 +1,3 @@
+* text=auto eol=lf
+# Preserve the supplied authoritative references, including Markdown hard breaks.
+.agents/skills/proof-of-alpha/** whitespace=-blank-at-eol

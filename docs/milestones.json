@@ -1,0 +1,249 @@
+{
+  "schemaVersion": "proof-of-alpha/milestone-plan/v1",
+  "authorizedMilestone": "M0",
+  "criticalPath": "M0 → M1 → M2 → M3 → M4 → M5 → M6 → M7",
+  "milestones": [
+    {
+      "id": "M0",
+      "title": "Environment and decision freeze",
+      "dependsOn": [],
+      "steps": [
+        {
+          "id": "M0.1",
+          "deliverable": "Pinned pnpm/TypeScript workspace, runnable configuration API/web/worker, PostgreSQL migration and Docker/CI",
+          "exit": "Frozen install, typecheck, unit/schema tests, web build, database restart checks and service smoke pass"
+        },
+        {
+          "id": "M0.2",
+          "deliverable": "Strict versioned schemas, manifest seal, three distinct profiles, integration inventory and fact sheets",
+          "exit": "Every required adapter has evidence or a disabled TO_VERIFY gate; incompatible routes and tampering fail validation"
+        },
+        {
+          "id": "M0.3",
+          "deliverable": "Project state, ADRs, scope cuts, provenance/demo plan and M1–M7 acceptance plan",
+          "exit": "State reflects actual evidence; focused M0 commit exists and M1 has not started"
+        }
+      ],
+      "commands": [
+        "pnpm check",
+        "docker compose up --build -d",
+        "pnpm test:db",
+        "pnpm smoke",
+        "git diff --check"
+      ],
+      "externalGate": "No deployment/RPC credential required; all unresolved external integrations remain disabled"
+    },
+    {
+      "id": "M1",
+      "title": "Deterministic accounting kernel",
+      "dependsOn": ["M0"],
+      "steps": [
+        {
+          "id": "M1.1",
+          "deliverable": "packages/accounting: pure global portfolio, cash/reservations/positions/receivables, asset aliases and explicit rounding helpers",
+          "exit": "Property tests preserve value/remainders with amounts above Number.MAX_SAFE_INTEGER; no shared balances across networks/scenarios"
+        },
+        {
+          "id": "M1.2",
+          "deliverable": "Operation identity, receipt application, costs/payables/allowances and transfer reducer",
+          "exit": "Source failure releases reservation minus attempt costs; burn/delay/retry/settlement sequences debit once, credit once and survive serialize/reload at each boundary"
+        },
+        {
+          "id": "M1.3",
+          "deliverable": "Mark/liquidation contracts, pure replay fixtures and failure cases",
+          "exit": "Withdrawal success followed by swap failure preserves cash/costs; missing data and blocked exits remain explicit; no repeated exit-charge mutation"
+        }
+      ],
+      "commands": [
+        "pnpm test",
+        "pnpm typecheck",
+        "pnpm config:validate",
+        "pnpm schemas:check",
+        "pnpm check"
+      ],
+      "externalGate": "None: synthetic fixtures only, clearly labeled; no API/signing/live adapter implementation required"
+    },
+    {
+      "id": "M2",
+      "title": "First local economic slice",
+      "dependsOn": ["M1"],
+      "steps": [
+        {
+          "id": "M2.1",
+          "deliverable": "packages/market-data + adapters: archive inputs and first Aave USDC cash→supply→cash path",
+          "exit": "Exact official target/bytecode and fixed-block fork/captured fixture validate index accrual, caps, pauses, liquidity, approvals and gas"
+        },
+        {
+          "id": "M2.2",
+          "deliverable": "One synchronous Ethereum USDC vault family and direct Uniswap V3 USDC/USDT exact-in path with USDT supply",
+          "exit": "Conversions/previews/limits/virtual-holder capacity and both swap directions agree with fixed-block cases at each amount; quote fee/impact charged once"
+        },
+        {
+          "id": "M2.3",
+          "deliverable": "Content-addressed S3 archive and selected receipt replay",
+          "exit": "Another process reproduces outputs from raw block/quote/gas/feed payloads and pinned versions; stale/missing inputs stop execution"
+        }
+      ],
+      "commands": [
+        "pnpm test",
+        "pnpm check",
+        "Add and run pnpm test:fork with pinned blocks and explicit required RPCs",
+        "Add and run pnpm test:replay"
+      ],
+      "externalGate": "Ethereum archive RPC, exact Aave/vault/Uniswap targets, conversion source and object store. If blocked, fixture path works but real adapter activation stays TO_VERIFY"
+    },
+    {
+      "id": "M3",
+      "title": "Experiment, API and external agent",
+      "dependsOn": ["M2"],
+      "steps": [
+        {
+          "id": "M3.1",
+          "deliverable": "Agent/version/key registry, immutable experiment start, canonical policy snapshot/hash, revocation",
+          "exit": "No start with unresolved dependencies; policy-changing writes after X fail; a correction preserves original evidence"
+        },
+        {
+          "id": "M3.2",
+          "deliverable": "packages/sdk and examples/self-hosted-treasury-agent with injected EIP-712 signer",
+          "exit": "External process fetches policy, builds exact allocation/hash, signs locally, submits and verifies acknowledgment; key never leaves agent"
+        },
+        {
+          "id": "M3.3",
+          "deliverable": "Append-only economic journal, PostgreSQL queue, planner and worker acceptance/application transactions",
+          "exit": "Wrong domain/profile/policy/scenario/key, expiry, nonce conflict, idempotent repeat, stale version, concurrency and payload/quota cases pass; crash each durable boundary without duplicate effects"
+        }
+      ],
+      "commands": [
+        "pnpm check",
+        "pnpm test:db",
+        "Add and run pnpm test:e2e:signed-intent",
+        "pnpm test:replay"
+      ],
+      "externalGate": "Use local deterministic signing-domain fixture until exact Arc registry deployment exists; no fabricated verifying contract in real profile"
+    },
+    {
+      "id": "M4",
+      "title": "Multi-capital and references",
+      "dependsOn": ["M3"],
+      "steps": [
+        {
+          "id": "M4.1",
+          "deliverable": "Three independent 1k/10k/100k scenario streams and two reference portfolios each",
+          "exit": "Equal starting global capital/distribution, distinct financial identities and amount-specific costs; one quote never silently scaled"
+        },
+        {
+          "id": "M4.2",
+          "deliverable": "Checkpoints and packages/valuation/evaluation descriptive outputs",
+          "exit": "Inactive positions accrue correctly; mark/liquidation, costs, cash, transit, drawdown and reference differences replay at the same checkpoint"
+        },
+        {
+          "id": "M4.3",
+          "deliverable": "Reference failure and data quality paths",
+          "exit": "Failed passive entry retains cash/costs and suspends comparison; no replacement after X, missing metrics never zero; correlated scenarios never triple samples"
+        }
+      ],
+      "commands": [
+        "pnpm check",
+        "pnpm test:db",
+        "pnpm test:replay",
+        "Add and run pnpm test:e2e:scenarios"
+      ],
+      "externalGate": "Verified conservative reference and same observation provenance; fixtures remain synthetic if data unavailable"
+    },
+    {
+      "id": "M5",
+      "title": "Arc and CCTP technical lifecycle",
+      "dependsOn": ["M4"],
+      "steps": [
+        {
+          "id": "M5.1",
+          "deliverable": "Arc/Sepolia ERC-4626 test vaults, finite funded test yield, gas/decimal alias handling",
+          "exit": "Actual test-token deposit/withdraw and bytecode/address evidence; finite schedule frozen before X"
+        },
+        {
+          "id": "M5.2",
+          "deliverable": "CCTP both directions, durable transfer worker, prefunded test relayer and fee/delay model",
+          "exit": "Actual Sepolia→Arc and Arc→Sepolia burn/attestation/receipt records; duplicate settlement and restart cannot credit twice; costs charged without bankroll subsidy"
+        },
+        {
+          "id": "M5.3",
+          "deliverable": "Delayed attestation, source failure, destination retries, reorg and closure reconciliation",
+          "exit": "Unresolved receivable remains unavailable; no timer-only actual settlement; late receipt cannot improve deadline result; fork/unit/live evidence remain distinct"
+        }
+      ],
+      "commands": [
+        "pnpm check",
+        "pnpm test:db",
+        "forge fmt --check --root contracts",
+        "forge test --root contracts",
+        "Add and run pnpm test:live:testnet (explicit testnet credentials)",
+        "pnpm test:replay"
+      ],
+      "externalGate": "Testnet RPCs, faucets, test-only relayer/publisher keys, exact CCTP contracts/route/attestation/fees and actual transactions. M5 cannot be complete with mocks alone"
+    },
+    {
+      "id": "M6",
+      "title": "Evaluation, commitments, export and UI",
+      "dependsOn": ["M5"],
+      "steps": [
+        {
+          "id": "M6.1",
+          "deliverable": "Separate compliance/economic/statistical statuses and provenance gate",
+          "exit": "Testnet/replay/synthetic/mixed excluded before criteria; disabled inference never produces eligibility; old reports survive corrections"
+        },
+        {
+          "id": "M6.2",
+          "deliverable": "packages/commitments + Arc registry, ordered leaves, batch chain and inclusion proofs",
+          "exit": "Valid proof passes; tampering/gaps/overlap/wrong predecessor/reorg detected; confirmed root has actual deployment/publication evidence"
+        },
+        {
+          "id": "M6.3",
+          "deliverable": "Read-only canonical dashboard, versioned export and independent replay command",
+          "exit": "Fresh process reconstructs selected receipt from exported schemas, versions, raw inputs, events and proofs, then verifies leaf and batch continuity"
+        }
+      ],
+      "commands": [
+        "pnpm check",
+        "pnpm test:db",
+        "forge test --root contracts",
+        "pnpm test:replay",
+        "Add and run pnpm test:e2e:export-proof",
+        "pnpm smoke"
+      ],
+      "externalGate": "Arc testnet registry publication plus archival availability. Periodic anchoring is not pre-execution public timestamp proof"
+    },
+    {
+      "id": "M7",
+      "title": "Demo hardening",
+      "dependsOn": ["M6"],
+      "steps": [
+        {
+          "id": "M7.1",
+          "deliverable": "Synthetic failures, longer labeled replay and separate fresh Ethereum forward session",
+          "exit": "Recorded evidence cannot be spliced across provenance classes or claim a longer forward history"
+        },
+        {
+          "id": "M7.2",
+          "deliverable": "Monitoring, quotas, incident displays, operational recovery and timed runbook",
+          "exit": "Rehearsal completes signed action→economic consequence→references→proof/export; fallback evidence accurately labeled; errors/losses remain visible"
+        },
+        {
+          "id": "M7.3",
+          "deliverable": "Final acceptance and deployment/demo documentation",
+          "exit": "All implemented validation passes; real integration evidence is linked; limitations, TO_VERIFY leftovers and run commands accurate; focused milestone commit"
+        }
+      ],
+      "commands": [
+        "pnpm check",
+        "pnpm test:db",
+        "pnpm test:fork",
+        "pnpm test:replay",
+        "forge test --root contracts",
+        "pnpm test:e2e:export-proof",
+        "pnpm smoke",
+        "Run docs/demo-runbook.md timed rehearsal"
+      ],
+      "externalGate": "Current public network availability, bounded fresh forward observation period and stored backup evidence; no automatic real-fund allocation"
+    }
+  ]
+}

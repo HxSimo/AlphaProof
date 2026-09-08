@@ -1,0 +1,27 @@
+name: M0 validation
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+      - run: npm install --global pnpm@10.34.5
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm check
+        env:
+          NEXT_TELEMETRY_DISABLED: '1'
+      - run: docker compose config --quiet
+      - run: docker compose up --build -d
+      - run: pnpm test:db && pnpm smoke
+        env:
+          DATABASE_URL: postgres://poa:poa-local-only@localhost:54329/poa
+      - run: docker compose logs --no-color
+        if: failure()
+      - run: docker compose down
+        if: always()

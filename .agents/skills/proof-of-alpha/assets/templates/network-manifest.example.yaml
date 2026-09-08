@@ -1,0 +1,58 @@
+schemaVersion: "proof-of-alpha/network-manifest/v1"
+status: "TO_VERIFY"
+checkedAt: null
+checkedBy: null
+
+networks:
+  ethereum-sepolia:
+    environment: "testnet"
+    chainId: "VERIFY_CURRENT_VALUE"
+    rpc:
+      archiveReadsRequired: true
+      endpointEnvironmentVariable: "ETHEREUM_SEPOLIA_RPC_URL"
+    nativeGasAsset: "ETH"
+    assets:
+      testUsdc:
+        address: "VERIFY_OFFICIAL_ADDRESS"
+        decimals: "VERIFY"
+    contracts:
+      demoVault: "DEPLOY_OR_VERIFY"
+      registry: null
+    cctp:
+      domain: "VERIFY_CURRENT_OFFICIAL_VALUE"
+      tokenMessenger: "VERIFY_CURRENT_OFFICIAL_ADDRESS"
+      messageTransmitter: "VERIFY_CURRENT_OFFICIAL_ADDRESS"
+      attestationEnvironment: "testnet"
+
+  arc-testnet:
+    environment: "testnet"
+    chainId: "VERIFY_CURRENT_OFFICIAL_VALUE"
+    rpc:
+      archiveReadsRequired: true
+      endpointEnvironmentVariable: "ARC_TESTNET_RPC_URL"
+    nativeGasAsset: "USDC"
+    assets:
+      testUsdc:
+        nativeAndErc20AreSameEconomicBalance: true
+        address: "VERIFY_OFFICIAL_INTERFACE"
+        decimals: "VERIFY_NATIVE_AND_ERC20_SCALES"
+    contracts:
+      demoVault: "DEPLOY_OR_VERIFY"
+      commitmentRegistry: "DEPLOY_OR_VERIFY"
+    cctp:
+      domain: "VERIFY_CURRENT_OFFICIAL_VALUE"
+      tokenMessenger: "VERIFY_CURRENT_OFFICIAL_ADDRESS"
+      messageTransmitter: "VERIFY_CURRENT_OFFICIAL_ADDRESS"
+      attestationEnvironment: "testnet"
+
+routeValidation:
+  ethereumSepoliaToArcTestnet:
+    enabled: false
+    actualTransferEvidence: null
+    feeEvidence: null
+    destinationGasConvention: "CHOOSE_AND_LOCK"
+  arcTestnetToEthereumSepolia:
+    enabled: false
+    actualTransferEvidence: null
+    feeEvidence: null
+    destinationGasConvention: "CHOOSE_AND_LOCK"

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Proof of Alpha"
+  short_description: "Concevoir et développer Proof of Alpha"
+  default_prompt: "Use $proof-of-alpha to plan and implement the next verifiable Proof of Alpha milestone."

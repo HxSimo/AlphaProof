@@ -1,0 +1,345 @@
+{
+  "schemaVersion": "proof-of-alpha/instrument-manifest/v1",
+  "manifestVersion": "0.1.0",
+  "instruments": [
+    {
+      "instrumentId": "eth-cash-usdc",
+      "networkId": "ethereum-mainnet",
+      "assetId": "usdc",
+      "kind": "CASH",
+      "protocolId": "circle",
+      "adapterId": "cash-ethereum-mainnet",
+      "adapterVersion": "0.0.0",
+      "contractAddress": null,
+      "codeHash": null,
+      "factSheet": "docs/instrument-catalog/eth-cash-usdc.md",
+      "candidateName": "Ethereum USDC cash",
+      "verification": {
+        "status": "TO_VERIFY",
+        "enabled": false,
+        "checkedAt": null,
+        "checkedBy": null,
+        "requiredEvidence": [
+          "OFFICIAL_SOURCE",
+          "ONCHAIN_CODE",
+          "ARCHIVE_READ",
+          "REPLAY"
+        ],
+        "evidence": [],
+        "blockers": [
+          "Exact contract, code and asset verification outstanding.",
+          "Resolve USDC token/interface and decimals, verify bytecode and balance reads. For Arc compare native and ERC-20 views at one block, normalize with retained dust and alias one economic balance. Verify USDT separately where listed."
+        ]
+      }
+    },
+    {
+      "instrumentId": "eth-cash-usdt",
+      "networkId": "ethereum-mainnet",
+      "assetId": "usdt",
+      "kind": "CASH",
+      "protocolId": "tether",
+      "adapterId": "cash-ethereum-mainnet",
+      "adapterVersion": "0.0.0",
+      "contractAddress": null,
+      "codeHash": null,
+      "factSheet": "docs/instrument-catalog/eth-cash-usdt.md",
+      "candidateName": "Ethereum USDT cash; swap intermediary only",
+      "verification": {
+        "status": "TO_VERIFY",
+        "enabled": false,
+        "checkedAt": null,
+        "checkedBy": null,
+        "requiredEvidence": [
+          "OFFICIAL_SOURCE",
+          "ONCHAIN_CODE",
+          "ARCHIVE_READ",
+          "REPLAY"
+        ],
+        "evidence": [],
+        "blockers": [
+          "Exact contract, code and asset verification outstanding.",
+          "Resolve USDC token/interface and decimals, verify bytecode and balance reads. For Arc compare native and ERC-20 views at one block, normalize with retained dust and alias one economic balance. Verify USDT separately where listed."
+        ]
+      }
+    },
+    {
+      "instrumentId": "eth-aave-usdc",
+      "networkId": "ethereum-mainnet",
+      "assetId": "usdc",
+      "kind": "LENDING",
+      "protocolId": "aave",
+      "adapterId": "aave-v3-ethereum",
+      "adapterVersion": "0.0.0",
+      "contractAddress": null,
+      "codeHash": null,
+      "factSheet": "docs/instrument-catalog/eth-aave-usdc.md",
+      "candidateName": "Aave V3 USDC; proposed conservative reference",
+      "verification": {
+        "status": "TO_VERIFY",
+        "enabled": false,
+        "checkedAt": null,
+        "checkedBy": null,
+        "requiredEvidence": [
+          "OFFICIAL_SOURCE",
+          "ONCHAIN_CODE",
+          "FIXED_BLOCK_FORK",
+          "ARCHIVE_READ",
+          "GAS_CALIBRATION",
+          "REPLAY"
+        ],
+        "evidence": [],
+        "blockers": [
+          "Exact contract, code and asset verification outstanding.",
+          "Pin official Aave V3 address book commit, pool, USDC/USDT reserves, receipt token and decimals. Archive reserve index, caps, liquidity, pause/freeze flags and bytecode. Fork supply/accrue/withdraw at a fixed block for all three amounts, limits, gas and failed exits."
+        ]
+      }
+    },
+    {
+      "instrumentId": "eth-aave-usdt",
+      "networkId": "ethereum-mainnet",
+      "assetId": "usdt",
+      "kind": "LENDING",
+      "protocolId": "aave",
+      "adapterId": "aave-v3-ethereum",
+      "adapterVersion": "0.0.0",
+      "contractAddress": null,
+      "codeHash": null,
+      "factSheet": "docs/instrument-catalog/eth-aave-usdt.md",
+      "candidateName": "Aave V3 USDT supply",
+      "verification": {
+        "status": "TO_VERIFY",
+        "enabled": false,
+        "checkedAt": null,
+        "checkedBy": null,
+        "requiredEvidence": [
+          "OFFICIAL_SOURCE",
+          "ONCHAIN_CODE",
+          "FIXED_BLOCK_FORK",
+          "ARCHIVE_READ",
+          "GAS_CALIBRATION",
+          "REPLAY"
+        ],
+        "evidence": [],
+        "blockers": [
+          "Exact contract, code and asset verification outstanding.",
+          "Pin official Aave V3 address book commit, pool, USDC/USDT reserves, receipt token and decimals. Archive reserve index, caps, liquidity, pause/freeze flags and bytecode. Fork supply/accrue/withdraw at a fixed block for all three amounts, limits, gas and failed exits."
+        ]
+      }
+    },
+    {
+      "instrumentId": "eth-vault-usdc",
+      "networkId": "ethereum-mainnet",
+      "assetId": "usdc",
+      "kind": "ERC4626",
+      "protocolId": "morpho",
+      "adapterId": "erc4626-ethereum",
+      "adapterVersion": "0.0.0",
+      "contractAddress": null,
+      "codeHash": null,
+      "factSheet": "docs/instrument-catalog/eth-vault-usdc.md",
+      "candidateName": "One selected synchronous USDC vault; Gauntlet Prime/Core review candidates",
+      "verification": {
+        "status": "TO_VERIFY",
+        "enabled": false,
+        "checkedAt": null,
+        "checkedBy": null,
+        "requiredEvidence": [
+          "OFFICIAL_SOURCE",
+          "ONCHAIN_CODE",
+          "FIXED_BLOCK_FORK",
+          "ARCHIVE_READ",
+          "GAS_CALIBRATION",
+          "REPLAY"
+        ],
+        "evidence": [],
+        "blockers": [
+          "Exact contract, code and asset verification outstanding.",
+          "Select one synchronous USDC vault after reviewing Gauntlet Prime/Core candidates. Pin exact version/address/asset and governance dependencies. Verify conversions, all previews/max methods, fees, available exits, virtual-holder capacity, rounding and gas on fixed-block forks; archive raw reads."
+        ]
+      }
+    },
+    {
+      "instrumentId": "sepolia-cash-usdc",
+      "networkId": "ethereum-sepolia",
+      "assetId": "usdc",
+      "kind": "CASH",
+      "protocolId": "circle",
+      "adapterId": "cash-ethereum-sepolia",
+      "adapterVersion": "0.0.0",
+      "contractAddress": null,
+      "codeHash": null,
+      "factSheet": "docs/instrument-catalog/sepolia-cash-usdc.md",
+      "candidateName": "Sepolia test USDC cash",
+      "verification": {
+        "status": "TO_VERIFY",
+        "enabled": false,
+        "checkedAt": null,
+        "checkedBy": null,
+        "requiredEvidence": [
+          "OFFICIAL_SOURCE",
+          "ONCHAIN_CODE",
+          "ARCHIVE_READ",
+          "REPLAY"
+        ],
+        "evidence": [],
+        "blockers": [
+          "Exact contract, code and asset verification outstanding.",
+          "Resolve USDC token/interface and decimals, verify bytecode and balance reads. For Arc compare native and ERC-20 views at one block, normalize with retained dust and alias one economic balance. Verify USDT separately where listed."
+        ]
+      }
+    },
+    {
+      "instrumentId": "sepolia-vault-usdc",
+      "networkId": "ethereum-sepolia",
+      "assetId": "usdc",
+      "kind": "ERC4626",
+      "protocolId": "poa-demo",
+      "adapterId": "demo-vault-ethereum-sepolia",
+      "adapterVersion": "0.0.0",
+      "contractAddress": null,
+      "codeHash": null,
+      "factSheet": "docs/instrument-catalog/sepolia-vault-usdc.md",
+      "candidateName": "Sepolia technical passive test reference",
+      "verification": {
+        "status": "TO_VERIFY",
+        "enabled": false,
+        "checkedAt": null,
+        "checkedBy": null,
+        "requiredEvidence": [
+          "OFFICIAL_SOURCE",
+          "DEPLOYMENT",
+          "ONCHAIN_CODE",
+          "LIVE_ROUND_TRIP",
+          "REPLAY"
+        ],
+        "evidence": [],
+        "blockers": [
+          "Exact contract, code and asset verification outstanding.",
+          "Deploy or select an ERC-4626 test USDC vault. Archive deployment bytecode/address, admin powers and decimals. Publish finite funded test-yield budget/schedule before X. Record actual deposit/withdraw test-token receipts and limits/rounding fixtures; no commercial APY claim."
+        ]
+      }
+    },
+    {
+      "instrumentId": "arc-test-cash-usdc",
+      "networkId": "arc-testnet",
+      "assetId": "usdc",
+      "kind": "CASH",
+      "protocolId": "circle",
+      "adapterId": "cash-arc-testnet",
+      "adapterVersion": "0.0.0",
+      "contractAddress": null,
+      "codeHash": null,
+      "factSheet": "docs/instrument-catalog/arc-test-cash-usdc.md",
+      "candidateName": "Arc test USDC cash; native and ERC-20 views alias",
+      "verification": {
+        "status": "TO_VERIFY",
+        "enabled": false,
+        "checkedAt": null,
+        "checkedBy": null,
+        "requiredEvidence": [
+          "OFFICIAL_SOURCE",
+          "ONCHAIN_CODE",
+          "ARCHIVE_READ",
+          "REPLAY"
+        ],
+        "evidence": [],
+        "blockers": [
+          "Exact contract, code and asset verification outstanding.",
+          "Resolve USDC token/interface and decimals, verify bytecode and balance reads. For Arc compare native and ERC-20 views at one block, normalize with retained dust and alias one economic balance. Verify USDT separately where listed."
+        ]
+      }
+    },
+    {
+      "instrumentId": "arc-test-vault-usdc",
+      "networkId": "arc-testnet",
+      "assetId": "usdc",
+      "kind": "ERC4626",
+      "protocolId": "poa-demo",
+      "adapterId": "demo-vault-arc-testnet",
+      "adapterVersion": "0.0.0",
+      "contractAddress": null,
+      "codeHash": null,
+      "factSheet": "docs/instrument-catalog/arc-test-vault-usdc.md",
+      "candidateName": "Arc demonstration ERC-4626 vault",
+      "verification": {
+        "status": "TO_VERIFY",
+        "enabled": false,
+        "checkedAt": null,
+        "checkedBy": null,
+        "requiredEvidence": [
+          "OFFICIAL_SOURCE",
+          "DEPLOYMENT",
+          "ONCHAIN_CODE",
+          "LIVE_ROUND_TRIP",
+          "REPLAY"
+        ],
+        "evidence": [],
+        "blockers": [
+          "Exact contract, code and asset verification outstanding.",
+          "Deploy or select an ERC-4626 test USDC vault. Archive deployment bytecode/address, admin powers and decimals. Publish finite funded test-yield budget/schedule before X. Record actual deposit/withdraw test-token receipts and limits/rounding fixtures; no commercial APY claim."
+        ]
+      }
+    },
+    {
+      "instrumentId": "arc-cash-usdc",
+      "networkId": "arc-mainnet",
+      "assetId": "usdc",
+      "kind": "CASH",
+      "protocolId": "circle",
+      "adapterId": "cash-arc-mainnet",
+      "adapterVersion": "0.0.0",
+      "contractAddress": null,
+      "codeHash": null,
+      "factSheet": "docs/instrument-catalog/arc-cash-usdc.md",
+      "candidateName": "Unverified future Arc mainnet USDC",
+      "verification": {
+        "status": "TO_VERIFY",
+        "enabled": false,
+        "checkedAt": null,
+        "checkedBy": null,
+        "requiredEvidence": [
+          "OFFICIAL_SOURCE",
+          "ONCHAIN_CODE",
+          "ARCHIVE_READ",
+          "REPLAY"
+        ],
+        "evidence": [],
+        "blockers": [
+          "Exact contract, code and asset verification outstanding.",
+          "Resolve USDC token/interface and decimals, verify bytecode and balance reads. For Arc compare native and ERC-20 views at one block, normalize with retained dust and alias one economic balance. Verify USDT separately where listed."
+        ]
+      }
+    },
+    {
+      "instrumentId": "arc-vault-usdc",
+      "networkId": "arc-mainnet",
+      "assetId": "usdc",
+      "kind": "ERC4626",
+      "protocolId": "unselected",
+      "adapterId": "yield-arc-mainnet",
+      "adapterVersion": "0.0.0",
+      "contractAddress": null,
+      "codeHash": null,
+      "factSheet": "docs/instrument-catalog/arc-vault-usdc.md",
+      "candidateName": "Unselected future Arc mainnet USDC market",
+      "verification": {
+        "status": "TO_VERIFY",
+        "enabled": false,
+        "checkedAt": null,
+        "checkedBy": null,
+        "requiredEvidence": [
+          "OFFICIAL_SOURCE",
+          "ONCHAIN_CODE",
+          "FIXED_BLOCK_FORK",
+          "ARCHIVE_READ",
+          "REPLAY"
+        ],
+        "evidence": [],
+        "blockers": [
+          "Exact contract, code and asset verification outstanding.",
+          "Verify current Arc mainnet availability, exact usable USDC market, yield source, synchronous exits, governance, liquidity and historical data. Pin contracts and fixed-block evidence before a new mainnet profile."
+        ]
+      }
+    }
+  ]
+}

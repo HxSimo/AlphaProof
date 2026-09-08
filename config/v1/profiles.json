@@ -1,0 +1,458 @@
+{
+  "schemaVersion": "proof-of-alpha/profile-manifest/v1",
+  "manifestVersion": "0.1.0",
+  "profiles": [
+    {
+      "schemaVersion": "proof-of-alpha/profile/v1",
+      "profileVersion": "0.1.0",
+      "status": "PROPOSED_NOT_PRODUCTION",
+      "enabled": false,
+      "mandate": "STABLECOIN_TREASURY",
+      "unitOfAccount": "USDC",
+      "automaticFundingEnabled": false,
+      "registryNetworkId": "arc-testnet",
+      "capitalScenarios": [
+        {
+          "id": "capital-1k",
+          "initialAmountUsdcMinor": "1000000000"
+        },
+        {
+          "id": "capital-10k",
+          "initialAmountUsdcMinor": "10000000000"
+        },
+        {
+          "id": "capital-100k",
+          "initialAmountUsdcMinor": "100000000000"
+        }
+      ],
+      "constraints": {
+        "minimumTargetAvailableCashBps": 1000,
+        "maximumInstrumentWeightBps": 4000,
+        "maximumUnderlyingProtocolWeightBps": 6000,
+        "maximumUsdtExposureBps": 2500,
+        "maximumInTransitBps": 4000,
+        "maximumSwapSlippageBps": 10,
+        "borrowingAllowed": false,
+        "leverageAllowed": false,
+        "oneIntentInProgressPerScenario": true
+      },
+      "execution": {
+        "version": "0.1.0",
+        "firstEthereumStepBlockOffset": 2,
+        "nextEthereumStepBlockOffset": 1,
+        "arcServiceDelaySeconds": 2,
+        "planStartExpirySeconds": 120,
+        "ethereumSegmentMaxBlocks": 10,
+        "arcSegmentMaxSeconds": 120,
+        "blockSelection": "FIRST_ADMISSIBLE_AFTER_DURABLE_RECEIPT",
+        "missingData": "SUSPEND_OR_EXPIRE_NO_PRICE_FALLBACK",
+        "partialFailure": "PRESERVE_SUCCESS_STOP_DEPENDENTS",
+        "gasModel": "CAPTURED_CHAIN_FEES_FORK_CALIBRATED_GAS",
+        "costConversion": "CHARGE_USDC_RETAIN_NATIVE_PRECISION",
+        "swapRule": "DIRECT_EXACT_IN_NET_OF_GAS_TIEBREAK_POOL_ID",
+        "referenceFailure": "RETAIN_CASH_AND_COSTS_COMPARISON_UNAVAILABLE"
+      },
+      "transfer": {
+        "version": "0.1.0",
+        "mechanism": "CCTP",
+        "mode": "STANDARD",
+        "asset": "USDC",
+        "routeDependencyIds": [],
+        "destinationGasConvention": "PREFUNDED_TEST_RELAYER_CHARGE_SCENARIO",
+        "feeRule": "CAPTURE_ALL_APPLICABLE_COSTS_ONCE",
+        "shadowDelayModelVersion": null,
+        "delayedAfterSeconds": 3600,
+        "reconcileAfterSeconds": 86400,
+        "maxDestinationAttempts": 3,
+        "retryAuthority": "OPERATOR_WORKER_SAME_MESSAGE",
+        "splittingAllowed": false
+      },
+      "valuation": {
+        "version": "0.1.0",
+        "basis": "MARK_AND_LIQUIDATION_ESTIMATE",
+        "checkpointRule": "PER_CHAIN_LAST_ADMISSIBLE_BLOCK_AT_OR_BEFORE_CHECKPOINT",
+        "staleData": "DISPLAY_STALE_EXCLUDE_FRESH_OBSERVATIONS",
+        "closure": "FREEZE_DEADLINE_STATE_RECONCILE_TRANSFERS_SEPARATELY"
+      },
+      "cadence": {
+        "valuationCheckpointSeconds": 300,
+        "descriptiveObservationSeconds": 3600,
+        "summarySeconds": 86400,
+        "commitmentBatchSeconds": 300
+      },
+      "durationSeconds": 2592000,
+      "commitmentMode": "PERIODIC_AFTER_RECEIPT",
+      "configurationPublication": "CONFIRMED_BEFORE_ACTIONS_OPEN",
+      "statistics": {
+        "status": "NOT_ASSESSED",
+        "methodVersion": null,
+        "realCapitalEligibilityEnabled": false
+      },
+      "quotas": {
+        "activeAgents": 10,
+        "acceptedIntentsPerDayPerScenario": 60,
+        "activeExperimentsPerAgentPerProfile": 1
+      },
+      "retention": {
+        "reproducibilityDataDaysAfterClosure": 90
+      },
+      "operatingCosts": "SUPPLEMENTARY_DECLARED_VIEW_SHARED_ALLOCATION_REQUIRED",
+      "limitations": [
+        "M0 configuration catalog only; no experiment can start.",
+        "Runtime is SELF_REPORTED; strategy execution is not attested.",
+        "Periodic anchoring proves integrity after publication, not public receipt before execution.",
+        "All external adapters are disabled pending evidence.",
+        "Numerical defaults are proposed and must be accepted in a versioned policy before X.",
+        "Statistical inference is NOT_ASSESSED; no real-capital eligibility or automatic funding."
+      ],
+      "profileId": "ethereum-forward",
+      "networkProfile": "ETHEREUM_MAINNET_FORWARD",
+      "marketNetworkIds": ["ethereum-mainnet"],
+      "resultProvenance": "FORWARD_SHADOW",
+      "instrumentAllowlist": [
+        "eth-cash-usdc",
+        "eth-cash-usdt",
+        "eth-aave-usdc",
+        "eth-aave-usdt",
+        "eth-vault-usdc"
+      ],
+      "initialDistribution": [
+        {
+          "networkId": "ethereum-mainnet",
+          "instrumentId": "eth-cash-usdc",
+          "weightBps": 10000
+        }
+      ],
+      "references": [
+        {
+          "type": "CASH",
+          "instrumentId": "eth-cash-usdc",
+          "behavior": "STATIONARY_INITIAL_DISTRIBUTION"
+        },
+        {
+          "type": "CONSERVATIVE_YIELD",
+          "instrumentId": "eth-aave-usdc",
+          "behavior": "PASSIVE_NO_SWITCHING"
+        }
+      ],
+      "requiredDependencyIds": [
+        "rpc-ethereum-mainnet",
+        "cash-ethereum-mainnet",
+        "aave-v3-ethereum",
+        "erc4626-ethereum",
+        "uniswap-v3-ethereum",
+        "eth-usdc-conversion",
+        "registry-arc-testnet",
+        "archive-storage"
+      ],
+      "unitOfAccountDecimals": 6
+    },
+    {
+      "schemaVersion": "proof-of-alpha/profile/v1",
+      "profileVersion": "0.1.0",
+      "status": "PROPOSED_NOT_PRODUCTION",
+      "enabled": false,
+      "mandate": "STABLECOIN_TREASURY",
+      "unitOfAccount": "USDC",
+      "automaticFundingEnabled": false,
+      "registryNetworkId": "arc-testnet",
+      "capitalScenarios": [
+        {
+          "id": "capital-1k",
+          "initialAmountUsdcMinor": "1000000000"
+        },
+        {
+          "id": "capital-10k",
+          "initialAmountUsdcMinor": "10000000000"
+        },
+        {
+          "id": "capital-100k",
+          "initialAmountUsdcMinor": "100000000000"
+        }
+      ],
+      "constraints": {
+        "minimumTargetAvailableCashBps": 1000,
+        "maximumInstrumentWeightBps": 4000,
+        "maximumUnderlyingProtocolWeightBps": 6000,
+        "maximumUsdtExposureBps": 2500,
+        "maximumInTransitBps": 4000,
+        "maximumSwapSlippageBps": 10,
+        "borrowingAllowed": false,
+        "leverageAllowed": false,
+        "oneIntentInProgressPerScenario": true
+      },
+      "execution": {
+        "version": "0.1.0",
+        "firstEthereumStepBlockOffset": 2,
+        "nextEthereumStepBlockOffset": 1,
+        "arcServiceDelaySeconds": 2,
+        "planStartExpirySeconds": 120,
+        "ethereumSegmentMaxBlocks": 10,
+        "arcSegmentMaxSeconds": 120,
+        "blockSelection": "FIRST_ADMISSIBLE_AFTER_DURABLE_RECEIPT",
+        "missingData": "SUSPEND_OR_EXPIRE_NO_PRICE_FALLBACK",
+        "partialFailure": "PRESERVE_SUCCESS_STOP_DEPENDENTS",
+        "gasModel": "CAPTURED_CHAIN_FEES_FORK_CALIBRATED_GAS",
+        "costConversion": "CHARGE_USDC_RETAIN_NATIVE_PRECISION",
+        "swapRule": "DIRECT_EXACT_IN_NET_OF_GAS_TIEBREAK_POOL_ID",
+        "referenceFailure": "RETAIN_CASH_AND_COSTS_COMPARISON_UNAVAILABLE"
+      },
+      "transfer": {
+        "version": "0.1.0",
+        "mechanism": "CCTP",
+        "mode": "STANDARD",
+        "asset": "USDC",
+        "routeDependencyIds": [
+          "cctp-ethereum-sepolia-to-arc-testnet",
+          "cctp-arc-testnet-to-ethereum-sepolia"
+        ],
+        "destinationGasConvention": "PREFUNDED_TEST_RELAYER_CHARGE_SCENARIO",
+        "feeRule": "CAPTURE_ALL_APPLICABLE_COSTS_ONCE",
+        "shadowDelayModelVersion": null,
+        "delayedAfterSeconds": 3600,
+        "reconcileAfterSeconds": 86400,
+        "maxDestinationAttempts": 3,
+        "retryAuthority": "OPERATOR_WORKER_SAME_MESSAGE",
+        "splittingAllowed": false
+      },
+      "valuation": {
+        "version": "0.1.0",
+        "basis": "MARK_AND_LIQUIDATION_ESTIMATE",
+        "checkpointRule": "PER_CHAIN_LAST_ADMISSIBLE_BLOCK_AT_OR_BEFORE_CHECKPOINT",
+        "staleData": "DISPLAY_STALE_EXCLUDE_FRESH_OBSERVATIONS",
+        "closure": "FREEZE_DEADLINE_STATE_RECONCILE_TRANSFERS_SEPARATELY"
+      },
+      "cadence": {
+        "valuationCheckpointSeconds": 300,
+        "descriptiveObservationSeconds": 3600,
+        "summarySeconds": 86400,
+        "commitmentBatchSeconds": 300
+      },
+      "durationSeconds": 86400,
+      "commitmentMode": "PERIODIC_AFTER_RECEIPT",
+      "configurationPublication": "CONFIRMED_BEFORE_ACTIONS_OPEN",
+      "statistics": {
+        "status": "NOT_ASSESSED",
+        "methodVersion": null,
+        "realCapitalEligibilityEnabled": false
+      },
+      "quotas": {
+        "activeAgents": 10,
+        "acceptedIntentsPerDayPerScenario": 60,
+        "activeExperimentsPerAgentPerProfile": 1
+      },
+      "retention": {
+        "reproducibilityDataDaysAfterClosure": 90
+      },
+      "operatingCosts": "SUPPLEMENTARY_DECLARED_VIEW_SHARED_ALLOCATION_REQUIRED",
+      "limitations": [
+        "M0 configuration catalog only; no experiment can start.",
+        "Runtime is SELF_REPORTED; strategy execution is not attested.",
+        "Periodic anchoring proves integrity after publication, not public receipt before execution.",
+        "All external adapters are disabled pending evidence.",
+        "Numerical defaults are proposed and must be accepted in a versioned policy before X.",
+        "Statistical inference is NOT_ASSESSED; no real-capital eligibility or automatic funding.",
+        "Test tokens and finite artificial test yield prove technical lifecycle only."
+      ],
+      "profileId": "cross-chain-testnet",
+      "networkProfile": "CROSS_CHAIN_TESTNET",
+      "marketNetworkIds": ["ethereum-sepolia", "arc-testnet"],
+      "resultProvenance": "CROSS_CHAIN_TESTNET",
+      "instrumentAllowlist": [
+        "sepolia-cash-usdc",
+        "sepolia-vault-usdc",
+        "arc-test-cash-usdc",
+        "arc-test-vault-usdc"
+      ],
+      "initialDistribution": [
+        {
+          "networkId": "ethereum-sepolia",
+          "instrumentId": "sepolia-cash-usdc",
+          "weightBps": 10000
+        }
+      ],
+      "references": [
+        {
+          "type": "CASH",
+          "instrumentId": "sepolia-cash-usdc",
+          "behavior": "STATIONARY_INITIAL_DISTRIBUTION"
+        },
+        {
+          "type": "CONSERVATIVE_YIELD_TEST_REFERENCE",
+          "instrumentId": "sepolia-vault-usdc",
+          "behavior": "PASSIVE_NO_SWITCHING"
+        }
+      ],
+      "requiredDependencyIds": [
+        "rpc-ethereum-sepolia",
+        "rpc-arc-testnet",
+        "cash-ethereum-sepolia",
+        "cash-arc-testnet",
+        "demo-vault-ethereum-sepolia",
+        "demo-vault-arc-testnet",
+        "cctp-ethereum-sepolia-to-arc-testnet",
+        "cctp-arc-testnet-to-ethereum-sepolia",
+        "testnet-gas-conversion",
+        "registry-arc-testnet",
+        "archive-storage"
+      ],
+      "unitOfAccountDecimals": 6
+    },
+    {
+      "schemaVersion": "proof-of-alpha/profile/v1",
+      "profileVersion": "0.1.0",
+      "status": "PROPOSED_NOT_PRODUCTION",
+      "enabled": false,
+      "mandate": "STABLECOIN_TREASURY",
+      "unitOfAccount": "USDC",
+      "automaticFundingEnabled": false,
+      "registryNetworkId": "arc-testnet",
+      "capitalScenarios": [
+        {
+          "id": "capital-1k",
+          "initialAmountUsdcMinor": "1000000000"
+        },
+        {
+          "id": "capital-10k",
+          "initialAmountUsdcMinor": "10000000000"
+        },
+        {
+          "id": "capital-100k",
+          "initialAmountUsdcMinor": "100000000000"
+        }
+      ],
+      "constraints": {
+        "minimumTargetAvailableCashBps": 1000,
+        "maximumInstrumentWeightBps": 4000,
+        "maximumUnderlyingProtocolWeightBps": 6000,
+        "maximumUsdtExposureBps": 2500,
+        "maximumInTransitBps": 4000,
+        "maximumSwapSlippageBps": 10,
+        "borrowingAllowed": false,
+        "leverageAllowed": false,
+        "oneIntentInProgressPerScenario": true
+      },
+      "execution": {
+        "version": "0.1.0",
+        "firstEthereumStepBlockOffset": 2,
+        "nextEthereumStepBlockOffset": 1,
+        "arcServiceDelaySeconds": 2,
+        "planStartExpirySeconds": 120,
+        "ethereumSegmentMaxBlocks": 10,
+        "arcSegmentMaxSeconds": 120,
+        "blockSelection": "FIRST_ADMISSIBLE_AFTER_DURABLE_RECEIPT",
+        "missingData": "SUSPEND_OR_EXPIRE_NO_PRICE_FALLBACK",
+        "partialFailure": "PRESERVE_SUCCESS_STOP_DEPENDENTS",
+        "gasModel": "CAPTURED_CHAIN_FEES_FORK_CALIBRATED_GAS",
+        "costConversion": "CHARGE_USDC_RETAIN_NATIVE_PRECISION",
+        "swapRule": "DIRECT_EXACT_IN_NET_OF_GAS_TIEBREAK_POOL_ID",
+        "referenceFailure": "RETAIN_CASH_AND_COSTS_COMPARISON_UNAVAILABLE"
+      },
+      "transfer": {
+        "version": "0.1.0",
+        "mechanism": "CCTP",
+        "mode": "STANDARD",
+        "asset": "USDC",
+        "routeDependencyIds": [
+          "cctp-ethereum-mainnet-to-arc-mainnet",
+          "cctp-arc-mainnet-to-ethereum-mainnet"
+        ],
+        "destinationGasConvention": "PREFUNDED_TEST_RELAYER_CHARGE_SCENARIO",
+        "feeRule": "CAPTURE_ALL_APPLICABLE_COSTS_ONCE",
+        "shadowDelayModelVersion": null,
+        "delayedAfterSeconds": 3600,
+        "reconcileAfterSeconds": 86400,
+        "maxDestinationAttempts": 3,
+        "retryAuthority": "OPERATOR_WORKER_SAME_MESSAGE",
+        "splittingAllowed": false
+      },
+      "valuation": {
+        "version": "0.1.0",
+        "basis": "MARK_AND_LIQUIDATION_ESTIMATE",
+        "checkpointRule": "PER_CHAIN_LAST_ADMISSIBLE_BLOCK_AT_OR_BEFORE_CHECKPOINT",
+        "staleData": "DISPLAY_STALE_EXCLUDE_FRESH_OBSERVATIONS",
+        "closure": "FREEZE_DEADLINE_STATE_RECONCILE_TRANSFERS_SEPARATELY"
+      },
+      "cadence": {
+        "valuationCheckpointSeconds": 300,
+        "descriptiveObservationSeconds": 3600,
+        "summarySeconds": 86400,
+        "commitmentBatchSeconds": 300
+      },
+      "durationSeconds": 2592000,
+      "commitmentMode": "PERIODIC_AFTER_RECEIPT",
+      "configurationPublication": "CONFIRMED_BEFORE_ACTIONS_OPEN",
+      "statistics": {
+        "status": "NOT_ASSESSED",
+        "methodVersion": null,
+        "realCapitalEligibilityEnabled": false
+      },
+      "quotas": {
+        "activeAgents": 10,
+        "acceptedIntentsPerDayPerScenario": 60,
+        "activeExperimentsPerAgentPerProfile": 1
+      },
+      "retention": {
+        "reproducibilityDataDaysAfterClosure": 90
+      },
+      "operatingCosts": "SUPPLEMENTARY_DECLARED_VIEW_SHARED_ALLOCATION_REQUIRED",
+      "limitations": [
+        "M0 configuration catalog only; no experiment can start.",
+        "Runtime is SELF_REPORTED; strategy execution is not attested.",
+        "Periodic anchoring proves integrity after publication, not public receipt before execution.",
+        "All external adapters are disabled pending evidence.",
+        "Numerical defaults are proposed and must be accepted in a versioned policy before X.",
+        "Statistical inference is NOT_ASSESSED; no real-capital eligibility or automatic funding.",
+        "Future scope: usable Arc mainnet markets and both routes unverified; test relayer convention is not an approved mainnet funding model."
+      ],
+      "profileId": "cross-chain-mainnet",
+      "networkProfile": "CROSS_CHAIN_MAINNET_FORWARD",
+      "marketNetworkIds": ["ethereum-mainnet", "arc-mainnet"],
+      "resultProvenance": "FORWARD_SHADOW",
+      "instrumentAllowlist": [
+        "eth-cash-usdc",
+        "eth-cash-usdt",
+        "eth-aave-usdc",
+        "eth-aave-usdt",
+        "eth-vault-usdc",
+        "arc-cash-usdc",
+        "arc-vault-usdc"
+      ],
+      "initialDistribution": [
+        {
+          "networkId": "ethereum-mainnet",
+          "instrumentId": "eth-cash-usdc",
+          "weightBps": 10000
+        }
+      ],
+      "references": [
+        {
+          "type": "CASH",
+          "instrumentId": "eth-cash-usdc",
+          "behavior": "STATIONARY_INITIAL_DISTRIBUTION"
+        },
+        {
+          "type": "CONSERVATIVE_YIELD",
+          "instrumentId": "eth-aave-usdc",
+          "behavior": "PASSIVE_NO_SWITCHING"
+        }
+      ],
+      "requiredDependencyIds": [
+        "rpc-ethereum-mainnet",
+        "rpc-arc-mainnet",
+        "cash-ethereum-mainnet",
+        "cash-arc-mainnet",
+        "aave-v3-ethereum",
+        "erc4626-ethereum",
+        "uniswap-v3-ethereum",
+        "yield-arc-mainnet",
+        "cctp-ethereum-mainnet-to-arc-mainnet",
+        "cctp-arc-mainnet-to-ethereum-mainnet",
+        "eth-usdc-conversion",
+        "registry-arc-testnet",
+        "archive-storage"
+      ],
+      "unitOfAccountDecimals": 6
+    }
+  ]
+}

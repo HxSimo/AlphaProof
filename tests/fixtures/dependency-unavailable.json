@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "proof-of-alpha/dependency-fixture/v1",
+  "resultProvenance": "SYNTHETIC_TEST",
+  "request": {
+    "operation": "SNAPSHOT",
+    "dependencyId": "FROM_MANIFEST"
+  },
+  "response": {
+    "status": "UNAVAILABLE",
+    "code": "DEPENDENCY_UNVERIFIED",
+    "rawObjectHash": null,
+    "block": null,
+    "transactionHash": null,
+    "quote": null
+  },
+  "limitation": "Deterministic M0 unavailability fixture; economic adapter fixtures belong to M2/M5. No RPC or transaction is performed."
+}

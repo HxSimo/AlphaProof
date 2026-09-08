@@ -1,0 +1,14 @@
+.git
+.agents
+.codex
+node_modules
+**/node_modules
+**/.next
+**/*.tsbuildinfo
+.env
+.env.*
+.local
+coverage
+contracts/out
+contracts/cache
+artifacts/local

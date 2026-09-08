@@ -1,0 +1,19 @@
+{
+  "name": "@poa/worker",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --env-file-if-exists=../../.env --import tsx --watch src/main.ts",
+    "start": "node --env-file-if-exists=../../.env --import tsx src/main.ts",
+    "build": "tsc --noEmit",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@poa/config": "workspace:*",
+    "@poa/storage": "workspace:*"
+  },
+  "devDependencies": {
+    "tsx": "4.23.13"
+  }
+}
