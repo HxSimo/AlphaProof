@@ -1,0 +1,13 @@
+# Exact continuation prompt for M2
+
+```text
+Use $proof-of-alpha at .agents/skills/proof-of-alpha/SKILL.md as the authoritative workflow and project context. Continue from the verified M1 accounting kernel. Inspect Git status and preserve all existing changes, then read docs/project-state.md, all accepted ADRs, docs/milestones.json, docs/integrations.md, the relevant instrument fact sheets, and every skill reference required for market-data, adapter, economic-engine, replay and testing work. Consult the complete v0.3 source specification for missing or conflicting details. Run pnpm plan M2.
+
+Your objective is M2 only: build the first local Ethereum economic slice. Add content-addressed raw-input archival and replay; implement one Aave V3 USDC cash→supply→cash path; select and implement one synchronous Ethereum USDC ERC-4626 vault family; and implement direct Uniswap V3 USDC/USDT exact-input swaps plus USDT supply. Adapters must emit versioned, source-hashed observations and M1 accounting receipts without owning eligibility logic.
+
+Resolve exact current targets, token scales, supported operations, limits, pauses, caps, liquidity, conversion/index behavior, approvals, fees, gas conversion and quote semantics from official primary sources before activation. Validate real protocol mechanics at pinned blocks with explicit archive RPC requirements. Archive exact amount-dependent quote/feed/block payloads and adapter/parser/source versions. Prove all three capital amounts independently; never scale one quote silently. Charge approvals, gas, protocol fees and swap impact once. Stale, missing or unverifiable inputs must stop execution without fabricated zero cost or success.
+
+If an archive RPC, exact deployment, conversion source or object store is unavailable, complete the interface, deterministic captured/synthetic fixture, validation and replay path, keep the manifest dependency TO_VERIFY and the adapter disabled, and document the exact command/evidence needed to activate it. Never invent an address, block result, route, liquidity, fee, transaction or successful fork test. Keep every external profile disabled unless its existing activation gates are actually satisfied.
+
+Satisfy every M2 observable exit in docs/milestones.json. Add meaningful unit, boundary, failure, fixed-block fork and cross-process replay tests; make credentialed tests fail clearly or skip only under an explicit documented gate. Run all relevant validation, update generated schemas/manifests/fact sheets/project state, record material decisions as ADRs, and make a focused verified M2 commit. Do not begin M3. Finish with the exact continuation prompt for M3.
+```

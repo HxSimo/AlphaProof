@@ -2,17 +2,28 @@
 
 M0 accepts the v0.3 architecture in ADR-0001. There are three applications and PostgreSQL. Raw external data will use S3-compatible storage in M2. No Redis, message broker, inference hosting or additional services are required.
 
-| Boundary | Implemented in M0                                                                           | Next responsibility                                                                                 |
-| -------- | ------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| domain   | Stable error codes, canonical JSON, content hashes, provenance/scenario constants           | Keep free of RPC and UI; amount arithmetic belongs to M1 accounting                                 |
-| schemas  | Strict wire contracts and generated JSON Schema                                             | Expand with tested versioned kernel/adapter contracts as behavior arrives                           |
-| config   | Relational manifest validation, seal checking, fail-closed dependency gate                  | Frozen experiment snapshots at M3                                                                   |
-| storage  | PostgreSQL pool, checksummed transactional migrations and immutable configuration snapshots | Economic event store and queue at M3; S3 archival at M2                                             |
-| api      | Live/ready health and validated `/v1/profiles` catalog                                      | Authentication, signing, locking and atomic durable intent receipt at M3                            |
-| worker   | Repeated configuration validation/archive with restart-safe insertion                       | Resumable planning, capture, execution, transfers, valuations and publication as distinct job types |
-| web      | Server-rendered canonical API catalog and explicit unavailable state                        | Read-only economic results, proofs and exports; no browser accounting                               |
+| Boundary   | Implemented in M0                                                                           | Next responsibility                                                                                 |
+| ---------- | ------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| domain     | Stable error codes, canonical JSON, content hashes, provenance/scenario constants           | Keep free of RPC and UI                                                                             |
+| schemas    | Strict wire contracts and generated JSON Schema, including M1 accounting receipts/state     | Expand with tested versioned adapter contracts as behavior arrives                                  |
+| accounting | Pure receipt reducer, conservation, bigint rounding, transfers and valuation views          | M2 supplies archived mechanics/observations; M3 persists reductions atomically                      |
+| config     | Relational manifest validation, seal checking, fail-closed dependency gate                  | Frozen experiment snapshots at M3                                                                   |
+| storage    | PostgreSQL pool, checksummed transactional migrations and immutable configuration snapshots | Economic event store and queue at M3; S3 archival at M2                                             |
+| api        | Live/ready health and validated `/v1/profiles` catalog                                      | Authentication, signing, locking and atomic durable intent receipt at M3                            |
+| worker     | Repeated configuration validation/archive with restart-safe insertion                       | Resumable planning, capture, execution, transfers, valuations and publication as distinct job types |
+| web        | Server-rendered canonical API catalog and explicit unavailable state                        | Read-only economic results, proofs and exports; no browser accounting                               |
 
-Package imports form an acyclic graph: domain → schemas → config → API/worker; storage depends on domain. Web consumes schemas/API output. Packages for accounting, adapters, market-data, SDK, experiments, execution, valuation, evaluation and commitments are created when they have executable consumers in their assigned milestone. A conceptual interface is not a finished integration.
+Package imports form an acyclic graph: domain → schemas → accounting; config consumes domain/schemas; storage depends on domain; API/worker consume config/storage. Web consumes schemas/API output. Accounting has no RPC, database or UI dependency. Packages for adapters, market-data, SDK, experiments, execution, valuation, evaluation and commitments are created when they have executable consumers in their assigned milestone. A conceptual interface is not a finished integration.
+
+## Deterministic accounting boundary
+
+`ShadowPortfolio` is one global treasury for exactly one experiment/scenario. Its network cash families, reservations, indexed positions, transfer receivables and fee payables satisfy `net assets = initial capital + modeled PnL - recognized costs` after every receipt. Multiple balance views may alias one family, which models Arc native/ERC-20 access without creating another balance. The three standard capital sizes instantiate separate portfolio objects and operation/version streams.
+
+Receipt application is optimistic and immutable. A receipt binds accounting version, experiment, scenario, provenance, expected portfolio version, operation identity, source hashes and observed time. Exact redelivery returns the prior state; changed content under the same operation identity fails. Serialization is a durable boundary: replay reparses and revalidates state after every receipt.
+
+The transfer reducer moves value through cash → reservation → one unavailable receivable → destination cash. Source failure releases the reservation minus proven costs. A delayed or exhausted transfer keeps the receivable. Settlement removes it before crediting the destination and cannot be applied twice. Deadline closure stores a hash of the pre-close state; later transfer reconciliation is allowed while local investing and accrual are rejected.
+
+Valuation is a pure projection. Mark includes a transfer receivable at its recorded amount; immediate liquidation excludes it and applies supplied recoverability/exit costs. Stale and unavailable inputs remain explicit. Estimated exit costs never mutate portfolio cash or cumulative costs.
 
 ## Database design
 

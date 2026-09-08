@@ -36,6 +36,7 @@
     "@poa/domain": "workspace:*",
     "@poa/schemas": "workspace:*",
     "@poa/config": "workspace:*",
+    "@poa/accounting": "workspace:*",
     "@poa/storage": "workspace:*"
   }
 }

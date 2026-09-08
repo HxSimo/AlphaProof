@@ -10,6 +10,7 @@ COPY packages/domain/package.json packages/domain/package.json
 COPY packages/schemas/package.json packages/schemas/package.json
 COPY packages/config/package.json packages/config/package.json
 COPY packages/storage/package.json packages/storage/package.json
+COPY packages/accounting/package.json packages/accounting/package.json
 RUN pnpm install --frozen-lockfile
 COPY . .
 RUN pnpm build

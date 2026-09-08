@@ -2,8 +2,8 @@
 
 ## Current milestone
 
-- Milestone: **M0 complete — exit criteria verified. M1 has not started.**
-- Target observable outcome: runnable repository/toolchain and CI, strict schemas, versioned profiles/manifests, instrument fact sheets, explicit disabled external gates, scope/provenance decisions and executable M0–M7 plan.
+- Milestone: **M1 complete — exit criteria verified. M2 has not started.**
+- Target observable outcome: deterministic global portfolio accounting with canonical integer arithmetic, conservation, exactly-once receipt effects, restart-safe transfer lifecycle and pure mark/liquidation valuation.
 - Last updated: 2026-09-08.
 - Baseline: repository contained the authoritative skill only, no implementation or commits. Existing skill files are preserved unchanged.
 
@@ -18,13 +18,18 @@
 | API catalog and liveness/readiness                                                     | Fastify injection tests, shared output schema, unavailable DB state without leaked details                               | Local configuration review          |
 | Web configuration review                                                               | Next production build and Docker web/API smoke passed; page renders exact API bundle hash                                | No accounting in browser            |
 | Worker configuration archival and migration                                            | Eight PostgreSQL checks: concurrent migrations/delivery, restart/reconnect, hash, mutation rejection, drift and rollback | Local PostgreSQL 17.9               |
-| Milestone plan and decisions                                                           | `pnpm plan M0` through `M7`; five accepted ADRs                                                                          | Requested scope remains M0          |
+| Milestone plan and decisions                                                           | `pnpm plan M0` through `M7`; six accepted ADRs                                                                           | Requested scope ends at M1          |
+| Deterministic global accounting                                                        | Conservation asserted after every receipt; cash, reservations, indexed positions, receivables, payables and allowances   | Synthetic M1 only                   |
+| Rounding and balance aliases                                                           | 500 bigint floor/ceil cases with remainders; Arc native/ERC-20 aliases share one balance family                          | No live asset balance claimed       |
+| Receipt idempotency and partial failure                                                | Exact duplicate no-op, changed duplicate conflict, stale-version rejection, approval/withdrawal/failed-swap cases        | Pure reducer, no database queue yet |
+| Transfer lifecycle and restart                                                         | 100 generated serialize/reload sequences plus JSON burn/delay/retry/settlement/payable fixture                           | Synthetic CCTP-style lifecycle      |
+| Mark and liquidation contracts                                                         | In-transit, blocked, stale and unavailable values explicit; repeated estimates leave accounting unchanged                | Synthetic observation inputs        |
 
 ## In progress
 
-No implementation work remains in M0. The verified foundation is committed as `feat: establish verified M0 project foundation`; use `git log -1` for its exact hash. M1 is the next authorized continuation only when requested. No M1 accounting package or economic reducer has been started.
+No implementation work remains in M1. The reducer, schemas, fixture, ADR and validation evidence are complete; this document is updated before the focused M1 commit. M2 remains unauthorized and unstarted.
 
-M0 exit: every required adapter has a disabled TO_VERIFY gate and documented completion evidence; mainnet/testnet market combinations and reference provenance are unambiguous and tested. All three profiles are disabled. The local catalog is reviewable at <http://localhost:3000>; it is not an active experiment.
+M1 exit: every accepted receipt preserves one global scenario value under the declared cost/PnL identity. Source failure, transfer delay/retry/settlement, duplicate delivery, restart, partial success, Arc aliasing, valuation failure and closure-in-transit paths are covered. All three profiles and every external dependency remain disabled. The local catalog is reviewable at <http://localhost:3000>; it is not an active experiment.
 
 ## External verifications
 
@@ -58,38 +63,38 @@ No real protocol adapter, deployed contract, liquidity, current fee, archive RPC
 
 ## Risks and scope cuts
 
-| Risk                                             | Impact                         | Mitigation or cut                                                                                 | Trigger                              |
-| ------------------------------------------------ | ------------------------------ | ------------------------------------------------------------------------------------------------- | ------------------------------------ |
-| Unverified external deployments/data/costs       | False economic claims          | All gates disabled; archive official/code/fork/transaction evidence before activation             | Before M2/M5 enablement              |
-| Mixed mainnet/testnet market history             | Invalid eligibility            | Separate experiments; registry location does not imply market provenance                          | Every profile/receipt/export         |
-| Duplicate capital or financial effects           | Invalid accounting             | M1 pure invariants and M3 transaction/queue constraints; no accounting implementation claimed yet | Before accepting any signed intent   |
-| Two similar Ethereum vaults increase scope       | Delays critical flow           | Cut to one synchronous USDC vault family; candidates remain unselected                            | M2 integration selection             |
-| Short history or disabled inference              | Unsupported green eligibility  | NOT_ASSESSED and eligibility disabled; no automatic funds                                         | Every future report                  |
-| Unavailable raw data/export storage              | Irreproducible result          | S3 retention/restore remains gated; local config archive is narrower                              | Before external capture is relied on |
-| Public receipt timing trusted to server          | Late anchor can be overstated  | Periodic integrity guarantee only; pre-execution anchoring deferred                               | Demo language and proof UI           |
-| Mainnet cross-chain gas/market policy unresolved | Testnet assumptions misapplied | Future mainnet profile cannot activate in this version                                            | Future new profile/experiment        |
+| Risk                                             | Impact                         | Mitigation or cut                                                                     | Trigger                              |
+| ------------------------------------------------ | ------------------------------ | ------------------------------------------------------------------------------------- | ------------------------------------ |
+| Unverified external deployments/data/costs       | False economic claims          | All gates disabled; archive official/code/fork/transaction evidence before activation | Before M2/M5 enablement              |
+| Mixed mainnet/testnet market history             | Invalid eligibility            | Separate experiments; registry location does not imply market provenance              | Every profile/receipt/export         |
+| Duplicate capital or financial effects           | Invalid accounting             | M1 pure invariants/idempotency pass; M3 must add transaction and queue constraints    | Before accepting any signed intent   |
+| Two similar Ethereum vaults increase scope       | Delays critical flow           | Cut to one synchronous USDC vault family; candidates remain unselected                | M2 integration selection             |
+| Short history or disabled inference              | Unsupported green eligibility  | NOT_ASSESSED and eligibility disabled; no automatic funds                             | Every future report                  |
+| Unavailable raw data/export storage              | Irreproducible result          | S3 retention/restore remains gated; local config archive is narrower                  | Before external capture is relied on |
+| Public receipt timing trusted to server          | Late anchor can be overstated  | Periodic integrity guarantee only; pre-execution anchoring deferred                   | Demo language and proof UI           |
+| Mainnet cross-chain gas/market policy unresolved | Testnet assumptions misapplied | Future mainnet profile cannot activate in this version                                | Future new profile/experiment        |
 
 ## Decisions
 
-- Accepted ADRs: [0001 architecture](adr/0001-architecture.md), [0002 profiles/provenance](adr/0002-profiles-and-provenance.md), [0003 scope](adr/0003-scope-and-integrations.md), [0004 proposed economics](adr/0004-proposed-economic-policy.md), [0005 canonical schemas](adr/0005-canonical-schemas.md).
+- Accepted ADRs: [0001 architecture](adr/0001-architecture.md), [0002 profiles/provenance](adr/0002-profiles-and-provenance.md), [0003 scope](adr/0003-scope-and-integrations.md), [0004 proposed economics](adr/0004-proposed-economic-policy.md), [0005 canonical schemas](adr/0005-canonical-schemas.md), [0006 deterministic accounting](adr/0006-deterministic-accounting.md).
 - Proposed parameters: numerical risk/timing/cadence/quota defaults, passive reference target, exact market selection and calibrations remain profile proposals. ADR acceptance does not enable a profile.
 - Superseded ADRs: none.
 - LOCKED product requirements are preserved; extra vaults, advanced inference, custom profiles, optional sponsor integrations and live capital controls are cut/deferred as documented.
 
 ## Test health
 
-- Unit/property: 52 focused tests passed in four files, including canonical ordering/permutations, uint boundaries, receipt/provenance and manifest failure cases.
+- Unit/property: 65 focused tests passed in five files. M1 adds 13 tests covering int256 bounds, 500 rounding examples, 100 generated transfer/restart sequences, three scenario sizes, aliases, costs, failure, idempotency, transfer settlement and valuation.
 - Database/integration: eight PostgreSQL foundation checks passed. Economic receipt/queue concurrency tests belong to M3.
 - Fork/adapter: not implemented/run; no RPC or bytecode evidence claimed.
-- Replay: configuration reload/seal and snapshot hash checked; economic receipt replay belongs to M1/M2 onward.
+- Replay: configuration reload/seal and snapshot hash checked; independent M1 fixture replays parse serialization at every receipt and produce identical state hashes.
 - End to end: Docker web/API/database smoke passed; the actual restarted worker retained one configuration snapshot and returned inserted=false. SDK-signed economic flow not implemented (M3).
 - Live testnet: not run; requires actual M5 transactions.
 - Solidity: toolchain settings selected; no contract suite exists yet and no pass is claimed.
 - GitHub CI: workflow configured; remote execution not run or claimed.
-- Full local check: `pnpm check` passed; Docker frozen install/build/start, migrations, DB tests and smoke passed. No failing M0 check remains. [Exact evidence](evidence/m0-validation.md).
+- Full local check: `pnpm check` passed with formatting, all typechecks, config/schema/plan validation, 65 tests and production builds. M0 Docker, migrations, DB tests and smoke remain previously verified and unchanged. [M1 evidence](evidence/m1-validation.md); [M0 evidence](evidence/m0-validation.md).
 
 ## Next smallest credible milestone
 
-M1 only: pure deterministic global portfolio accounting. Introduce cash, reservations, shares/positions, fees/payables, allowances and a CCTP receivable lifecycle with stable operation identity. Prove conservation, cost recognition once, partial-failure preservation, Arc precision/aliasing and exactly one settlement credit through synthetic fixtures, arbitrary sequences and serialize/reload after every durable boundary. Add mark/liquidation contracts without RPC or balance mutation during estimates. No external credential is needed and no adapter is activated. Run `pnpm plan M1` for the observable substeps and acceptance commands; update this document/ADRs and commit after verification before M2.
+M2 only: content-addressed external input archival and a first Ethereum economic path covering Aave V3 USDC, one selected synchronous USDC ERC-4626 vault family, direct Uniswap V3 USDC/USDT swaps and USDT supply. Exact deployments, code, blocks, limits, liquidity, fees and quote/conversion sources must be verified from current official sources and fixed-block evidence before activation. When credentials or facts are unavailable, deterministic fixtures and fail-closed TO_VERIFY gates remain required. No M3 API/signing/database work begins.
 
-The [exact M1 continuation prompt](continuation-m1.md) is ready.
+The [exact M2 continuation prompt](continuation-m2.md) is ready.

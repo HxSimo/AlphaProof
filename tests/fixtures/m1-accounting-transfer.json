@@ -1,0 +1,247 @@
+{
+  "fixtureVersion": "proof-of-alpha/accounting-fixture/v1",
+  "provenance": "SYNTHETIC_TEST",
+  "description": "Synthetic CCTP-style reserve, burn, delay, retry, settlement and payable settlement. It is not live-chain evidence.",
+  "portfolio": {
+    "experimentId": "exp-m1-fixture",
+    "scenarioId": "capital-10k",
+    "portfolioId": "portfolio-m1-fixture",
+    "resultProvenance": "SYNTHETIC_TEST",
+    "initialValueUsdcMinor": "10000000000",
+    "maxDestinationAttempts": "3",
+    "balanceViews": [
+      {
+        "viewId": "ethereum-usdc-erc20",
+        "networkId": "ethereum-mainnet",
+        "assetId": "usdc",
+        "balanceFamilyId": "ethereum-usdc",
+        "decimals": 6,
+        "canonicalDecimals": 6
+      },
+      {
+        "viewId": "arc-usdc-native",
+        "networkId": "arc-mainnet",
+        "assetId": "usdc",
+        "balanceFamilyId": "arc-usdc",
+        "decimals": 18,
+        "canonicalDecimals": 6
+      },
+      {
+        "viewId": "arc-usdc-erc20",
+        "networkId": "arc-mainnet",
+        "assetId": "usdc",
+        "balanceFamilyId": "arc-usdc",
+        "decimals": 6,
+        "canonicalDecimals": 6
+      }
+    ],
+    "initialCash": [
+      {
+        "viewId": "ethereum-usdc-erc20",
+        "amountUsdcMinor": "10000000000"
+      }
+    ]
+  },
+  "receipts": [
+    {
+      "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+      "accountingVersion": "1.0.0",
+      "kind": "RESERVE",
+      "operationId": "op-reserve",
+      "experimentId": "exp-m1-fixture",
+      "scenarioId": "capital-10k",
+      "expectedPortfolioVersion": "0",
+      "observedAt": "2026-09-08T10:00:00.000Z",
+      "resultProvenance": "SYNTHETIC_TEST",
+      "sourceHashes": [
+        "0x0101010101010101010101010101010101010101010101010101010101010101"
+      ],
+      "costs": [],
+      "reservationId": "reservation-one",
+      "cashViewId": "ethereum-usdc-erc20",
+      "amountUsdcMinor": "4000000000"
+    },
+    {
+      "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+      "accountingVersion": "1.0.0",
+      "kind": "TRANSFER_BURNED",
+      "operationId": "op-burn",
+      "experimentId": "exp-m1-fixture",
+      "scenarioId": "capital-10k",
+      "expectedPortfolioVersion": "1",
+      "observedAt": "2026-09-08T10:01:00.000Z",
+      "resultProvenance": "SYNTHETIC_TEST",
+      "sourceHashes": [
+        "0x0202020202020202020202020202020202020202020202020202020202020202"
+      ],
+      "costs": [
+        {
+          "costId": "cost-transfer-fee",
+          "category": "TRANSFER_FEE",
+          "funding": "WITHHELD",
+          "amountUsdcMinor": "1000000",
+          "networkId": "ethereum-mainnet",
+          "cashBalanceFamilyId": null,
+          "sourceHash": "0x0202020202020202020202020202020202020202020202020202020202020202"
+        },
+        {
+          "costId": "cost-source-gas",
+          "category": "SOURCE_GAS",
+          "funding": "PAYABLE",
+          "amountUsdcMinor": "2000000",
+          "networkId": "ethereum-mainnet",
+          "cashBalanceFamilyId": null,
+          "sourceHash": "0x0202020202020202020202020202020202020202020202020202020202020202"
+        }
+      ],
+      "reservationId": "reservation-one",
+      "transferId": "transfer-one",
+      "messageIdentity": "synthetic-message-one",
+      "destinationNetworkId": "arc-mainnet",
+      "destinationCashViewId": "arc-usdc-native",
+      "netReceivableUsdcMinor": "3999000000"
+    },
+    {
+      "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+      "accountingVersion": "1.0.0",
+      "kind": "TRANSFER_DELAYED",
+      "operationId": "op-delay",
+      "experimentId": "exp-m1-fixture",
+      "scenarioId": "capital-10k",
+      "expectedPortfolioVersion": "2",
+      "observedAt": "2026-09-08T10:02:00.000Z",
+      "resultProvenance": "SYNTHETIC_TEST",
+      "sourceHashes": [
+        "0x0303030303030303030303030303030303030303030303030303030303030303"
+      ],
+      "costs": [],
+      "transferId": "transfer-one"
+    },
+    {
+      "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+      "accountingVersion": "1.0.0",
+      "kind": "TRANSFER_READY",
+      "operationId": "op-ready-one",
+      "experimentId": "exp-m1-fixture",
+      "scenarioId": "capital-10k",
+      "expectedPortfolioVersion": "3",
+      "observedAt": "2026-09-08T10:03:00.000Z",
+      "resultProvenance": "SYNTHETIC_TEST",
+      "sourceHashes": [
+        "0x0404040404040404040404040404040404040404040404040404040404040404"
+      ],
+      "costs": [],
+      "transferId": "transfer-one"
+    },
+    {
+      "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+      "accountingVersion": "1.0.0",
+      "kind": "TRANSFER_DESTINATION_RETRY",
+      "operationId": "op-retry",
+      "experimentId": "exp-m1-fixture",
+      "scenarioId": "capital-10k",
+      "expectedPortfolioVersion": "4",
+      "observedAt": "2026-09-08T10:04:00.000Z",
+      "resultProvenance": "SYNTHETIC_TEST",
+      "sourceHashes": [
+        "0x0505050505050505050505050505050505050505050505050505050505050505"
+      ],
+      "costs": [
+        {
+          "costId": "cost-retry-gas",
+          "category": "RETRY_GAS",
+          "funding": "PAYABLE",
+          "amountUsdcMinor": "1000000",
+          "networkId": "arc-mainnet",
+          "cashBalanceFamilyId": null,
+          "sourceHash": "0x0505050505050505050505050505050505050505050505050505050505050505"
+        }
+      ],
+      "transferId": "transfer-one"
+    },
+    {
+      "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+      "accountingVersion": "1.0.0",
+      "kind": "TRANSFER_READY",
+      "operationId": "op-ready-two",
+      "experimentId": "exp-m1-fixture",
+      "scenarioId": "capital-10k",
+      "expectedPortfolioVersion": "5",
+      "observedAt": "2026-09-08T10:05:00.000Z",
+      "resultProvenance": "SYNTHETIC_TEST",
+      "sourceHashes": [
+        "0x0606060606060606060606060606060606060606060606060606060606060606"
+      ],
+      "costs": [],
+      "transferId": "transfer-one"
+    },
+    {
+      "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+      "accountingVersion": "1.0.0",
+      "kind": "TRANSFER_SETTLED",
+      "operationId": "op-settle",
+      "experimentId": "exp-m1-fixture",
+      "scenarioId": "capital-10k",
+      "expectedPortfolioVersion": "6",
+      "observedAt": "2026-09-08T10:06:00.000Z",
+      "resultProvenance": "SYNTHETIC_TEST",
+      "sourceHashes": [
+        "0x0707070707070707070707070707070707070707070707070707070707070707"
+      ],
+      "costs": [
+        {
+          "costId": "cost-destination-fee",
+          "category": "DESTINATION_GAS",
+          "funding": "WITHHELD",
+          "amountUsdcMinor": "1000000",
+          "networkId": "arc-mainnet",
+          "cashBalanceFamilyId": null,
+          "sourceHash": "0x0707070707070707070707070707070707070707070707070707070707070707"
+        }
+      ],
+      "transferId": "transfer-one",
+      "destinationCreditUsdcMinor": "3998000000"
+    },
+    {
+      "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+      "accountingVersion": "1.0.0",
+      "kind": "PAYABLE_SETTLED",
+      "operationId": "op-pay-source-gas",
+      "experimentId": "exp-m1-fixture",
+      "scenarioId": "capital-10k",
+      "expectedPortfolioVersion": "7",
+      "observedAt": "2026-09-08T10:07:00.000Z",
+      "resultProvenance": "SYNTHETIC_TEST",
+      "sourceHashes": [
+        "0x0808080808080808080808080808080808080808080808080808080808080808"
+      ],
+      "payableId": "cost-source-gas",
+      "cashViewId": "ethereum-usdc-erc20"
+    },
+    {
+      "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+      "accountingVersion": "1.0.0",
+      "kind": "PAYABLE_SETTLED",
+      "operationId": "op-pay-retry-gas",
+      "experimentId": "exp-m1-fixture",
+      "scenarioId": "capital-10k",
+      "expectedPortfolioVersion": "8",
+      "observedAt": "2026-09-08T10:08:00.000Z",
+      "resultProvenance": "SYNTHETIC_TEST",
+      "sourceHashes": [
+        "0x0909090909090909090909090909090909090909090909090909090909090909"
+      ],
+      "payableId": "cost-retry-gas",
+      "cashViewId": "arc-usdc-erc20"
+    }
+  ],
+  "expected": {
+    "version": "9",
+    "globalBookValueUsdcMinor": "9995000000",
+    "ethereumCashUsdcMinor": "5998000000",
+    "arcCashUsdcMinor": "3997000000",
+    "recognizedCostUsdcMinor": "5000000",
+    "receivableCount": 0,
+    "payableCount": 0
+  }
+}

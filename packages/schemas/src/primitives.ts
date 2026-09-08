@@ -12,6 +12,16 @@ export const UInt = z
     'Expected uint256',
   );
 export const PositiveUInt = UInt.refine((v) => v !== '0', 'Must be positive');
+export const Int = z
+  .string()
+  .regex(/^(0|-?[1-9][0-9]{0,77})$/)
+  .refine(
+    (v) =>
+      /^(0|-?[1-9][0-9]{0,77})$/.test(v) &&
+      BigInt(v) >= -(1n << 255n) &&
+      BigInt(v) < 1n << 255n,
+    'Expected int256',
+  );
 export const Bps = z.number().int().min(0).max(10000);
 export const Seconds = z.number().int().positive().max(31536000);
 export const Timestamp = z.iso.datetime({ precision: 3 });

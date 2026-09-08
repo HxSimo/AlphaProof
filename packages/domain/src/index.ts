@@ -20,6 +20,11 @@ export const ERROR_CODES = [
   'QUOTE_UNAVAILABLE',
   'MIGRATION_CHANGED',
   'DATABASE_UNAVAILABLE',
+  'ACCOUNTING_INVARIANT',
+  'OPERATION_CONFLICT',
+  'INVALID_TRANSITION',
+  'CLOSED_PORTFOLIO',
+  'PAYABLE_NOT_FOUND',
 ] as const;
 export type ErrorCode = (typeof ERROR_CODES)[number];
 export class PoaError extends Error {

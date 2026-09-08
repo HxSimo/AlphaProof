@@ -6,6 +6,7 @@ import {
   Amount,
   EvaluationReceipt,
   ExperimentPolicy,
+  Int,
   TransferReceipt,
   UInt,
   ValuationCheckpoint,
@@ -26,6 +27,16 @@ describe('canonical boundaries', () => {
       ((1n << 256n) - 1n).toString(),
     );
     expect(UInt.safeParse((1n << 256n).toString()).success).toBe(false);
+  });
+  it('supports the full canonical int256 range for modeled PnL', () => {
+    const minimum = -(1n << 255n);
+    const maximum = (1n << 255n) - 1n;
+    expect(Int.parse(minimum.toString())).toBe(minimum.toString());
+    expect(Int.parse(maximum.toString())).toBe(maximum.toString());
+    expect(Int.safeParse((minimum - 1n).toString()).success).toBe(false);
+    expect(Int.safeParse((maximum + 1n).toString()).success).toBe(false);
+    for (const invalid of ['-0', '+1', '01', '-01', '1.0'])
+      expect(Int.safeParse(invalid).success).toBe(false);
   });
   it.each([1000, 1n, '-1', '01', '1e3', '1.0', '+1', '', ' 1'])(
     'rejects noncanonical amount %#',

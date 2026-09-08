@@ -2,6 +2,2459 @@
   "schemaVersion": "proof-of-alpha/schema-catalog/v1",
   "semanticValidation": "packages/schemas + packages/config; see docs/schemas.md",
   "schemas": {
+    "AccountingCost": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "costId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "APPROVAL_GAS",
+            "EXECUTION_GAS",
+            "SOURCE_GAS",
+            "DESTINATION_GAS",
+            "RETRY_GAS",
+            "PROTOCOL_FEE",
+            "SWAP_FEE_IMPACT",
+            "TRANSFER_FEE",
+            "RELAYER"
+          ]
+        },
+        "funding": {
+          "type": "string",
+          "enum": [
+            "AVAILABLE_CASH",
+            "PAYABLE",
+            "WITHHELD"
+          ]
+        },
+        "amountUsdcMinor": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        },
+        "networkId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "cashBalanceFamilyId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sourceHash": {
+          "type": "string",
+          "pattern": "^0x[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "costId",
+        "category",
+        "funding",
+        "amountUsdcMinor",
+        "networkId",
+        "cashBalanceFamilyId",
+        "sourceHash"
+      ],
+      "additionalProperties": false
+    },
+    "AccountingPosition": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "positionId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "networkId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "instrumentId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "assetId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "sharesMinor": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        },
+        "indexNumerator": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        },
+        "indexDenominator": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        },
+        "bookValueUsdcMinor": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        },
+        "roundingRemainderNumerator": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        },
+        "lastSourceHash": {
+          "type": "string",
+          "pattern": "^0x[0-9a-f]{64}$"
+        },
+        "lastObservedAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+        }
+      },
+      "required": [
+        "positionId",
+        "networkId",
+        "instrumentId",
+        "assetId",
+        "sharesMinor",
+        "indexNumerator",
+        "indexDenominator",
+        "bookValueUsdcMinor",
+        "roundingRemainderNumerator",
+        "lastSourceHash",
+        "lastObservedAt"
+      ],
+      "additionalProperties": false
+    },
+    "AccountingReceipt": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "type": "string",
+              "const": "proof-of-alpha/accounting-receipt/v1"
+            },
+            "accountingVersion": {
+              "type": "string",
+              "const": "1.0.0"
+            },
+            "operationId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "experimentId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "scenarioId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "expectedPortfolioVersion": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,77})$"
+            },
+            "observedAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+            },
+            "resultProvenance": {
+              "type": "string",
+              "enum": [
+                "FORWARD_SHADOW",
+                "HISTORICAL_REPLAY",
+                "SYNTHETIC_TEST",
+                "LIVE_SEPARATE",
+                "CROSS_CHAIN_TESTNET",
+                "MIXED_DIAGNOSTIC"
+              ]
+            },
+            "sourceHashes": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^0x[0-9a-f]{64}$"
+              }
+            },
+            "kind": {
+              "type": "string",
+              "const": "NO_EFFECT"
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "REJECTED_BEFORE_ATTEMPT",
+                "SKIPPED"
+              ]
+            },
+            "reasonCode": {
+              "type": "string",
+              "minLength": 1
+            },
+            "costs": {
+              "type": "array",
+              "prefixItems": [],
+              "items": false,
+              "maxItems": 0
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "accountingVersion",
+            "operationId",
+            "experimentId",
+            "scenarioId",
+            "expectedPortfolioVersion",
+            "observedAt",
+            "resultProvenance",
+            "sourceHashes",
+            "kind",
+            "status",
+            "reasonCode",
+            "costs"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "type": "string",
+              "const": "proof-of-alpha/accounting-receipt/v1"
+            },
+            "accountingVersion": {
+              "type": "string",
+              "const": "1.0.0"
+            },
+            "operationId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "experimentId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "scenarioId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "expectedPortfolioVersion": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,77})$"
+            },
+            "observedAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+            },
+            "resultProvenance": {
+              "type": "string",
+              "enum": [
+                "FORWARD_SHADOW",
+                "HISTORICAL_REPLAY",
+                "SYNTHETIC_TEST",
+                "LIVE_SEPARATE",
+                "CROSS_CHAIN_TESTNET",
+                "MIXED_DIAGNOSTIC"
+              ]
+            },
+            "sourceHashes": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^0x[0-9a-f]{64}$"
+              }
+            },
+            "costs": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "costId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "category": {
+                    "type": "string",
+                    "enum": [
+                      "APPROVAL_GAS",
+                      "EXECUTION_GAS",
+                      "SOURCE_GAS",
+                      "DESTINATION_GAS",
+                      "RETRY_GAS",
+                      "PROTOCOL_FEE",
+                      "SWAP_FEE_IMPACT",
+                      "TRANSFER_FEE",
+                      "RELAYER"
+                    ]
+                  },
+                  "funding": {
+                    "type": "string",
+                    "enum": [
+                      "AVAILABLE_CASH",
+                      "PAYABLE",
+                      "WITHHELD"
+                    ]
+                  },
+                  "amountUsdcMinor": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "networkId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "cashBalanceFamilyId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "sourceHash": {
+                    "type": "string",
+                    "pattern": "^0x[0-9a-f]{64}$"
+                  }
+                },
+                "required": [
+                  "costId",
+                  "category",
+                  "funding",
+                  "amountUsdcMinor",
+                  "networkId",
+                  "cashBalanceFamilyId",
+                  "sourceHash"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "kind": {
+              "type": "string",
+              "const": "RESERVE"
+            },
+            "reservationId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "cashViewId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "amountUsdcMinor": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,77})$"
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "accountingVersion",
+            "operationId",
+            "experimentId",
+            "scenarioId",
+            "expectedPortfolioVersion",
+            "observedAt",
+            "resultProvenance",
+            "sourceHashes",
+            "costs",
+            "kind",
+            "reservationId",
+            "cashViewId",
+            "amountUsdcMinor"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "type": "string",
+              "const": "proof-of-alpha/accounting-receipt/v1"
+            },
+            "accountingVersion": {
+              "type": "string",
+              "const": "1.0.0"
+            },
+            "operationId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "experimentId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "scenarioId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "expectedPortfolioVersion": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,77})$"
+            },
+            "observedAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+            },
+            "resultProvenance": {
+              "type": "string",
+              "enum": [
+                "FORWARD_SHADOW",
+                "HISTORICAL_REPLAY",
+                "SYNTHETIC_TEST",
+                "LIVE_SEPARATE",
+                "CROSS_CHAIN_TESTNET",
+                "MIXED_DIAGNOSTIC"
+              ]
+            },
+            "sourceHashes": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^0x[0-9a-f]{64}$"
+              }
+            },
+            "costs": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "costId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "category": {
+                    "type": "string",
+                    "enum": [
+                      "APPROVAL_GAS",
+                      "EXECUTION_GAS",
+                      "SOURCE_GAS",
+                      "DESTINATION_GAS",
+                      "RETRY_GAS",
+                      "PROTOCOL_FEE",
+                      "SWAP_FEE_IMPACT",
+                      "TRANSFER_FEE",
+                      "RELAYER"
+                    ]
+                  },
+                  "funding": {
+                    "type": "string",
+                    "enum": [
+                      "AVAILABLE_CASH",
+                      "PAYABLE",
+                      "WITHHELD"
+                    ]
+                  },
+                  "amountUsdcMinor": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "networkId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "cashBalanceFamilyId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "sourceHash": {
+                    "type": "string",
+                    "pattern": "^0x[0-9a-f]{64}$"
+                  }
+                },
+                "required": [
+                  "costId",
+                  "category",
+                  "funding",
+                  "amountUsdcMinor",
+                  "networkId",
+                  "cashBalanceFamilyId",
+                  "sourceHash"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "kind": {
+              "type": "string",
+              "const": "COST"
+            },
+            "status": {
+              "type": "string",
+              "const": "FAILED_AFTER_ATTEMPT"
+            },
+            "reasonCode": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "accountingVersion",
+            "operationId",
+            "experimentId",
+            "scenarioId",
+            "expectedPortfolioVersion",
+            "observedAt",
+            "resultProvenance",
+            "sourceHashes",
+            "costs",
+            "kind",
+            "status",
+            "reasonCode"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "type": "string",
+              "const": "proof-of-alpha/accounting-receipt/v1"
+            },
+            "accountingVersion": {
+              "type": "string",
+              "const": "1.0.0"
+            },
+            "operationId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "experimentId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "scenarioId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "expectedPortfolioVersion": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,77})$"
+            },
+            "observedAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+            },
+            "resultProvenance": {
+              "type": "string",
+              "enum": [
+                "FORWARD_SHADOW",
+                "HISTORICAL_REPLAY",
+                "SYNTHETIC_TEST",
+                "LIVE_SEPARATE",
+                "CROSS_CHAIN_TESTNET",
+                "MIXED_DIAGNOSTIC"
+              ]
+            },
+            "sourceHashes": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^0x[0-9a-f]{64}$"
+              }
+            },
+            "costs": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "costId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "category": {
+                    "type": "string",
+                    "enum": [
+                      "APPROVAL_GAS",
+                      "EXECUTION_GAS",
+                      "SOURCE_GAS",
+                      "DESTINATION_GAS",
+                      "RETRY_GAS",
+                      "PROTOCOL_FEE",
+                      "SWAP_FEE_IMPACT",
+                      "TRANSFER_FEE",
+                      "RELAYER"
+                    ]
+                  },
+                  "funding": {
+                    "type": "string",
+                    "enum": [
+                      "AVAILABLE_CASH",
+                      "PAYABLE",
+                      "WITHHELD"
+                    ]
+                  },
+                  "amountUsdcMinor": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "networkId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "cashBalanceFamilyId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "sourceHash": {
+                    "type": "string",
+                    "pattern": "^0x[0-9a-f]{64}$"
+                  }
+                },
+                "required": [
+                  "costId",
+                  "category",
+                  "funding",
+                  "amountUsdcMinor",
+                  "networkId",
+                  "cashBalanceFamilyId",
+                  "sourceHash"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "kind": {
+              "type": "string",
+              "const": "APPROVE"
+            },
+            "allowanceId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "networkId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "assetId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "spenderId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "amountMinor": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,77})$"
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "accountingVersion",
+            "operationId",
+            "experimentId",
+            "scenarioId",
+            "expectedPortfolioVersion",
+            "observedAt",
+            "resultProvenance",
+            "sourceHashes",
+            "costs",
+            "kind",
+            "allowanceId",
+            "networkId",
+            "assetId",
+            "spenderId",
+            "amountMinor"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "type": "string",
+              "const": "proof-of-alpha/accounting-receipt/v1"
+            },
+            "accountingVersion": {
+              "type": "string",
+              "const": "1.0.0"
+            },
+            "operationId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "experimentId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "scenarioId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "expectedPortfolioVersion": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,77})$"
+            },
+            "observedAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+            },
+            "resultProvenance": {
+              "type": "string",
+              "enum": [
+                "FORWARD_SHADOW",
+                "HISTORICAL_REPLAY",
+                "SYNTHETIC_TEST",
+                "LIVE_SEPARATE",
+                "CROSS_CHAIN_TESTNET",
+                "MIXED_DIAGNOSTIC"
+              ]
+            },
+            "sourceHashes": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^0x[0-9a-f]{64}$"
+              }
+            },
+            "costs": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "costId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "category": {
+                    "type": "string",
+                    "enum": [
+                      "APPROVAL_GAS",
+                      "EXECUTION_GAS",
+                      "SOURCE_GAS",
+                      "DESTINATION_GAS",
+                      "RETRY_GAS",
+                      "PROTOCOL_FEE",
+                      "SWAP_FEE_IMPACT",
+                      "TRANSFER_FEE",
+                      "RELAYER"
+                    ]
+                  },
+                  "funding": {
+                    "type": "string",
+                    "enum": [
+                      "AVAILABLE_CASH",
+                      "PAYABLE",
+                      "WITHHELD"
+                    ]
+                  },
+                  "amountUsdcMinor": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "networkId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "cashBalanceFamilyId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "sourceHash": {
+                    "type": "string",
+                    "pattern": "^0x[0-9a-f]{64}$"
+                  }
+                },
+                "required": [
+                  "costId",
+                  "category",
+                  "funding",
+                  "amountUsdcMinor",
+                  "networkId",
+                  "cashBalanceFamilyId",
+                  "sourceHash"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "kind": {
+              "type": "string",
+              "const": "DEPOSIT"
+            },
+            "cashViewId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "positionId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "instrumentId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "sharesCreditMinor": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,77})$"
+            },
+            "indexNumerator": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,77})$"
+            },
+            "indexDenominator": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,77})$"
+            },
+            "inputUsdcMinor": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,77})$"
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "accountingVersion",
+            "operationId",
+            "experimentId",
+            "scenarioId",
+            "expectedPortfolioVersion",
+            "observedAt",
+            "resultProvenance",
+            "sourceHashes",
+            "costs",
+            "kind",
+            "cashViewId",
+            "positionId",
+            "instrumentId",
+            "sharesCreditMinor",
+            "indexNumerator",
+            "indexDenominator",
+            "inputUsdcMinor"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "type": "string",
+              "const": "proof-of-alpha/accounting-receipt/v1"
+            },
+            "accountingVersion": {
+              "type": "string",
+              "const": "1.0.0"
+            },
+            "operationId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "experimentId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "scenarioId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "expectedPortfolioVersion": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,77})$"
+            },
+            "observedAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+            },
+            "resultProvenance": {
+              "type": "string",
+              "enum": [
+                "FORWARD_SHADOW",
+                "HISTORICAL_REPLAY",
+                "SYNTHETIC_TEST",
+                "LIVE_SEPARATE",
+                "CROSS_CHAIN_TESTNET",
+                "MIXED_DIAGNOSTIC"
+              ]
+            },
+            "sourceHashes": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^0x[0-9a-f]{64}$"
+              }
+            },
+            "costs": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "costId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "category": {
+                    "type": "string",
+                    "enum": [
+                      "APPROVAL_GAS",
+                      "EXECUTION_GAS",
+                      "SOURCE_GAS",
+                      "DESTINATION_GAS",
+                      "RETRY_GAS",
+                      "PROTOCOL_FEE",
+                      "SWAP_FEE_IMPACT",
+                      "TRANSFER_FEE",
+                      "RELAYER"
+                    ]
+                  },
+                  "funding": {
+                    "type": "string",
+                    "enum": [
+                      "AVAILABLE_CASH",
+                      "PAYABLE",
+                      "WITHHELD"
+                    ]
+                  },
+                  "amountUsdcMinor": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "networkId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "cashBalanceFamilyId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "sourceHash": {
+                    "type": "string",
+                    "pattern": "^0x[0-9a-f]{64}$"
+                  }
+                },
+                "required": [
+                  "costId",
+                  "category",
+                  "funding",
+                  "amountUsdcMinor",
+                  "networkId",
+                  "cashBalanceFamilyId",
+                  "sourceHash"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "kind": {
+              "type": "string",
+              "const": "WITHDRAW"
+            },
+            "cashViewId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "positionId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "sharesDebitMinor": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,77})$"
+            },
+            "cashCreditUsdcMinor": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,77})$"
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "accountingVersion",
+            "operationId",
+            "experimentId",
+            "scenarioId",
+            "expectedPortfolioVersion",
+            "observedAt",
+            "resultProvenance",
+            "sourceHashes",
+            "costs",
+            "kind",
+            "cashViewId",
+            "positionId",
+            "sharesDebitMinor",
+            "cashCreditUsdcMinor"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "type": "string",
+              "const": "proof-of-alpha/accounting-receipt/v1"
+            },
+            "accountingVersion": {
+              "type": "string",
+              "const": "1.0.0"
+            },
+            "operationId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "experimentId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "scenarioId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "expectedPortfolioVersion": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,77})$"
+            },
+            "observedAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+            },
+            "resultProvenance": {
+              "type": "string",
+              "enum": [
+                "FORWARD_SHADOW",
+                "HISTORICAL_REPLAY",
+                "SYNTHETIC_TEST",
+                "LIVE_SEPARATE",
+                "CROSS_CHAIN_TESTNET",
+                "MIXED_DIAGNOSTIC"
+              ]
+            },
+            "sourceHashes": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^0x[0-9a-f]{64}$"
+              }
+            },
+            "costs": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "costId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "category": {
+                    "type": "string",
+                    "enum": [
+                      "APPROVAL_GAS",
+                      "EXECUTION_GAS",
+                      "SOURCE_GAS",
+                      "DESTINATION_GAS",
+                      "RETRY_GAS",
+                      "PROTOCOL_FEE",
+                      "SWAP_FEE_IMPACT",
+                      "TRANSFER_FEE",
+                      "RELAYER"
+                    ]
+                  },
+                  "funding": {
+                    "type": "string",
+                    "enum": [
+                      "AVAILABLE_CASH",
+                      "PAYABLE",
+                      "WITHHELD"
+                    ]
+                  },
+                  "amountUsdcMinor": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "networkId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "cashBalanceFamilyId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "sourceHash": {
+                    "type": "string",
+                    "pattern": "^0x[0-9a-f]{64}$"
+                  }
+                },
+                "required": [
+                  "costId",
+                  "category",
+                  "funding",
+                  "amountUsdcMinor",
+                  "networkId",
+                  "cashBalanceFamilyId",
+                  "sourceHash"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "kind": {
+              "type": "string",
+              "const": "SWAP"
+            },
+            "sourceCashViewId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "destinationCashViewId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "sourceDebitUsdcMinor": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,77})$"
+            },
+            "destinationCreditUsdcMinor": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,77})$"
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "accountingVersion",
+            "operationId",
+            "experimentId",
+            "scenarioId",
+            "expectedPortfolioVersion",
+            "observedAt",
+            "resultProvenance",
+            "sourceHashes",
+            "costs",
+            "kind",
+            "sourceCashViewId",
+            "destinationCashViewId",
+            "sourceDebitUsdcMinor",
+            "destinationCreditUsdcMinor"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "type": "string",
+              "const": "proof-of-alpha/accounting-receipt/v1"
+            },
+            "accountingVersion": {
+              "type": "string",
+              "const": "1.0.0"
+            },
+            "operationId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "experimentId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "scenarioId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "expectedPortfolioVersion": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,77})$"
+            },
+            "observedAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+            },
+            "resultProvenance": {
+              "type": "string",
+              "enum": [
+                "FORWARD_SHADOW",
+                "HISTORICAL_REPLAY",
+                "SYNTHETIC_TEST",
+                "LIVE_SEPARATE",
+                "CROSS_CHAIN_TESTNET",
+                "MIXED_DIAGNOSTIC"
+              ]
+            },
+            "sourceHashes": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^0x[0-9a-f]{64}$"
+              }
+            },
+            "kind": {
+              "type": "string",
+              "const": "PAYABLE_SETTLED"
+            },
+            "payableId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "cashViewId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "accountingVersion",
+            "operationId",
+            "experimentId",
+            "scenarioId",
+            "expectedPortfolioVersion",
+            "observedAt",
+            "resultProvenance",
+            "sourceHashes",
+            "kind",
+            "payableId",
+            "cashViewId"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "type": "string",
+              "const": "proof-of-alpha/accounting-receipt/v1"
+            },
+            "accountingVersion": {
+              "type": "string",
+              "const": "1.0.0"
+            },
+            "operationId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "experimentId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "scenarioId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "expectedPortfolioVersion": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,77})$"
+            },
+            "observedAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+            },
+            "resultProvenance": {
+              "type": "string",
+              "enum": [
+                "FORWARD_SHADOW",
+                "HISTORICAL_REPLAY",
+                "SYNTHETIC_TEST",
+                "LIVE_SEPARATE",
+                "CROSS_CHAIN_TESTNET",
+                "MIXED_DIAGNOSTIC"
+              ]
+            },
+            "sourceHashes": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^0x[0-9a-f]{64}$"
+              }
+            },
+            "costs": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "costId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "category": {
+                    "type": "string",
+                    "enum": [
+                      "APPROVAL_GAS",
+                      "EXECUTION_GAS",
+                      "SOURCE_GAS",
+                      "DESTINATION_GAS",
+                      "RETRY_GAS",
+                      "PROTOCOL_FEE",
+                      "SWAP_FEE_IMPACT",
+                      "TRANSFER_FEE",
+                      "RELAYER"
+                    ]
+                  },
+                  "funding": {
+                    "type": "string",
+                    "enum": [
+                      "AVAILABLE_CASH",
+                      "PAYABLE",
+                      "WITHHELD"
+                    ]
+                  },
+                  "amountUsdcMinor": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "networkId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "cashBalanceFamilyId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "sourceHash": {
+                    "type": "string",
+                    "pattern": "^0x[0-9a-f]{64}$"
+                  }
+                },
+                "required": [
+                  "costId",
+                  "category",
+                  "funding",
+                  "amountUsdcMinor",
+                  "networkId",
+                  "cashBalanceFamilyId",
+                  "sourceHash"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "kind": {
+              "type": "string",
+              "const": "TRANSFER_SOURCE_FAILED"
+            },
+            "reservationId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "accountingVersion",
+            "operationId",
+            "experimentId",
+            "scenarioId",
+            "expectedPortfolioVersion",
+            "observedAt",
+            "resultProvenance",
+            "sourceHashes",
+            "costs",
+            "kind",
+            "reservationId"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "type": "string",
+              "const": "proof-of-alpha/accounting-receipt/v1"
+            },
+            "accountingVersion": {
+              "type": "string",
+              "const": "1.0.0"
+            },
+            "operationId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "experimentId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "scenarioId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "expectedPortfolioVersion": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,77})$"
+            },
+            "observedAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+            },
+            "resultProvenance": {
+              "type": "string",
+              "enum": [
+                "FORWARD_SHADOW",
+                "HISTORICAL_REPLAY",
+                "SYNTHETIC_TEST",
+                "LIVE_SEPARATE",
+                "CROSS_CHAIN_TESTNET",
+                "MIXED_DIAGNOSTIC"
+              ]
+            },
+            "sourceHashes": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^0x[0-9a-f]{64}$"
+              }
+            },
+            "costs": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "costId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "category": {
+                    "type": "string",
+                    "enum": [
+                      "APPROVAL_GAS",
+                      "EXECUTION_GAS",
+                      "SOURCE_GAS",
+                      "DESTINATION_GAS",
+                      "RETRY_GAS",
+                      "PROTOCOL_FEE",
+                      "SWAP_FEE_IMPACT",
+                      "TRANSFER_FEE",
+                      "RELAYER"
+                    ]
+                  },
+                  "funding": {
+                    "type": "string",
+                    "enum": [
+                      "AVAILABLE_CASH",
+                      "PAYABLE",
+                      "WITHHELD"
+                    ]
+                  },
+                  "amountUsdcMinor": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "networkId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "cashBalanceFamilyId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "sourceHash": {
+                    "type": "string",
+                    "pattern": "^0x[0-9a-f]{64}$"
+                  }
+                },
+                "required": [
+                  "costId",
+                  "category",
+                  "funding",
+                  "amountUsdcMinor",
+                  "networkId",
+                  "cashBalanceFamilyId",
+                  "sourceHash"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "kind": {
+              "type": "string",
+              "const": "TRANSFER_BURNED"
+            },
+            "reservationId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "transferId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "messageIdentity": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "destinationNetworkId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "destinationCashViewId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "netReceivableUsdcMinor": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,77})$"
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "accountingVersion",
+            "operationId",
+            "experimentId",
+            "scenarioId",
+            "expectedPortfolioVersion",
+            "observedAt",
+            "resultProvenance",
+            "sourceHashes",
+            "costs",
+            "kind",
+            "reservationId",
+            "transferId",
+            "messageIdentity",
+            "destinationNetworkId",
+            "destinationCashViewId",
+            "netReceivableUsdcMinor"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "type": "string",
+              "const": "proof-of-alpha/accounting-receipt/v1"
+            },
+            "accountingVersion": {
+              "type": "string",
+              "const": "1.0.0"
+            },
+            "operationId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "experimentId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "scenarioId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "expectedPortfolioVersion": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,77})$"
+            },
+            "observedAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+            },
+            "resultProvenance": {
+              "type": "string",
+              "enum": [
+                "FORWARD_SHADOW",
+                "HISTORICAL_REPLAY",
+                "SYNTHETIC_TEST",
+                "LIVE_SEPARATE",
+                "CROSS_CHAIN_TESTNET",
+                "MIXED_DIAGNOSTIC"
+              ]
+            },
+            "sourceHashes": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^0x[0-9a-f]{64}$"
+              }
+            },
+            "costs": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "costId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "category": {
+                    "type": "string",
+                    "enum": [
+                      "APPROVAL_GAS",
+                      "EXECUTION_GAS",
+                      "SOURCE_GAS",
+                      "DESTINATION_GAS",
+                      "RETRY_GAS",
+                      "PROTOCOL_FEE",
+                      "SWAP_FEE_IMPACT",
+                      "TRANSFER_FEE",
+                      "RELAYER"
+                    ]
+                  },
+                  "funding": {
+                    "type": "string",
+                    "enum": [
+                      "AVAILABLE_CASH",
+                      "PAYABLE",
+                      "WITHHELD"
+                    ]
+                  },
+                  "amountUsdcMinor": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "networkId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "cashBalanceFamilyId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "sourceHash": {
+                    "type": "string",
+                    "pattern": "^0x[0-9a-f]{64}$"
+                  }
+                },
+                "required": [
+                  "costId",
+                  "category",
+                  "funding",
+                  "amountUsdcMinor",
+                  "networkId",
+                  "cashBalanceFamilyId",
+                  "sourceHash"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "kind": {
+              "type": "string",
+              "const": "TRANSFER_READY"
+            },
+            "transferId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "accountingVersion",
+            "operationId",
+            "experimentId",
+            "scenarioId",
+            "expectedPortfolioVersion",
+            "observedAt",
+            "resultProvenance",
+            "sourceHashes",
+            "costs",
+            "kind",
+            "transferId"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "type": "string",
+              "const": "proof-of-alpha/accounting-receipt/v1"
+            },
+            "accountingVersion": {
+              "type": "string",
+              "const": "1.0.0"
+            },
+            "operationId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "experimentId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "scenarioId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "expectedPortfolioVersion": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,77})$"
+            },
+            "observedAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+            },
+            "resultProvenance": {
+              "type": "string",
+              "enum": [
+                "FORWARD_SHADOW",
+                "HISTORICAL_REPLAY",
+                "SYNTHETIC_TEST",
+                "LIVE_SEPARATE",
+                "CROSS_CHAIN_TESTNET",
+                "MIXED_DIAGNOSTIC"
+              ]
+            },
+            "sourceHashes": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^0x[0-9a-f]{64}$"
+              }
+            },
+            "costs": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "costId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "category": {
+                    "type": "string",
+                    "enum": [
+                      "APPROVAL_GAS",
+                      "EXECUTION_GAS",
+                      "SOURCE_GAS",
+                      "DESTINATION_GAS",
+                      "RETRY_GAS",
+                      "PROTOCOL_FEE",
+                      "SWAP_FEE_IMPACT",
+                      "TRANSFER_FEE",
+                      "RELAYER"
+                    ]
+                  },
+                  "funding": {
+                    "type": "string",
+                    "enum": [
+                      "AVAILABLE_CASH",
+                      "PAYABLE",
+                      "WITHHELD"
+                    ]
+                  },
+                  "amountUsdcMinor": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "networkId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "cashBalanceFamilyId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "sourceHash": {
+                    "type": "string",
+                    "pattern": "^0x[0-9a-f]{64}$"
+                  }
+                },
+                "required": [
+                  "costId",
+                  "category",
+                  "funding",
+                  "amountUsdcMinor",
+                  "networkId",
+                  "cashBalanceFamilyId",
+                  "sourceHash"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "kind": {
+              "type": "string",
+              "const": "TRANSFER_DELAYED"
+            },
+            "transferId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "accountingVersion",
+            "operationId",
+            "experimentId",
+            "scenarioId",
+            "expectedPortfolioVersion",
+            "observedAt",
+            "resultProvenance",
+            "sourceHashes",
+            "costs",
+            "kind",
+            "transferId"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "type": "string",
+              "const": "proof-of-alpha/accounting-receipt/v1"
+            },
+            "accountingVersion": {
+              "type": "string",
+              "const": "1.0.0"
+            },
+            "operationId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "experimentId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "scenarioId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "expectedPortfolioVersion": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,77})$"
+            },
+            "observedAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+            },
+            "resultProvenance": {
+              "type": "string",
+              "enum": [
+                "FORWARD_SHADOW",
+                "HISTORICAL_REPLAY",
+                "SYNTHETIC_TEST",
+                "LIVE_SEPARATE",
+                "CROSS_CHAIN_TESTNET",
+                "MIXED_DIAGNOSTIC"
+              ]
+            },
+            "sourceHashes": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^0x[0-9a-f]{64}$"
+              }
+            },
+            "costs": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "costId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "category": {
+                    "type": "string",
+                    "enum": [
+                      "APPROVAL_GAS",
+                      "EXECUTION_GAS",
+                      "SOURCE_GAS",
+                      "DESTINATION_GAS",
+                      "RETRY_GAS",
+                      "PROTOCOL_FEE",
+                      "SWAP_FEE_IMPACT",
+                      "TRANSFER_FEE",
+                      "RELAYER"
+                    ]
+                  },
+                  "funding": {
+                    "type": "string",
+                    "enum": [
+                      "AVAILABLE_CASH",
+                      "PAYABLE",
+                      "WITHHELD"
+                    ]
+                  },
+                  "amountUsdcMinor": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "networkId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "cashBalanceFamilyId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "sourceHash": {
+                    "type": "string",
+                    "pattern": "^0x[0-9a-f]{64}$"
+                  }
+                },
+                "required": [
+                  "costId",
+                  "category",
+                  "funding",
+                  "amountUsdcMinor",
+                  "networkId",
+                  "cashBalanceFamilyId",
+                  "sourceHash"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "kind": {
+              "type": "string",
+              "const": "TRANSFER_DESTINATION_RETRY"
+            },
+            "transferId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "accountingVersion",
+            "operationId",
+            "experimentId",
+            "scenarioId",
+            "expectedPortfolioVersion",
+            "observedAt",
+            "resultProvenance",
+            "sourceHashes",
+            "costs",
+            "kind",
+            "transferId"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "type": "string",
+              "const": "proof-of-alpha/accounting-receipt/v1"
+            },
+            "accountingVersion": {
+              "type": "string",
+              "const": "1.0.0"
+            },
+            "operationId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "experimentId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "scenarioId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "expectedPortfolioVersion": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,77})$"
+            },
+            "observedAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+            },
+            "resultProvenance": {
+              "type": "string",
+              "enum": [
+                "FORWARD_SHADOW",
+                "HISTORICAL_REPLAY",
+                "SYNTHETIC_TEST",
+                "LIVE_SEPARATE",
+                "CROSS_CHAIN_TESTNET",
+                "MIXED_DIAGNOSTIC"
+              ]
+            },
+            "sourceHashes": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^0x[0-9a-f]{64}$"
+              }
+            },
+            "costs": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "costId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "category": {
+                    "type": "string",
+                    "enum": [
+                      "APPROVAL_GAS",
+                      "EXECUTION_GAS",
+                      "SOURCE_GAS",
+                      "DESTINATION_GAS",
+                      "RETRY_GAS",
+                      "PROTOCOL_FEE",
+                      "SWAP_FEE_IMPACT",
+                      "TRANSFER_FEE",
+                      "RELAYER"
+                    ]
+                  },
+                  "funding": {
+                    "type": "string",
+                    "enum": [
+                      "AVAILABLE_CASH",
+                      "PAYABLE",
+                      "WITHHELD"
+                    ]
+                  },
+                  "amountUsdcMinor": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "networkId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "cashBalanceFamilyId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "sourceHash": {
+                    "type": "string",
+                    "pattern": "^0x[0-9a-f]{64}$"
+                  }
+                },
+                "required": [
+                  "costId",
+                  "category",
+                  "funding",
+                  "amountUsdcMinor",
+                  "networkId",
+                  "cashBalanceFamilyId",
+                  "sourceHash"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "kind": {
+              "type": "string",
+              "const": "TRANSFER_SETTLED"
+            },
+            "transferId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "destinationCreditUsdcMinor": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,77})$"
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "accountingVersion",
+            "operationId",
+            "experimentId",
+            "scenarioId",
+            "expectedPortfolioVersion",
+            "observedAt",
+            "resultProvenance",
+            "sourceHashes",
+            "costs",
+            "kind",
+            "transferId",
+            "destinationCreditUsdcMinor"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "type": "string",
+              "const": "proof-of-alpha/accounting-receipt/v1"
+            },
+            "accountingVersion": {
+              "type": "string",
+              "const": "1.0.0"
+            },
+            "operationId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "experimentId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "scenarioId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "expectedPortfolioVersion": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,77})$"
+            },
+            "observedAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+            },
+            "resultProvenance": {
+              "type": "string",
+              "enum": [
+                "FORWARD_SHADOW",
+                "HISTORICAL_REPLAY",
+                "SYNTHETIC_TEST",
+                "LIVE_SEPARATE",
+                "CROSS_CHAIN_TESTNET",
+                "MIXED_DIAGNOSTIC"
+              ]
+            },
+            "sourceHashes": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^0x[0-9a-f]{64}$"
+              }
+            },
+            "costs": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "costId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "category": {
+                    "type": "string",
+                    "enum": [
+                      "APPROVAL_GAS",
+                      "EXECUTION_GAS",
+                      "SOURCE_GAS",
+                      "DESTINATION_GAS",
+                      "RETRY_GAS",
+                      "PROTOCOL_FEE",
+                      "SWAP_FEE_IMPACT",
+                      "TRANSFER_FEE",
+                      "RELAYER"
+                    ]
+                  },
+                  "funding": {
+                    "type": "string",
+                    "enum": [
+                      "AVAILABLE_CASH",
+                      "PAYABLE",
+                      "WITHHELD"
+                    ]
+                  },
+                  "amountUsdcMinor": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "networkId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "cashBalanceFamilyId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "sourceHash": {
+                    "type": "string",
+                    "pattern": "^0x[0-9a-f]{64}$"
+                  }
+                },
+                "required": [
+                  "costId",
+                  "category",
+                  "funding",
+                  "amountUsdcMinor",
+                  "networkId",
+                  "cashBalanceFamilyId",
+                  "sourceHash"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "kind": {
+              "type": "string",
+              "const": "ACCRUE"
+            },
+            "positionId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "nextIndexNumerator": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,77})$"
+            },
+            "nextIndexDenominator": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,77})$"
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "accountingVersion",
+            "operationId",
+            "experimentId",
+            "scenarioId",
+            "expectedPortfolioVersion",
+            "observedAt",
+            "resultProvenance",
+            "sourceHashes",
+            "costs",
+            "kind",
+            "positionId",
+            "nextIndexNumerator",
+            "nextIndexDenominator"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "type": "string",
+              "const": "proof-of-alpha/accounting-receipt/v1"
+            },
+            "accountingVersion": {
+              "type": "string",
+              "const": "1.0.0"
+            },
+            "operationId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "experimentId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "scenarioId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "expectedPortfolioVersion": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,77})$"
+            },
+            "observedAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+            },
+            "resultProvenance": {
+              "type": "string",
+              "enum": [
+                "FORWARD_SHADOW",
+                "HISTORICAL_REPLAY",
+                "SYNTHETIC_TEST",
+                "LIVE_SEPARATE",
+                "CROSS_CHAIN_TESTNET",
+                "MIXED_DIAGNOSTIC"
+              ]
+            },
+            "sourceHashes": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^0x[0-9a-f]{64}$"
+              }
+            },
+            "kind": {
+              "type": "string",
+              "const": "CLOSE"
+            },
+            "closedAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+            },
+            "costs": {
+              "type": "array",
+              "prefixItems": [],
+              "items": false,
+              "maxItems": 0
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "accountingVersion",
+            "operationId",
+            "experimentId",
+            "scenarioId",
+            "expectedPortfolioVersion",
+            "observedAt",
+            "resultProvenance",
+            "sourceHashes",
+            "kind",
+            "closedAt",
+            "costs"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "AccountingReceivable": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "transferId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "messageIdentity": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "sourceNetworkId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "destinationNetworkId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "destinationBalanceFamilyId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "amountUsdcMinor": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "IN_TRANSIT",
+            "READY_TO_RECEIVE",
+            "DELAYED",
+            "DESTINATION_RETRY"
+          ]
+        },
+        "destinationAttempts": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+        }
+      },
+      "required": [
+        "transferId",
+        "messageIdentity",
+        "sourceNetworkId",
+        "destinationNetworkId",
+        "destinationBalanceFamilyId",
+        "amountUsdcMinor",
+        "state",
+        "destinationAttempts",
+        "createdAt",
+        "updatedAt"
+      ],
+      "additionalProperties": false
+    },
+    "AccountingVersion": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "string",
+      "const": "1.0.0"
+    },
     "ActionAcknowledgment": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "type": "object",
@@ -61,7 +2514,12 @@
               "DATA_UNAVAILABLE",
               "QUOTE_UNAVAILABLE",
               "MIGRATION_CHANGED",
-              "DATABASE_UNAVAILABLE"
+              "DATABASE_UNAVAILABLE",
+              "ACCOUNTING_INVARIANT",
+              "OPERATION_CONFLICT",
+              "INVALID_TRANSITION",
+              "CLOSED_PORTFOLIO",
+              "PAYABLE_NOT_FOUND"
             ]
           }
         }
@@ -383,6 +2841,40 @@
       ],
       "additionalProperties": false
     },
+    "Allowance": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "allowanceId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "networkId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "assetId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "spenderId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "amountMinor": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        }
+      },
+      "required": [
+        "allowanceId",
+        "networkId",
+        "assetId",
+        "spenderId",
+        "amountMinor"
+      ],
+      "additionalProperties": false
+    },
     "Amount": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "type": "object",
@@ -415,6 +2907,30 @@
         "assetAddress",
         "decimals",
         "minor"
+      ],
+      "additionalProperties": false
+    },
+    "AppliedAccountingReceipt": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "operationId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "receiptHash": {
+          "type": "string",
+          "pattern": "^0x[0-9a-f]{64}$"
+        },
+        "versionApplied": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        }
+      },
+      "required": [
+        "operationId",
+        "receiptHash",
+        "versionApplied"
       ],
       "additionalProperties": false
     },
@@ -509,6 +3025,47 @@
         "contentHash",
         "previousEventHash",
         "supersedesContentHash"
+      ],
+      "additionalProperties": false
+    },
+    "BalanceView": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "viewId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "networkId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "assetId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "balanceFamilyId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "decimals": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 36
+        },
+        "canonicalDecimals": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 36
+        }
+      },
+      "required": [
+        "viewId",
+        "networkId",
+        "assetId",
+        "balanceFamilyId",
+        "decimals",
+        "canonicalDecimals"
       ],
       "additionalProperties": false
     },
@@ -657,6 +3214,35 @@
         "cashReferencePortfolioId",
         "yieldReferencePortfolioId",
         "resultProvenance"
+      ],
+      "additionalProperties": false
+    },
+    "CashBalance": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "balanceFamilyId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "networkId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "assetId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "amountUsdcMinor": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        }
+      },
+      "required": [
+        "balanceFamilyId",
+        "networkId",
+        "assetId",
+        "amountUsdcMinor"
       ],
       "additionalProperties": false
     },
@@ -1110,6 +3696,15 @@
         "source"
       ],
       "additionalProperties": false
+    },
+    "CostFunding": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "string",
+      "enum": [
+        "AVAILABLE_CASH",
+        "PAYABLE",
+        "WITHHELD"
+      ]
     },
     "Dependency": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -1604,7 +4199,12 @@
         "DATA_UNAVAILABLE",
         "QUOTE_UNAVAILABLE",
         "MIGRATION_CHANGED",
-        "DATABASE_UNAVAILABLE"
+        "DATABASE_UNAVAILABLE",
+        "ACCOUNTING_INVARIANT",
+        "OPERATION_CONFLICT",
+        "INVALID_TRANSITION",
+        "CLOSED_PORTFOLIO",
+        "PAYABLE_NOT_FOUND"
       ]
     },
     "EvaluationReceipt": {
@@ -2384,7 +4984,12 @@
                     "DATA_UNAVAILABLE",
                     "QUOTE_UNAVAILABLE",
                     "MIGRATION_CHANGED",
-                    "DATABASE_UNAVAILABLE"
+                    "DATABASE_UNAVAILABLE",
+                    "ACCOUNTING_INVARIANT",
+                    "OPERATION_CONFLICT",
+                    "INVALID_TRANSITION",
+                    "CLOSED_PORTFOLIO",
+                    "PAYABLE_NOT_FOUND"
                   ]
                 }
               }
@@ -2625,6 +5230,35 @@
         "adapterVersions",
         "signingDomain",
         "automaticFundingEnabled"
+      ],
+      "additionalProperties": false
+    },
+    "FeePayable": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "payableId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "costId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "networkId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "amountUsdcMinor": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        }
+      },
+      "required": [
+        "payableId",
+        "costId",
+        "networkId",
+        "amountUsdcMinor"
       ],
       "additionalProperties": false
     },
@@ -3068,6 +5702,11 @@
         "instruments"
       ],
       "additionalProperties": false
+    },
+    "Int": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "string",
+      "pattern": "^(0|-?[1-9][0-9]{0,77})$"
     },
     "Network": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -4310,7 +6949,12 @@
               "DATA_UNAVAILABLE",
               "QUOTE_UNAVAILABLE",
               "MIGRATION_CHANGED",
-              "DATABASE_UNAVAILABLE"
+              "DATABASE_UNAVAILABLE",
+              "ACCOUNTING_INVARIANT",
+              "OPERATION_CONFLICT",
+              "INVALID_TRANSITION",
+              "CLOSED_PORTFOLIO",
+              "PAYABLE_NOT_FOUND"
             ]
           }
         }
@@ -4325,6 +6969,191 @@
         "economicBlock",
         "rawInputHashes",
         "reasonCodes"
+      ],
+      "additionalProperties": false
+    },
+    "PortfolioValuation": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "string",
+          "const": "proof-of-alpha/portfolio-valuation/v1"
+        },
+        "accountingVersion": {
+          "type": "string",
+          "const": "1.0.0"
+        },
+        "portfolioHash": {
+          "type": "string",
+          "pattern": "^0x[0-9a-f]{64}$"
+        },
+        "portfolioVersion": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        },
+        "markValueUsdcMinor": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,77})$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "liquidationValueUsdcMinor": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,77})$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "availableUsdcMinor": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        },
+        "reservedUsdcMinor": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        },
+        "inTransitUsdcMinor": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        },
+        "blockedValueUsdcMinor": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,77})$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "feesPayableUsdcMinor": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        },
+        "dataQuality": {
+          "type": "string",
+          "enum": [
+            "FRESH",
+            "STALE",
+            "UNAVAILABLE"
+          ]
+        },
+        "sourceHashes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^0x[0-9a-f]{64}$"
+          }
+        },
+        "reasonCodes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "DATA_UNAVAILABLE",
+              "STALE_DATA",
+              "IN_TRANSIT_UNAVAILABLE",
+              "BLOCKED_LIQUIDITY"
+            ]
+          }
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "accountingVersion",
+        "portfolioHash",
+        "portfolioVersion",
+        "markValueUsdcMinor",
+        "liquidationValueUsdcMinor",
+        "availableUsdcMinor",
+        "reservedUsdcMinor",
+        "inTransitUsdcMinor",
+        "blockedValueUsdcMinor",
+        "feesPayableUsdcMinor",
+        "dataQuality",
+        "sourceHashes",
+        "reasonCodes"
+      ],
+      "additionalProperties": false
+    },
+    "PositionValuationInput": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "positionId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "markValueUsdcMinor": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,77})$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "recoverableUsdcMinor": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,77})$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "exitCostUsdcMinor": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,77})$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "dataQuality": {
+          "type": "string",
+          "enum": [
+            "FRESH",
+            "STALE",
+            "UNAVAILABLE"
+          ]
+        },
+        "sourceHash": {
+          "type": "string",
+          "pattern": "^0x[0-9a-f]{64}$"
+        },
+        "observedAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+        }
+      },
+      "required": [
+        "positionId",
+        "markValueUsdcMinor",
+        "recoverableUsdcMinor",
+        "exitCostUsdcMinor",
+        "dataQuality",
+        "sourceHash",
+        "observedAt"
       ],
       "additionalProperties": false
     },
@@ -5670,6 +8499,76 @@
         "MIXED_DIAGNOSTIC"
       ]
     },
+    "RecognizedCost": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "costId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "APPROVAL_GAS",
+            "EXECUTION_GAS",
+            "SOURCE_GAS",
+            "DESTINATION_GAS",
+            "RETRY_GAS",
+            "PROTOCOL_FEE",
+            "SWAP_FEE_IMPACT",
+            "TRANSFER_FEE",
+            "RELAYER"
+          ]
+        },
+        "funding": {
+          "type": "string",
+          "enum": [
+            "AVAILABLE_CASH",
+            "PAYABLE",
+            "WITHHELD"
+          ]
+        },
+        "amountUsdcMinor": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        },
+        "networkId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "cashBalanceFamilyId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sourceHash": {
+          "type": "string",
+          "pattern": "^0x[0-9a-f]{64}$"
+        },
+        "operationId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        }
+      },
+      "required": [
+        "costId",
+        "category",
+        "funding",
+        "amountUsdcMinor",
+        "networkId",
+        "cashBalanceFamilyId",
+        "sourceHash",
+        "operationId"
+      ],
+      "additionalProperties": false
+    },
     "RequirementStatus": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "type": "string",
@@ -5680,11 +8579,588 @@
         "POST_MVP"
       ]
     },
+    "Reservation": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "reservationId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "operationId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "balanceFamilyId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "networkId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "assetId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "amountUsdcMinor": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        }
+      },
+      "required": [
+        "reservationId",
+        "operationId",
+        "balanceFamilyId",
+        "networkId",
+        "assetId",
+        "amountUsdcMinor"
+      ],
+      "additionalProperties": false
+    },
     "Seconds": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "type": "integer",
       "exclusiveMinimum": 0,
       "maximum": 31536000
+    },
+    "ShadowPortfolio": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "string",
+          "const": "proof-of-alpha/shadow-portfolio/v1"
+        },
+        "accountingVersion": {
+          "type": "string",
+          "const": "1.0.0"
+        },
+        "experimentId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "scenarioId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "portfolioId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "resultProvenance": {
+          "type": "string",
+          "enum": [
+            "FORWARD_SHADOW",
+            "HISTORICAL_REPLAY",
+            "SYNTHETIC_TEST",
+            "LIVE_SEPARATE",
+            "CROSS_CHAIN_TESTNET",
+            "MIXED_DIAGNOSTIC"
+          ]
+        },
+        "unitOfAccount": {
+          "type": "string",
+          "const": "USDC"
+        },
+        "unitDecimals": {
+          "type": "number",
+          "const": 6
+        },
+        "initialValueUsdcMinor": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        },
+        "maxDestinationAttempts": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        },
+        "balanceViews": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "viewId": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]{0,95}$"
+              },
+              "networkId": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]{0,95}$"
+              },
+              "assetId": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]{0,95}$"
+              },
+              "balanceFamilyId": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]{0,95}$"
+              },
+              "decimals": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 36
+              },
+              "canonicalDecimals": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 36
+              }
+            },
+            "required": [
+              "viewId",
+              "networkId",
+              "assetId",
+              "balanceFamilyId",
+              "decimals",
+              "canonicalDecimals"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "cash": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "balanceFamilyId": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]{0,95}$"
+              },
+              "networkId": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]{0,95}$"
+              },
+              "assetId": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]{0,95}$"
+              },
+              "amountUsdcMinor": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]{0,77})$"
+              }
+            },
+            "required": [
+              "balanceFamilyId",
+              "networkId",
+              "assetId",
+              "amountUsdcMinor"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "reservations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "reservationId": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]{0,95}$"
+              },
+              "operationId": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]{0,95}$"
+              },
+              "balanceFamilyId": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]{0,95}$"
+              },
+              "networkId": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]{0,95}$"
+              },
+              "assetId": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]{0,95}$"
+              },
+              "amountUsdcMinor": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]{0,77})$"
+              }
+            },
+            "required": [
+              "reservationId",
+              "operationId",
+              "balanceFamilyId",
+              "networkId",
+              "assetId",
+              "amountUsdcMinor"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "positions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "positionId": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]{0,95}$"
+              },
+              "networkId": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]{0,95}$"
+              },
+              "instrumentId": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]{0,95}$"
+              },
+              "assetId": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]{0,95}$"
+              },
+              "sharesMinor": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]{0,77})$"
+              },
+              "indexNumerator": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]{0,77})$"
+              },
+              "indexDenominator": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]{0,77})$"
+              },
+              "bookValueUsdcMinor": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]{0,77})$"
+              },
+              "roundingRemainderNumerator": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]{0,77})$"
+              },
+              "lastSourceHash": {
+                "type": "string",
+                "pattern": "^0x[0-9a-f]{64}$"
+              },
+              "lastObservedAt": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+              }
+            },
+            "required": [
+              "positionId",
+              "networkId",
+              "instrumentId",
+              "assetId",
+              "sharesMinor",
+              "indexNumerator",
+              "indexDenominator",
+              "bookValueUsdcMinor",
+              "roundingRemainderNumerator",
+              "lastSourceHash",
+              "lastObservedAt"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "receivables": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "transferId": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]{0,95}$"
+              },
+              "messageIdentity": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]{0,95}$"
+              },
+              "sourceNetworkId": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]{0,95}$"
+              },
+              "destinationNetworkId": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]{0,95}$"
+              },
+              "destinationBalanceFamilyId": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]{0,95}$"
+              },
+              "amountUsdcMinor": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]{0,77})$"
+              },
+              "state": {
+                "type": "string",
+                "enum": [
+                  "IN_TRANSIT",
+                  "READY_TO_RECEIVE",
+                  "DELAYED",
+                  "DESTINATION_RETRY"
+                ]
+              },
+              "destinationAttempts": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]{0,77})$"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+              }
+            },
+            "required": [
+              "transferId",
+              "messageIdentity",
+              "sourceNetworkId",
+              "destinationNetworkId",
+              "destinationBalanceFamilyId",
+              "amountUsdcMinor",
+              "state",
+              "destinationAttempts",
+              "createdAt",
+              "updatedAt"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "payables": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "payableId": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]{0,95}$"
+              },
+              "costId": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]{0,95}$"
+              },
+              "networkId": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]{0,95}$"
+              },
+              "amountUsdcMinor": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]{0,77})$"
+              }
+            },
+            "required": [
+              "payableId",
+              "costId",
+              "networkId",
+              "amountUsdcMinor"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "allowances": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "allowanceId": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]{0,95}$"
+              },
+              "networkId": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]{0,95}$"
+              },
+              "assetId": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]{0,95}$"
+              },
+              "spenderId": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]{0,95}$"
+              },
+              "amountMinor": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]{0,77})$"
+              }
+            },
+            "required": [
+              "allowanceId",
+              "networkId",
+              "assetId",
+              "spenderId",
+              "amountMinor"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "recognizedCosts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "costId": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]{0,95}$"
+              },
+              "category": {
+                "type": "string",
+                "enum": [
+                  "APPROVAL_GAS",
+                  "EXECUTION_GAS",
+                  "SOURCE_GAS",
+                  "DESTINATION_GAS",
+                  "RETRY_GAS",
+                  "PROTOCOL_FEE",
+                  "SWAP_FEE_IMPACT",
+                  "TRANSFER_FEE",
+                  "RELAYER"
+                ]
+              },
+              "funding": {
+                "type": "string",
+                "enum": [
+                  "AVAILABLE_CASH",
+                  "PAYABLE",
+                  "WITHHELD"
+                ]
+              },
+              "amountUsdcMinor": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]{0,77})$"
+              },
+              "networkId": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]{0,95}$"
+              },
+              "cashBalanceFamilyId": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "sourceHash": {
+                "type": "string",
+                "pattern": "^0x[0-9a-f]{64}$"
+              },
+              "operationId": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]{0,95}$"
+              }
+            },
+            "required": [
+              "costId",
+              "category",
+              "funding",
+              "amountUsdcMinor",
+              "networkId",
+              "cashBalanceFamilyId",
+              "sourceHash",
+              "operationId"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "modeledPnlUsdcMinor": {
+          "type": "string",
+          "pattern": "^(0|-?[1-9][0-9]{0,77})$"
+        },
+        "appliedReceipts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "operationId": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]{0,95}$"
+              },
+              "receiptHash": {
+                "type": "string",
+                "pattern": "^0x[0-9a-f]{64}$"
+              },
+              "versionApplied": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]{0,77})$"
+              }
+            },
+            "required": [
+              "operationId",
+              "receiptHash",
+              "versionApplied"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "lastAppliedAt": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "closedAt": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "deadlineStateHash": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^0x[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "accountingVersion",
+        "experimentId",
+        "scenarioId",
+        "portfolioId",
+        "resultProvenance",
+        "unitOfAccount",
+        "unitDecimals",
+        "initialValueUsdcMinor",
+        "maxDestinationAttempts",
+        "version",
+        "balanceViews",
+        "cash",
+        "reservations",
+        "positions",
+        "receivables",
+        "payables",
+        "allowances",
+        "recognizedCosts",
+        "modeledPnlUsdcMinor",
+        "appliedReceipts",
+        "lastAppliedAt",
+        "closedAt",
+        "deadlineStateHash"
+      ],
+      "additionalProperties": false
     },
     "SignedActionRequest": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -5946,6 +9422,16 @@
       "type": "string",
       "format": "date-time",
       "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+    },
+    "TransferAccountingState": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "string",
+      "enum": [
+        "IN_TRANSIT",
+        "READY_TO_RECEIVE",
+        "DELAYED",
+        "DESTINATION_RETRY"
+      ]
     },
     "TransferIntent": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -6764,7 +10250,12 @@
               "DATA_UNAVAILABLE",
               "QUOTE_UNAVAILABLE",
               "MIGRATION_CHANGED",
-              "DATABASE_UNAVAILABLE"
+              "DATABASE_UNAVAILABLE",
+              "ACCOUNTING_INVARIANT",
+              "OPERATION_CONFLICT",
+              "INVALID_TRANSITION",
+              "CLOSED_PORTFOLIO",
+              "PAYABLE_NOT_FOUND"
             ]
           }
         }

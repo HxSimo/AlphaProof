@@ -2,7 +2,7 @@
 
 Prospective evaluation for self-hosted stablecoin treasury agents. The intended MVP receives signed allocation intents, evaluates future consequences with virtual capital and observed market data, and publishes reproducible results. It never automatically allocates real funds.
 
-**Current delivery: M0 foundation only.** The API exposes a validated profile catalog, the worker durably archives configuration snapshots, and the web displays dependencies and evidence boundaries. Accounting, strategy execution, signed-intent submission, market adapters and commitments are scheduled in M1–M7. No performance results or deployed contracts are claimed.
+**Current delivery: M1 deterministic accounting kernel.** The M0 API, worker and web foundation remains intact. `@poa/accounting` now reduces version-bound receipts into immutable scenario portfolios, enforces global conservation, tracks cash/reservations/positions/payables/transfers, and produces pure mark/liquidation views. Strategy execution, signed-intent submission, live market adapters and commitments are scheduled in M2–M7. No performance results or deployed contracts are claimed.
 
 ## Run with Docker
 
@@ -32,13 +32,13 @@ pnpm db:migrate
 pnpm dev
 ```
 
-Run `pnpm build` before using `pnpm --filter @poa/web start`. API and worker load the repository `.env`; Next defaults to the local API on port 3001. For a different host API, export `API_INTERNAL_URL` into the process running Next. No chain RPC or signing key is needed for M0. An agent's decision key never belongs in service configuration.
+Run `pnpm build` before using `pnpm --filter @poa/web start`. API and worker load the repository `.env`; Next defaults to the local API on port 3001. For a different host API, export `API_INTERNAL_URL` into the process running Next. No chain RPC or signing key is needed through M1. An agent's decision key never belongs in service configuration.
 
 ## Validate
 
 ```sh
 pnpm check
-pnpm plan M1
+pnpm plan M2
 pnpm test:db
 pnpm smoke
 git diff --check
@@ -52,7 +52,7 @@ git diff --check
 
 `ETHEREUM_MAINNET_FORWARD` has Ethereum markets and may use an Arc testnet registry. `CROSS_CHAIN_TESTNET` has Sepolia and Arc test markets. The future cross-chain mainnet profile is explicitly blocked. Replay, synthetic and mixed evidence cannot supply real-capital eligibility; statistics remain `NOT_ASSESSED`.
 
-The three proposed scenario amounts are independent global treasuries, with no duplicated capital between chains. Cash and one fixed passive investment are the only references. Numerical risk/timing defaults are proposed profile data. See [policy conventions](docs/experiment-policy/m0.md) for limits and unresolved calibration.
+The three proposed scenario amounts are independent global treasuries, with no duplicated capital between chains. M1 proves this in the synthetic reducer; it does not claim a live balance. Cash and one fixed passive investment are the only references. Numerical risk/timing defaults are proposed profile data. See [policy conventions](docs/experiment-policy/m0.md) for limits and unresolved calibration.
 
 - [Project state and validation evidence](docs/project-state.md)
 - [Executable milestone plan](docs/milestones.json) — `pnpm plan M0` through `M7`
@@ -60,5 +60,6 @@ The three proposed scenario amounts are independent global treasuries, with no d
 - [ADRs](docs/adr)
 - [External verification inventory](docs/integrations.md) and [instrument fact sheets](docs/instrument-catalog)
 - [Canonical schemas](docs/schemas.md) and [generated JSON Schema](schemas/generated/v1.json)
+- [M1 accounting decision](docs/adr/0006-deterministic-accounting.md) and [synthetic replay fixture](tests/fixtures/m1-accounting-transfer.json)
 - [Demo and provenance runbook](docs/demo-runbook.md)
 - [Authoritative skill](.agents/skills/proof-of-alpha/SKILL.md) and [complete v0.3 specification](.agents/skills/proof-of-alpha/references/source-specification-v0.3.md)
