@@ -25,6 +25,17 @@ import {
   type ShadowPortfolioData,
 } from '@poa/schemas';
 import { recoverActionSigner, verifySignedBytes } from '@poa/sdk';
+import { makeReferences } from '@poa/valuation';
+import { evaluateScenario, replayM4 } from '@poa/evaluation';
+import {
+  M4ReplayBundle,
+  ReferencePortfolio,
+  ScenarioCheckpoint,
+  ScenarioEvaluation,
+  type M4ReplayBundleData,
+  type CheckpointReplayInputsData,
+  type ScenarioCheckpointData,
+} from '@poa/schemas';
 
 const SYNTHETIC_PROFILE_ID = 'synthetic-m3-local';
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
@@ -309,8 +320,8 @@ export class ExperimentRepository {
           accounting: '1.0.0',
           planner: '1.0.0',
           execution: '1.0.0',
-          valuation: '0.1.0',
-          evaluation: '0.1.0',
+          valuation: '1.0.0',
+          evaluation: '1.0.0',
         },
         engineSourceHash: contentHash('poa-m3-engines@1.0.0'),
         adapterVersions: adapters.length
@@ -384,6 +395,26 @@ export class ExperimentRepository {
             json(portfolio),
           ],
         );
+        for (const reference of makeReferences(
+          portfolio,
+          policy.startsAt,
+          policy.endsAt,
+        )) {
+          await client.query(
+            'INSERT INTO reference_portfolios(experiment_id,scenario_id,reference_id,reference_kind,frozen_instrument_id,status,comparison_available,replacement_allowed,portfolio,portfolio_version,payload) VALUES ($1,$2,$3,$4,$5,$6,$7,false,$8::jsonb,0,$9::jsonb)',
+            [
+              experimentId,
+              scenario.id,
+              reference.referenceId,
+              reference.kind,
+              reference.frozenInstrumentId,
+              reference.status,
+              reference.comparisonAvailable,
+              json(reference.portfolio),
+              json(reference),
+            ],
+          );
+        }
       }
       await this.appendEvent(
         client,
@@ -1037,6 +1068,341 @@ export class ExperimentRepository {
         )
       ).rows[0]!.count,
     );
+  }
+
+  async getReferences(experimentId: string) {
+    const rows = (
+      await this.pool.query<{
+        payload: unknown;
+        portfolio: unknown;
+        status: string;
+        comparison_available: boolean;
+      }>(
+        'SELECT payload,portfolio,status,comparison_available FROM reference_portfolios WHERE experiment_id=$1 ORDER BY scenario_id,reference_kind',
+        [experimentId],
+      )
+    ).rows;
+    return rows.map((row) =>
+      ReferencePortfolio.parse({
+        ...(row.payload as object),
+        portfolio: row.portfolio,
+        status: row.status,
+        comparisonAvailable: row.comparison_available,
+      }),
+    );
+  }
+
+  async applyReferenceEntry(
+    referenceId: string,
+    receipts: AccountingReceiptData[],
+    result: {
+      status: 'ACTIVE' | 'ENTRY_FAILED';
+      reasonCodes?: string[];
+      bundle?: unknown;
+    },
+  ) {
+    return this.transaction(async (client) => {
+      const row = first(
+        (
+          await client.query<any>(
+            'SELECT * FROM reference_portfolios WHERE reference_id=$1 FOR UPDATE',
+            [referenceId],
+          )
+        ).rows,
+        'DATA_UNAVAILABLE',
+        'Reference not found',
+      );
+      if (
+        row.entry_replay_bundle &&
+        result.bundle !== undefined &&
+        contentHash(row.entry_replay_bundle) !== contentHash(result.bundle)
+      )
+        throw new PoaError(
+          'OPERATION_CONFLICT',
+          'Reference entry identity has different replay evidence',
+        );
+      if (row.status === 'ENTRY_FAILED' || row.portfolio_version !== '0') {
+        if (result.status !== row.status)
+          throw new PoaError(
+            'EXPERIMENT_LOCKED',
+            'Completed reference entry cannot be replaced after experiment start',
+          );
+        for (const receipt of receipts) {
+          const prior = first(
+            (
+              await client.query<{ receipt_hash: string }>(
+                'SELECT receipt_hash FROM reference_receipts WHERE reference_id=$1 AND operation_id=$2',
+                [referenceId, receipt.operationId],
+              )
+            ).rows,
+            'OPERATION_CONFLICT',
+            'Reference entry retry contains a new operation',
+          );
+          if (prior.receipt_hash !== contentHash(receipt))
+            throw new PoaError(
+              'OPERATION_CONFLICT',
+              'Reference receipt identity has different content',
+            );
+        }
+        return ReferencePortfolio.parse({
+          ...(row.payload as object),
+          portfolio: row.portfolio,
+          status: row.status,
+          comparisonAvailable: row.comparison_available,
+        });
+      }
+      let portfolio = row.portfolio as ShadowPortfolioData;
+      for (const receipt of receipts) {
+        const prior = await client.query(
+          'SELECT receipt_hash FROM reference_receipts WHERE reference_id=$1 AND operation_id=$2',
+          [referenceId, receipt.operationId],
+        );
+        if (prior.rows[0]) {
+          if (prior.rows[0].receipt_hash !== contentHash(receipt))
+            throw new PoaError(
+              'OPERATION_CONFLICT',
+              'Reference receipt identity has different content',
+            );
+          continue;
+        }
+        portfolio = applyReceipt(portfolio, receipt);
+        await client.query(
+          'INSERT INTO reference_receipts(reference_id,operation_id,receipt_hash,payload,applied_portfolio_version) VALUES ($1,$2,$3,$4::jsonb,$5)',
+          [
+            referenceId,
+            receipt.operationId,
+            contentHash(receipt),
+            json(receipt),
+            portfolio.version,
+          ],
+        );
+      }
+      const payload = ReferencePortfolio.parse({
+        ...(row.payload as object),
+        portfolio,
+        status: result.status,
+        comparisonAvailable: result.status === 'ACTIVE',
+        failureReasonCodes:
+          result.status === 'ENTRY_FAILED'
+            ? (result.reasonCodes ?? ['REFERENCE_ENTRY_FAILED'])
+            : [],
+      });
+      await client.query(
+        'UPDATE reference_portfolios SET status=$2,comparison_available=$3,portfolio=$4::jsonb,portfolio_version=$5,payload=$6::jsonb,entry_replay_bundle=COALESCE(entry_replay_bundle,$7::jsonb) WHERE reference_id=$1',
+        [
+          referenceId,
+          payload.status,
+          payload.comparisonAvailable,
+          json(portfolio),
+          portfolio.version,
+          json(payload),
+          result.bundle === undefined ? null : json(result.bundle),
+        ],
+      );
+      return payload;
+    });
+  }
+
+  async saveScenarioCheckpoint(
+    checkpointInput: ScenarioCheckpointData,
+    priorAgentMarksUsdcMinor: string[] = [],
+    rawObjects: { objectKey: string; bytesHex: string }[] = [],
+    checkpointInputs: CheckpointReplayInputsData | null = null,
+  ) {
+    const checkpoint = ScenarioCheckpoint.parse(checkpointInput);
+    if (
+      [
+        checkpoint.agent,
+        checkpoint.cashReference,
+        checkpoint.conservativeYieldReference,
+      ].some((item) => item.portfolio.positions.length > 0) &&
+      (rawObjects.length === 0 || checkpointInputs === null)
+    )
+      throw new PoaError(
+        'DATA_UNAVAILABLE',
+        'Position checkpoint requires archived raw inputs and replay inputs',
+      );
+    const evaluation = evaluateScenario(checkpoint, priorAgentMarksUsdcMinor);
+    const replay = M4ReplayBundle.parse({
+      schemaVersion: 'proof-of-alpha/m4-replay-bundle/v1',
+      checkpoint: (({ checkpointHash: _ignored, ...body }) => body)(checkpoint),
+      priorAgentMarksUsdcMinor,
+      rawObjects,
+      checkpointInputs,
+      expectedCheckpointHash: checkpoint.checkpointHash,
+      expectedEvaluation: evaluation,
+    });
+    replayM4(replay);
+    return this.transaction(async (client) => {
+      const prior = (
+        await client.query<{ payload: unknown }>(
+          'SELECT payload FROM valuation_checkpoints WHERE checkpoint_id=$1',
+          [checkpoint.checkpointId],
+        )
+      ).rows[0];
+      if (prior) {
+        const existing = ScenarioCheckpoint.parse(prior.payload);
+        if (existing.checkpointHash !== checkpoint.checkpointHash)
+          throw new PoaError(
+            'OPERATION_CONFLICT',
+            'Checkpoint identity has different content',
+          );
+        return { checkpoint: existing, evaluation };
+      }
+      const current = first(
+        (
+          await client.query<any>(
+            'SELECT portfolio FROM capital_scenarios WHERE experiment_id=$1 AND scenario_id=$2 FOR UPDATE',
+            [checkpoint.experimentId, checkpoint.scenarioId],
+          )
+        ).rows,
+        'DATA_UNAVAILABLE',
+        'Scenario not found',
+      );
+      const accruedCount = BigInt(checkpoint.agent.accruedReceiptHashes.length);
+      if (
+        BigInt((current.portfolio as ShadowPortfolioData).version) +
+          accruedCount !==
+        BigInt(checkpoint.agent.portfolio.version)
+      )
+        throw new PoaError(
+          'STALE_PORTFOLIO',
+          'Checkpoint agent portfolio version is stale',
+        );
+      await client.query(
+        'UPDATE capital_scenarios SET portfolio=$3::jsonb,portfolio_version=$4 WHERE experiment_id=$1 AND scenario_id=$2',
+        [
+          checkpoint.experimentId,
+          checkpoint.scenarioId,
+          json(checkpoint.agent.portfolio),
+          checkpoint.agent.portfolio.version,
+        ],
+      );
+      for (const reference of [
+        checkpoint.cashReference,
+        checkpoint.conservativeYieldReference,
+      ]) {
+        const currentReference = first(
+          (
+            await client.query<{
+              portfolio: ShadowPortfolioData;
+              status: string;
+              comparison_available: boolean;
+            }>(
+              'SELECT portfolio,status,comparison_available FROM reference_portfolios WHERE reference_id=$1 FOR UPDATE',
+              [reference.portfolioId],
+            )
+          ).rows,
+          'DATA_UNAVAILABLE',
+          'Reference not found',
+        );
+        if (
+          BigInt(currentReference.portfolio.version) +
+            BigInt(reference.accruedReceiptHashes.length) !==
+            BigInt(reference.portfolio.version) ||
+          currentReference.status !== reference.referenceStatus ||
+          currentReference.comparison_available !==
+            reference.comparisonAvailable
+        )
+          throw new PoaError(
+            'STALE_PORTFOLIO',
+            'Checkpoint reference portfolio is stale',
+          );
+        await client.query(
+          "UPDATE reference_portfolios SET portfolio=$2::jsonb,portfolio_version=$3,payload=jsonb_set(payload,'{portfolio}',$2::jsonb) WHERE reference_id=$1",
+          [
+            reference.portfolioId,
+            json(reference.portfolio),
+            reference.portfolio.version,
+          ],
+        );
+      }
+      await client.query(
+        'INSERT INTO valuation_checkpoints(checkpoint_id,experiment_id,scenario_id,sequence,checkpoint_at,checkpoint_hash,payload,replay_bundle) VALUES ($1,$2,$3,$4,$5,$6,$7::jsonb,$8::jsonb)',
+        [
+          checkpoint.checkpointId,
+          checkpoint.experimentId,
+          checkpoint.scenarioId,
+          checkpoint.sequence,
+          checkpoint.checkpointAt,
+          checkpoint.checkpointHash,
+          json(checkpoint),
+          json(replay),
+        ],
+      );
+      await client.query(
+        'INSERT INTO scenario_evaluations(evaluation_id,checkpoint_id,experiment_id,scenario_id,evaluation_hash,payload) VALUES ($1,$2,$3,$4,$5,$6::jsonb)',
+        [
+          evaluation.evaluationId,
+          checkpoint.checkpointId,
+          checkpoint.experimentId,
+          checkpoint.scenarioId,
+          evaluation.evaluationHash,
+          json(evaluation),
+        ],
+      );
+      await this.appendEvent(
+        client,
+        checkpoint.experimentId,
+        'VALUATION_CHECKPOINT',
+        checkpoint.checkpointAt,
+        {
+          checkpointHash: checkpoint.checkpointHash,
+          evaluationHash: evaluation.evaluationHash,
+        },
+        checkpoint.resultProvenance,
+      );
+      return { checkpoint, evaluation, replay };
+    });
+  }
+
+  async getValuations(experimentId: string) {
+    const rows = await this.pool.query<{ payload: unknown }>(
+      'SELECT payload FROM valuation_checkpoints WHERE experiment_id=$1 ORDER BY checkpoint_at,scenario_id',
+      [experimentId],
+    );
+    return rows.rows.map((row) => ScenarioCheckpoint.parse(row.payload));
+  }
+
+  async getEvaluations(experimentId: string) {
+    const rows = await this.pool.query<{ payload: unknown }>(
+      'SELECT payload FROM scenario_evaluations WHERE experiment_id=$1 ORDER BY created_at,scenario_id',
+      [experimentId],
+    );
+    return rows.rows.map((row) => ScenarioEvaluation.parse(row.payload));
+  }
+
+  async getReplayBundle(checkpointId: string): Promise<M4ReplayBundleData> {
+    const row = first(
+      (
+        await this.pool.query<{ replay_bundle: unknown }>(
+          'SELECT replay_bundle FROM valuation_checkpoints WHERE checkpoint_id=$1',
+          [checkpointId],
+        )
+      ).rows,
+      'DATA_UNAVAILABLE',
+      'Checkpoint not found',
+    );
+    return M4ReplayBundle.parse(row.replay_bundle);
+  }
+
+  async getReferenceEntryBundle(referenceId: string) {
+    const row = first(
+      (
+        await this.pool.query<{ entry_replay_bundle: unknown }>(
+          'SELECT entry_replay_bundle FROM reference_portfolios WHERE reference_id=$1',
+          [referenceId],
+        )
+      ).rows,
+      'DATA_UNAVAILABLE',
+      'Reference not found',
+    );
+    if (!row.entry_replay_bundle)
+      throw new PoaError(
+        'DATA_UNAVAILABLE',
+        'Reference entry has no replay bundle',
+      );
+    return row.entry_replay_bundle;
   }
 }
 

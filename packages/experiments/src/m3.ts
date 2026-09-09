@@ -44,6 +44,7 @@ export async function prepareSyntheticM3Execution(input: M3ExecutionInput) {
     },
   );
   const amount = plan.steps.at(-1)!.input.minor;
+  const amountSize = BigInt(amount);
   const archive = new MemoryObjectArchive();
   const expiresAt = new Date(Date.parse(input.receivedAt) + 600_000)
     .toISOString()
@@ -92,7 +93,7 @@ export async function prepareSyntheticM3Execution(input: M3ExecutionInput) {
       schemaVersion: 'proof-of-alpha/gas-input/v1',
       operation: 'APPROVE',
       amountInMinor: amount,
-      gasUnits: '50000',
+      gasUnits: (50_000n + amountSize / 100_000_000n).toString(),
       effectiveGasPriceWei: '20000000000',
     }),
   );
@@ -102,7 +103,7 @@ export async function prepareSyntheticM3Execution(input: M3ExecutionInput) {
       schemaVersion: 'proof-of-alpha/gas-input/v1',
       operation: 'SUPPLY',
       amountInMinor: amount,
-      gasUnits: '140000',
+      gasUnits: (140_000n + amountSize / 10_000_000n).toString(),
       effectiveGasPriceWei: '20000000000',
     }),
   );

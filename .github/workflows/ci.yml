@@ -19,7 +19,7 @@ jobs:
       - run: pnpm test:replay && pnpm test:fork
       - run: docker compose config --quiet
       - run: docker compose up --build -d
-      - run: pnpm test:db && pnpm smoke
+      - run: pnpm test:db && pnpm test:e2e:signed-intent && pnpm test:e2e:scenarios && pnpm smoke
         env:
           DATABASE_URL: postgres://poa:poa-local-only@localhost:54329/poa
       - run: docker compose logs --no-color

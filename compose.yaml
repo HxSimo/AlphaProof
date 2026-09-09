@@ -17,7 +17,7 @@ services:
       retries: 30
   migrate:
     build: .
-    image: proof-of-alpha:m3-local
+    image: proof-of-alpha:m4-local
     command: ['pnpm', 'db:migrate']
     environment:
       DATABASE_URL: postgres://poa:poa-local-only@postgres:5432/poa
@@ -25,7 +25,7 @@ services:
       postgres:
         condition: service_healthy
   api:
-    image: proof-of-alpha:m3-local
+    image: proof-of-alpha:m4-local
     command: ['pnpm', '--filter', '@poa/api', 'start']
     environment:
       DATABASE_URL: postgres://poa:poa-local-only@postgres:5432/poa
@@ -48,7 +48,7 @@ services:
       timeout: 4s
       retries: 20
   worker:
-    image: proof-of-alpha:m3-local
+    image: proof-of-alpha:m4-local
     command: ['pnpm', '--filter', '@poa/worker', 'start']
     environment:
       DATABASE_URL: postgres://poa:poa-local-only@postgres:5432/poa
@@ -57,7 +57,7 @@ services:
       migrate:
         condition: service_completed_successfully
   web:
-    image: proof-of-alpha:m3-local
+    image: proof-of-alpha:m4-local
     command: ['pnpm', '--filter', '@poa/web', 'start']
     environment:
       API_INTERNAL_URL: http://api:3001

@@ -1,5 +1,5 @@
 {
-  "name": "@poa/experiments",
+  "name": "@poa/valuation",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -12,11 +12,7 @@
   },
   "dependencies": {
     "@poa/accounting": "workspace:*",
-    "@poa/adapters": "workspace:*",
     "@poa/domain": "workspace:*",
-    "@poa/execution": "workspace:*",
-    "@poa/market-data": "workspace:*",
-    "@poa/schemas": "workspace:*",
-    "@poa/valuation": "workspace:*"
+    "@poa/schemas": "workspace:*"
   }
 }

@@ -9,6 +9,7 @@ import {
 } from '@poa/schemas';
 
 export * from './m3.js';
+export * from './m4.js';
 
 function field(input: Record<string, string | boolean>, key: string) {
   const value = input[key];

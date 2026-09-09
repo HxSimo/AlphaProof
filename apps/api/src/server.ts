@@ -58,7 +58,7 @@ export function createServer(
       message: 'Request could not be completed',
     });
   });
-  app.get('/health/live', async () => ({ status: 'ok', milestone: 'M3' }));
+  app.get('/health/live', async () => ({ status: 'ok', milestone: 'M4' }));
   app.get('/health/ready', async (_, reply) => {
     try {
       await checkDatabase();
@@ -118,6 +118,18 @@ export function createServer(
   app.get<{ Params: { experimentId: string } }>(
     '/v1/experiments/:experimentId/policy',
     async (request) => repository.getPolicy(request.params.experimentId),
+  );
+  app.get<{ Params: { experimentId: string } }>(
+    '/v1/experiments/:experimentId/references',
+    async (request) => repository.getReferences(request.params.experimentId),
+  );
+  app.get<{ Params: { experimentId: string } }>(
+    '/v1/experiments/:experimentId/valuations',
+    async (request) => repository.getValuations(request.params.experimentId),
+  );
+  app.get<{ Params: { experimentId: string } }>(
+    '/v1/experiments/:experimentId/evaluations',
+    async (request) => repository.getEvaluations(request.params.experimentId),
   );
   app.get<{ Params: { experimentId: string } }>(
     '/v1/experiments/:experimentId/instruments',

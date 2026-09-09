@@ -2,7 +2,7 @@
 
 Prospective evaluation for self-hosted stablecoin treasury agents. The intended MVP receives signed allocation intents, evaluates future consequences with virtual capital and observed market data, and publishes reproducible results. It never automatically allocates real funds.
 
-**Current delivery: M3 prospective experiment and external-agent flow.** The API registers agents and versions, freezes an immutable experiment policy, verifies EIP-712 intents, and atomically stores signed bytes, durable receipt time, journal event and PostgreSQL job. The worker plans against M2 archived synthetic observations and applies M1 receipts one transaction at a time, so retries preserve prior costs without duplicate effects. `@poa/sdk` uses an injected signer, and the example agent runs as a separate process. All external adapters and profiles remain disabled. The optional local M3 fixture has `SYNTHETIC_TEST` provenance and cannot produce eligibility. No performance result, live liquidity, deployed registry or chain transaction is claimed.
+**Current delivery: M4 multi-capital and reference evaluation.** The M3 signed-intent flow now drives separate 1,000, 10,000 and 100,000 USDC portfolios. Each has cash and frozen conservative-yield references with equal starting capital, distinct financial identities and amount-specific synthetic inputs. `@poa/valuation` accrues inactive positions and separates mark from liquidation value; `@poa/evaluation` publishes deterministic descriptive differences, costs and drawdown at common checkpoints. All external adapters and profiles remain disabled. Synthetic results are correlated policy views, statistical inference is `NOT_ASSESSED`, and real-capital eligibility is disabled. No live performance, liquidity, deployed registry or chain transaction is claimed.
 
 ## Run with Docker
 
@@ -40,13 +40,15 @@ Run `pnpm build` before using `pnpm --filter @poa/web start`. API and worker loa
 pnpm check
 pnpm test:replay
 pnpm test:fork
-pnpm plan M3
+pnpm plan M4
 pnpm test:db
+pnpm test:e2e:signed-intent
+pnpm test:e2e:scenarios
 pnpm smoke
 git diff --check
 ```
 
-`check` runs formatting, type checks, manifest/seal validation, generated-schema drift, unit/boundary tests and builds. `test:replay` restores M2 raw objects in another process; the M3 end-to-end test also replays the accepted action's raw bundle in a child process. `test:fork` skips with an explicit `TO_VERIFY` result unless the credential gate described in the [M2 verification runbook](docs/runbooks/m2-integration-verification.md) is enabled. `test:db` requires PostgreSQL and `DATABASE_URL`; it creates/removes only its own uniquely named schemas. `test:e2e:signed-intent` runs the API, external example agent and restart-safe worker flow. `smoke` requires the running web/API/PostgreSQL stack.
+`check` runs formatting, type checks, manifest/seal validation, generated-schema drift, unit/boundary tests and builds. `test:replay` restores M2 inputs and reproduces M4 checkpoint/evaluation hashes in another process. `test:fork` skips with an explicit `TO_VERIFY` result unless the credential gate described in the [M2 verification runbook](docs/runbooks/m2-integration-verification.md) is enabled. `test:db` requires PostgreSQL and `DATABASE_URL`; it creates/removes only uniquely named schemas. `test:e2e:signed-intent` retains the external agent and restart-safe worker path. `test:e2e:scenarios` covers the complete local M4 path. `smoke` requires the running web/API/PostgreSQL stack.
 
 ## Configuration and evidence
 
@@ -63,6 +65,7 @@ The three proposed scenario amounts are independent global treasuries, with no d
 - [External verification inventory](docs/integrations.md) and [instrument fact sheets](docs/instrument-catalog)
 - [Canonical schemas](docs/schemas.md) and [generated JSON Schema](schemas/generated/v1.json)
 - [M3 API and signing contract](docs/api/m3.md)
+- [M4 API](docs/api/m4.md), [validation evidence](docs/evidence/m4-validation.md), [scenario/reference decision](docs/adr/0011-m4-scenarios-and-fixed-references.md), [checkpoint/evaluation decision](docs/adr/0012-m4-checkpoints-and-descriptive-evaluation.md), and [runbook](docs/runbooks/m4-scenarios-and-evaluation.md)
 - [M1 accounting decision](docs/adr/0006-deterministic-accounting.md) and [synthetic replay fixture](tests/fixtures/m1-accounting-transfer.json)
 - [M2 validation evidence](docs/evidence/m2-validation.md), [archive decision](docs/adr/0007-content-addressed-economic-inputs.md), [adapter decision](docs/adr/0008-m2-ethereum-adapter-boundaries.md), and [activation runbook](docs/runbooks/m2-integration-verification.md)
 - [M3 validation evidence](docs/evidence/m3-validation.md), [signed boundary decision](docs/adr/0009-m3-signed-experiment-boundary.md), [job transaction decision](docs/adr/0010-m3-journal-and-job-transactions.md), and [signed-intent runbook](docs/runbooks/m3-signed-intent.md)

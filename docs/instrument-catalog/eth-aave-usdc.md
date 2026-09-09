@@ -1,6 +1,6 @@
 # Instrument fact sheet — eth-aave-usdc
 
-Adapted from the authoritative instrument-fact-sheet template. Version 0.2.0.
+Adapted from the authoritative instrument-fact-sheet template. Version 0.3.0.
 
 ## Status
 
@@ -53,3 +53,7 @@ Adapted from the authoritative instrument-fact-sheet template. Version 0.2.0.
 - Locked assumptions: no auto funding; prospective receipt; separated provenance; same global capital across chains.
 - Remaining blockers: all evidence kinds in the manifest, plus exact addresses, code, capacity and data.
 - Decision: ADR-0002 and ADR-0003. New manifest/profile version before X; never rewrite an experiment.
+
+## M4 reference use
+
+The conservative reference freezes this instrument family before experiment start and uses one full-capital synthetic entry per scenario followed by archived index accrual. Each size has distinct observation and receipt identities. This path is labeled `SYNTHETIC_TEST`, does not select or validate a live deployment, and cannot enable the `aave-v3-ethereum` dependency or real-capital eligibility.

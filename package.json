@@ -12,9 +12,10 @@
     "build": "pnpm -r build",
     "typecheck": "tsc --noEmit && pnpm -r typecheck",
     "test": "vitest run",
-    "test:db": "node --env-file-if-exists=.env --import tsx tests/database/foundation.ts && node --env-file-if-exists=.env --import tsx tests/database/m3.ts",
-    "test:replay": "node --import tsx tests/replay/m2.ts",
+    "test:db": "node --env-file-if-exists=.env --import tsx tests/database/foundation.ts && node --env-file-if-exists=.env --import tsx tests/database/m3.ts && node --env-file-if-exists=.env --import tsx tests/database/m4.ts",
+    "test:replay": "node --import tsx tests/replay/m2.ts && node --import tsx tests/replay/m4.ts",
     "test:e2e:signed-intent": "node --env-file-if-exists=.env --import tsx tests/end-to-end/signed-intent.ts",
+    "test:e2e:scenarios": "node --env-file-if-exists=.env --import tsx tests/end-to-end/scenarios.ts",
     "test:fork": "node --import tsx tests/fork/m2-gate.ts",
     "replay:m2": "node --import tsx scripts/replay-m2.ts",
     "format": "prettier --write .",
@@ -46,6 +47,8 @@
     "@poa/adapters": "workspace:*",
     "@poa/experiments": "workspace:*",
     "@poa/execution": "workspace:*",
-    "@poa/sdk": "workspace:*"
+    "@poa/sdk": "workspace:*",
+    "@poa/valuation": "workspace:*",
+    "@poa/evaluation": "workspace:*"
   }
 }
