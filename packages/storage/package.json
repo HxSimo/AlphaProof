@@ -11,7 +11,12 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@poa/accounting": "workspace:*",
+    "@poa/config": "workspace:*",
     "@poa/domain": "workspace:*",
+    "@poa/execution": "workspace:*",
+    "@poa/schemas": "workspace:*",
+    "@poa/sdk": "workspace:*",
     "pg": "8.23.0"
   }
 }

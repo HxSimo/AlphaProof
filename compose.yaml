@@ -17,7 +17,7 @@ services:
       retries: 30
   migrate:
     build: .
-    image: proof-of-alpha:m0-local
+    image: proof-of-alpha:m3-local
     command: ['pnpm', 'db:migrate']
     environment:
       DATABASE_URL: postgres://poa:poa-local-only@postgres:5432/poa
@@ -25,11 +25,12 @@ services:
       postgres:
         condition: service_healthy
   api:
-    image: proof-of-alpha:m0-local
+    image: proof-of-alpha:m3-local
     command: ['pnpm', '--filter', '@poa/api', 'start']
     environment:
       DATABASE_URL: postgres://poa:poa-local-only@postgres:5432/poa
       API_PORT: '3001'
+      POA_ENABLE_SYNTHETIC_M3: '${POA_ENABLE_SYNTHETIC_M3:-0}'
     ports:
       - '127.0.0.1:3001:3001'
     depends_on:
@@ -47,15 +48,16 @@ services:
       timeout: 4s
       retries: 20
   worker:
-    image: proof-of-alpha:m0-local
+    image: proof-of-alpha:m3-local
     command: ['pnpm', '--filter', '@poa/worker', 'start']
     environment:
       DATABASE_URL: postgres://poa:poa-local-only@postgres:5432/poa
+      POA_ENABLE_SYNTHETIC_M3: '${POA_ENABLE_SYNTHETIC_M3:-0}'
     depends_on:
       migrate:
         condition: service_completed_successfully
   web:
-    image: proof-of-alpha:m0-local
+    image: proof-of-alpha:m3-local
     command: ['pnpm', '--filter', '@poa/web', 'start']
     environment:
       API_INTERNAL_URL: http://api:3001

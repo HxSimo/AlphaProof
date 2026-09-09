@@ -12,6 +12,7 @@
   "dependencies": {
     "@poa/config": "workspace:*",
     "@poa/domain": "workspace:*",
+    "@poa/schemas": "workspace:*",
     "@poa/storage": "workspace:*",
     "fastify": "5.12.3"
   },

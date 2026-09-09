@@ -1,0 +1,15 @@
+{
+  "name": "@poa/example-agent",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node --env-file-if-exists=../../.env --import tsx src/main.ts",
+    "build": "tsc --noEmit",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@poa/domain": "workspace:*",
+    "@poa/sdk": "workspace:*"
+  }
+}

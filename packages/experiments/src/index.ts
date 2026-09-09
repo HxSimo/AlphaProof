@@ -8,6 +8,8 @@ import {
   type ArchivedObservationData,
 } from '@poa/schemas';
 
+export * from './m3.js';
+
 function field(input: Record<string, string | boolean>, key: string) {
   const value = input[key];
   if (typeof value !== 'string')

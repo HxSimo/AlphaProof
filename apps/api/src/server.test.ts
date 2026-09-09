@@ -2,7 +2,7 @@ import { expect, it } from 'vitest';
 import { CatalogResponse } from '@poa/schemas';
 import { createServer } from './server.js';
 
-it('serves a validated catalog with disabled experiments and no invented results', async () => {
+it('serves the M3 catalog with every external profile disabled and no invented results', async () => {
   const app = createServer(async () => {});
   try {
     const response = await app.inject('/v1/profiles');

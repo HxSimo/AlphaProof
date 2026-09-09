@@ -77,3 +77,4 @@ export async function archiveConfiguration(pool: Pool, payload: unknown) {
   return { contentHash: hash, inserted: result.rowCount === 1 };
 }
 export type { Pool } from 'pg';
+export * from './m3.js';

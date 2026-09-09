@@ -374,7 +374,7 @@ export function requireDependency(bundle: ConfigBundle, dependencyId: string) {
 export function catalog() {
   const { bundle, seal } = loadBundle();
   return {
-    milestone: 'M0' as const,
+    milestone: 'M3' as const,
     experimentStartAvailable: false as const,
     automaticFundingEnabled: false as const,
     bundleHash: seal.bundleHash,

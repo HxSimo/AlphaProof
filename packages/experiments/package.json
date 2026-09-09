@@ -14,6 +14,7 @@
     "@poa/accounting": "workspace:*",
     "@poa/adapters": "workspace:*",
     "@poa/domain": "workspace:*",
+    "@poa/execution": "workspace:*",
     "@poa/market-data": "workspace:*",
     "@poa/schemas": "workspace:*"
   }

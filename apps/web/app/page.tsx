@@ -17,15 +17,15 @@ export default async function Page() {
   const data = await getCatalog();
   return (
     <main>
-      <p className="eyebrow">PROOF OF ALPHA · M0 FOUNDATION</p>
+      <p className="eyebrow">PROOF OF ALPHA · M3 PROSPECTIVE FLOW</p>
       <h1>Evidence before capital.</h1>
       <p className="intro">
         A prospective evaluation protocol for self-hosted treasury agents.
         Signed decisions, virtual capital, auditable results.
       </p>
       <aside>
-        Configuration review only. Experiments are not open. No performance
-        history or real-capital eligibility is available.
+        External profiles remain closed. The opt-in local signed-intent fixture
+        is synthetic and cannot produce performance or eligibility claims.
       </aside>
       <h2>Experiment profiles</h2>
       {!data ? (

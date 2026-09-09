@@ -1,4 +1,12 @@
 import { keccak256, toBytes } from 'viem';
+export {
+  hashTypedData,
+  hexToString,
+  recoverTypedDataAddress,
+  stringToHex,
+} from 'viem';
+export type { Address, Hex } from 'viem';
+export { privateKeyToAccount } from 'viem/accounts';
 
 export const ERROR_CODES = [
   'INVALID_SCHEMA',
@@ -31,6 +39,16 @@ export const ERROR_CODES = [
   'LIQUIDITY_UNAVAILABLE',
   'SLIPPAGE_EXCEEDED',
   'REPLAY_MISMATCH',
+  'AGENT_NOT_FOUND',
+  'AGENT_VERSION_NOT_FOUND',
+  'KEY_REVOKED',
+  'EXPERIMENT_NOT_FOUND',
+  'EXPERIMENT_NOT_STARTED',
+  'EXPERIMENT_LOCKED',
+  'IDEMPOTENCY_CONFLICT',
+  'QUOTA_EXCEEDED',
+  'PAYLOAD_TOO_LARGE',
+  'JOB_LEASE_LOST',
 ] as const;
 export type ErrorCode = (typeof ERROR_CODES)[number];
 export class PoaError extends Error {

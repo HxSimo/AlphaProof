@@ -1,8 +1,8 @@
 # External integration verification inventory
 
-Version 0.2.0. All entries below remain `TO_VERIFY` and disabled. M2 pinned and hashed official Aave, Uniswap and MetaMorpho source files, implemented deterministic parsers/adapters, and proved synthetic replay. No chain RPC capture, contract bytecode check, liquidity test, fee calibration or live transaction has been performed. Documentation access and fixture success are not adapter activation.
+Version 0.3.0. All entries below remain `TO_VERIFY` and disabled. M2 pinned and hashed official Aave, Uniswap and MetaMorpho source files, implemented deterministic parsers/adapters, and proved synthetic replay. M3 adds a local chain-31337/zero-address signing-domain fixture solely for `SYNTHETIC_TEST`; it is not an Arc registry address or activation evidence. No chain RPC capture, contract bytecode check, liquidity test, fee calibration or live transaction has been performed. Documentation access and fixture success are not adapter activation.
 
-The exact M2 activation command, variables and evidence requirements are in [M2 Ethereum integration verification](runbooks/m2-integration-verification.md). `pnpm test:fork` currently reports `SKIPPED_TO_VERIFY`; `pnpm test:replay` reconstructs the fixture portfolio in another process.
+The exact M2 activation command, variables and evidence requirements are in [M2 Ethereum integration verification](runbooks/m2-integration-verification.md). The local signing flow and exact registry replacement gate are in [M3 signed intent](runbooks/m3-signed-intent.md). `pnpm test:fork` currently reports `SKIPPED_TO_VERIFY`; replay reconstructs archived fixture receipts in another process.
 
 The executable source is `config/v1/dependencies.json`. Four network manifests additionally gate chain/token/finality identities; eleven instrument fact sheets gate exact deployments and mechanics. All null addresses/scales must be resolved against the chosen environment before activation.
 

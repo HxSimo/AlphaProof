@@ -1,0 +1,13 @@
+# Exact continuation prompt for M4
+
+```text
+Use $proof-of-alpha at .agents/skills/proof-of-alpha/SKILL.md as the authoritative workflow and project context. Continue from the verified M3 prospective experiment and external-agent flow. Inspect Git status and preserve all existing changes, then read docs/project-state.md, all accepted ADRs, docs/milestones.json, docs/integrations.md, the M2 and M3 runbooks, and every skill reference required for multi-capital accounting, references, valuation, evaluation, replay and testing. Consult the complete v0.3 source specification for missing or conflicting details. Run pnpm plan M4.
+
+Your objective is M4 only: implement three independent 1,000, 10,000 and 100,000 USDC scenario streams and exactly two reference portfolios per scenario, then add deterministic checkpoints and descriptive valuation/evaluation outputs. Every scenario must have its own signed decision stream, financial identities, balances, receipts, costs and amount-dependent quotes. Initialize the cash and frozen conservative-yield references with exactly the same global capital, distribution, period and valuation convention as the agent scenario.
+
+Accrue inactive positions between checkpoints using archived protocol mechanics. Report mark and liquidation value, available cash, positions, in-transit and blocked capital, cumulative costs, drawdown and differences from both references at the same checkpoint. A failed passive reference entry must retain cash and incurred costs, mark that comparison unavailable and never select a replacement after X. Missing or stale values remain missing or stale, never zero. Treat the three sizes as correlated views of one decision policy, never three independent statistical samples.
+
+Keep all external gates disabled unless their existing evidence requirements are actually satisfied. Use distinct deterministic synthetic observations and amount-specific quotes wherever external data remains unavailable; never scale one quote, fee, receipt or liquidity result across capital sizes. No testnet, replay, synthetic or mixed output may become real-capital eligibility, and automatic funding remains disabled.
+
+Satisfy every M4 observable exit in docs/milestones.json. Add meaningful multi-capital isolation, reference equality/failure, inactivity accrual, checkpoint alignment, mark/liquidation, data-quality, cost, drawdown, correlation-label, restart and replay tests. Run all relevant validation, migrations and local service tests; update generated schemas, project state and integration documentation; record material decisions as ADRs; and make a focused verified M4 commit. Do not begin M5. Finish with the exact continuation prompt for M5.
+```

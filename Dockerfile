@@ -11,6 +11,12 @@ COPY packages/schemas/package.json packages/schemas/package.json
 COPY packages/config/package.json packages/config/package.json
 COPY packages/storage/package.json packages/storage/package.json
 COPY packages/accounting/package.json packages/accounting/package.json
+COPY packages/market-data/package.json packages/market-data/package.json
+COPY packages/adapters/package.json packages/adapters/package.json
+COPY packages/execution/package.json packages/execution/package.json
+COPY packages/experiments/package.json packages/experiments/package.json
+COPY packages/sdk/package.json packages/sdk/package.json
+COPY examples/self-hosted-treasury-agent/package.json examples/self-hosted-treasury-agent/package.json
 RUN pnpm install --frozen-lockfile
 COPY . .
 RUN pnpm build

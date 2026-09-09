@@ -11,6 +11,9 @@
   },
   "dependencies": {
     "@poa/config": "workspace:*",
+    "@poa/domain": "workspace:*",
+    "@poa/experiments": "workspace:*",
+    "@poa/schemas": "workspace:*",
     "@poa/storage": "workspace:*"
   },
   "devDependencies": {

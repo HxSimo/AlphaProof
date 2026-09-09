@@ -23,6 +23,9 @@ importers:
       '@poa/experiments':
         specifier: workspace:*
         version: link:packages/experiments
+      '@poa/execution':
+        specifier: workspace:*
+        version: link:packages/execution
       '@poa/market-data':
         specifier: workspace:*
         version: link:packages/market-data
@@ -32,6 +35,9 @@ importers:
       '@poa/storage':
         specifier: workspace:*
         version: link:packages/storage
+      '@poa/sdk':
+        specifier: workspace:*
+        version: link:packages/sdk
       '@types/node':
         specifier: 22.20.1
         version: 22.20.1
@@ -59,6 +65,9 @@ importers:
       '@poa/domain':
         specifier: workspace:*
         version: link:../../packages/domain
+      '@poa/schemas':
+        specifier: workspace:*
+        version: link:../../packages/schemas
       '@poa/storage':
         specifier: workspace:*
         version: link:../../packages/storage
@@ -97,6 +106,15 @@ importers:
       '@poa/config':
         specifier: workspace:*
         version: link:../../packages/config
+      '@poa/domain':
+        specifier: workspace:*
+        version: link:../../packages/domain
+      '@poa/experiments':
+        specifier: workspace:*
+        version: link:../../packages/experiments
+      '@poa/schemas':
+        specifier: workspace:*
+        version: link:../../packages/schemas
       '@poa/storage':
         specifier: workspace:*
         version: link:../../packages/storage
@@ -155,12 +173,31 @@ importers:
       '@poa/domain':
         specifier: workspace:*
         version: link:../domain
+      '@poa/execution':
+        specifier: workspace:*
+        version: link:../execution
       '@poa/market-data':
         specifier: workspace:*
         version: link:../market-data
       '@poa/schemas':
         specifier: workspace:*
         version: link:../schemas
+
+  packages/execution:
+    dependencies:
+      '@poa/domain':
+        specifier: workspace:*
+        version: link:../domain
+      '@poa/schemas':
+        specifier: workspace:*
+        version: link:../schemas
+    devDependencies:
+      '@poa/accounting':
+        specifier: workspace:*
+        version: link:../accounting
+      '@poa/config':
+        specifier: workspace:*
+        version: link:../config
 
   packages/market-data:
     dependencies:
@@ -180,14 +217,47 @@ importers:
         specifier: 4.5.4
         version: 4.5.4
 
-  packages/storage:
+  packages/sdk:
     dependencies:
       '@poa/domain':
         specifier: workspace:*
         version: link:../domain
+      '@poa/schemas':
+        specifier: workspace:*
+        version: link:../schemas
+
+  packages/storage:
+    dependencies:
+      '@poa/accounting':
+        specifier: workspace:*
+        version: link:../accounting
+      '@poa/config':
+        specifier: workspace:*
+        version: link:../config
+      '@poa/domain':
+        specifier: workspace:*
+        version: link:../domain
+      '@poa/execution':
+        specifier: workspace:*
+        version: link:../execution
+      '@poa/schemas':
+        specifier: workspace:*
+        version: link:../schemas
+      '@poa/sdk':
+        specifier: workspace:*
+        version: link:../sdk
       pg:
         specifier: 8.23.0
         version: 8.23.0
+
+  examples/self-hosted-treasury-agent:
+    dependencies:
+      '@poa/domain':
+        specifier: workspace:*
+        version: link:../../packages/domain
+      '@poa/sdk':
+        specifier: workspace:*
+        version: link:../../packages/sdk
 
 packages:
 

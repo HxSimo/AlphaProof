@@ -265,6 +265,7 @@ export async function aaveSupply(
     approvalGas: ArchivedObservationData;
     supplyGas: ArchivedObservationData;
     conversion: ArchivedObservationData;
+    operationPrefix?: string;
   },
 ) {
   const reserve = await load(
@@ -319,10 +320,18 @@ export async function aaveSupply(
   )
     throw new PoaError('LIMIT_EXCEEDED', 'Aave supply cap would be exceeded');
   const receipts: AccountingReceiptData[] = [];
+  const approveOperationId = input.operationPrefix
+    ? `${input.operationPrefix}-approve`
+    : `${context.scenarioId}-aave-approve`;
+  const depositOperationId = input.operationPrefix
+    ? `${input.operationPrefix}-deposit`
+    : `${context.scenarioId}-aave-supply`;
   let version = BigInt(context.expectedPortfolioVersion);
   if (BigInt(input.currentAllowanceMinor) < amount) {
     const cost = gasCost(
-      `${context.scenarioId}-aave-approval-gas`,
+      input.operationPrefix
+        ? `${input.operationPrefix}-approval-gas`
+        : `${context.scenarioId}-aave-approval-gas`,
       approvalGas,
       conversion,
       'APPROVAL_GAS',
@@ -330,7 +339,7 @@ export async function aaveSupply(
     receipts.push({
       schemaVersion: 'proof-of-alpha/accounting-receipt/v1',
       accountingVersion: '1.0.0',
-      operationId: `${context.scenarioId}-aave-approve`,
+      operationId: approveOperationId,
       experimentId: context.experimentId,
       scenarioId: context.scenarioId,
       expectedPortfolioVersion: version.toString(),
@@ -348,7 +357,9 @@ export async function aaveSupply(
     version++;
   }
   const supplyCost = gasCost(
-    `${context.scenarioId}-aave-supply-gas`,
+    input.operationPrefix
+      ? `${input.operationPrefix}-supply-gas`
+      : `${context.scenarioId}-aave-supply-gas`,
     supplyGas,
     conversion,
     'EXECUTION_GAS',
@@ -356,7 +367,7 @@ export async function aaveSupply(
   receipts.push({
     schemaVersion: 'proof-of-alpha/accounting-receipt/v1',
     accountingVersion: '1.0.0',
-    operationId: `${context.scenarioId}-aave-supply`,
+    operationId: depositOperationId,
     experimentId: context.experimentId,
     scenarioId: context.scenarioId,
     expectedPortfolioVersion: version.toString(),

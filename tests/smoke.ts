@@ -28,7 +28,7 @@ assert.ok(
 );
 for (const profile of data.profiles)
   assert.ok(html.includes(profile.resultProvenance));
-assert.ok(html.includes('Experiments are not open'));
+assert.ok(html.includes('External profiles remain closed'));
 console.log(
   'PASS: API database readiness, validated disabled catalog, web renders API hash/provenance/limitations',
 );

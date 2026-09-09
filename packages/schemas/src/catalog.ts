@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { Hash, Id, NetworkProfile, Provenance } from './primitives.js';
 export const CatalogResponse = z.strictObject({
-  milestone: z.literal('M0'),
+  milestone: z.literal('M3'),
   experimentStartAvailable: z.literal(false),
   automaticFundingEnabled: z.literal(false),
   bundleHash: Hash,
