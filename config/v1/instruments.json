@@ -1,6 +1,6 @@
 {
   "schemaVersion": "proof-of-alpha/instrument-manifest/v1",
-  "manifestVersion": "0.2.0",
+  "manifestVersion": "0.3.0",
   "instruments": [
     {
       "instrumentId": "eth-cash-usdc",
@@ -200,16 +200,16 @@
       "kind": "CASH",
       "protocolId": "circle",
       "adapterId": "cash-ethereum-sepolia",
-      "adapterVersion": "0.0.0",
-      "contractAddress": null,
+      "adapterVersion": "1.0.0",
+      "contractAddress": "0x1c7d4b196cb0c7b01d743fbc6116a902379c7238",
       "codeHash": null,
       "factSheet": "docs/instrument-catalog/sepolia-cash-usdc.md",
       "candidateName": "Sepolia test USDC cash",
       "verification": {
         "status": "TO_VERIFY",
         "enabled": false,
-        "checkedAt": null,
-        "checkedBy": null,
+        "checkedAt": "2026-09-09T00:00:00.000Z",
+        "checkedBy": "codex-m5-source-review",
         "requiredEvidence": [
           "OFFICIAL_SOURCE",
           "ONCHAIN_CODE",
@@ -218,7 +218,7 @@
         ],
         "evidence": [],
         "blockers": [
-          "Exact contract, code and asset verification outstanding.",
+          "Official token address and scale are source-reviewed; matching-chain bytecode remains outstanding.",
           "Resolve USDC token/interface and decimals, verify bytecode and balance reads. For Arc compare native and ERC-20 views at one block, normalize with retained dust and alias one economic balance. Verify USDT separately where listed."
         ]
       }
@@ -230,7 +230,7 @@
       "kind": "ERC4626",
       "protocolId": "poa-demo",
       "adapterId": "demo-vault-ethereum-sepolia",
-      "adapterVersion": "0.0.0",
+      "adapterVersion": "1.0.0",
       "contractAddress": null,
       "codeHash": null,
       "factSheet": "docs/instrument-catalog/sepolia-vault-usdc.md",
@@ -249,7 +249,7 @@
         ],
         "evidence": [],
         "blockers": [
-          "Exact contract, code and asset verification outstanding.",
+          "No vault deployment exists; address, bytecode and live round trip remain outstanding.",
           "Deploy or select an ERC-4626 test USDC vault. Archive deployment bytecode/address, admin powers and decimals. Publish finite funded test-yield budget/schedule before X. Record actual deposit/withdraw test-token receipts and limits/rounding fixtures; no commercial APY claim."
         ]
       }
@@ -261,16 +261,16 @@
       "kind": "CASH",
       "protocolId": "circle",
       "adapterId": "cash-arc-testnet",
-      "adapterVersion": "0.0.0",
-      "contractAddress": null,
+      "adapterVersion": "1.0.0",
+      "contractAddress": "0x3600000000000000000000000000000000000000",
       "codeHash": null,
       "factSheet": "docs/instrument-catalog/arc-test-cash-usdc.md",
       "candidateName": "Arc test USDC cash; native and ERC-20 views alias",
       "verification": {
         "status": "TO_VERIFY",
         "enabled": false,
-        "checkedAt": null,
-        "checkedBy": null,
+        "checkedAt": "2026-09-09T00:00:00.000Z",
+        "checkedBy": "codex-m5-source-review",
         "requiredEvidence": [
           "OFFICIAL_SOURCE",
           "ONCHAIN_CODE",
@@ -279,7 +279,7 @@
         ],
         "evidence": [],
         "blockers": [
-          "Exact contract, code and asset verification outstanding.",
+          "Official token address, scale and alias behavior are source-reviewed; matching-chain bytecode remains outstanding.",
           "Resolve USDC token/interface and decimals, verify bytecode and balance reads. For Arc compare native and ERC-20 views at one block, normalize with retained dust and alias one economic balance. Verify USDT separately where listed."
         ]
       }
@@ -291,7 +291,7 @@
       "kind": "ERC4626",
       "protocolId": "poa-demo",
       "adapterId": "demo-vault-arc-testnet",
-      "adapterVersion": "0.0.0",
+      "adapterVersion": "1.0.0",
       "contractAddress": null,
       "codeHash": null,
       "factSheet": "docs/instrument-catalog/arc-test-vault-usdc.md",

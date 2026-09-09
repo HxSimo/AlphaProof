@@ -19,6 +19,7 @@
     "@poa/sdk": "workspace:*",
     "@poa/valuation": "workspace:*",
     "@poa/evaluation": "workspace:*",
+    "@poa/transfers": "workspace:*",
     "pg": "8.23.0"
   }
 }

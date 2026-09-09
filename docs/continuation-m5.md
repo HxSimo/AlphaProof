@@ -1,4 +1,4 @@
-# Exact continuation prompt for M4
+# Exact continuation prompt for M5
 
 ```text
 Use $proof-of-alpha at .agents/skills/proof-of-alpha/SKILL.md as the authoritative workflow and project context. Continue from the verified M4 multi-capital and reference evaluation slice. Inspect Git status and preserve all existing changes, then read docs/project-state.md, all accepted ADRs, docs/milestones.json, docs/integrations.md, the M2 through M4 runbooks, and every skill reference required for Arc, CCTP, transfers, accounting, replay and testing. Consult the complete v0.3 source specification for missing or conflicting details. Run pnpm plan M5.

@@ -10,6 +10,7 @@ import {
   TransferReceipt,
   UInt,
   ValuationCheckpoint,
+  YieldSchedule,
 } from './index.js';
 
 const hash = '0x' + 'ab'.repeat(32);
@@ -149,6 +150,44 @@ describe('canonical boundaries', () => {
   });
 });
 describe('evidence boundaries', () => {
+  it('binds finite test yield to a prospective funded live deployment', () => {
+    const schedule = {
+      schemaVersion: 'proof-of-alpha/yield-schedule/v1',
+      scheduleId: 'arc-schedule-one',
+      networkId: 'arc-testnet',
+      vaultAddress: null,
+      assetAddress: '0x' + '12'.repeat(20),
+      assetDecimals: 6,
+      budgetAssetMinor: '100000',
+      startsAt: '2026-09-09T12:01:00.000Z',
+      endsAt: '2026-09-10T12:01:00.000Z',
+      frozenAt: '2026-09-09T10:00:00.000Z',
+      experimentStartsAt: '2026-09-09T12:00:00.000Z',
+      fundingTransactionHash: null,
+      deploymentTransactionHash: null,
+      sourceHashes: [hash],
+      evidenceMode: 'SYNTHETIC',
+    };
+    expect(YieldSchedule.safeParse(schedule).success).toBe(true);
+    expect(
+      YieldSchedule.safeParse({
+        ...schedule,
+        evidenceMode: 'LIVE_TESTNET',
+      }).success,
+    ).toBe(false);
+    expect(
+      YieldSchedule.safeParse({
+        ...schedule,
+        frozenAt: schedule.experimentStartsAt,
+      }).success,
+    ).toBe(false);
+    expect(
+      YieldSchedule.safeParse({
+        ...schedule,
+        fundingTransactionHash: hash,
+      }).success,
+    ).toBe(false);
+  });
   it('rejects malformed sequence strings without throwing out of safeParse', () => {
     const batch = {
       schemaVersion: 'proof-of-alpha/commitment-batch/v1',

@@ -20,7 +20,7 @@ try {
   await Promise.all([migrate(pool), migrate(pool)]);
   assert.equal(
     (await pool.query('SELECT * FROM schema_migrations')).rowCount,
-    3,
+    4,
   );
   const results = await Promise.all(
     Array.from({ length: 8 }, () => runFoundationCheck(pool)),
@@ -65,7 +65,7 @@ try {
   );
   assert.equal(
     (await pool.query('SELECT * FROM schema_migrations')).rowCount,
-    3,
+    4,
   );
   console.log(
     'PASS: concurrent migrations; duplicate worker delivery; reconnect/restart; snapshot hash; append-only UPDATE/DELETE/TRUNCATE; migration drift; failure rollback (8 checks)',

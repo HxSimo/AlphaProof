@@ -1,15 +1,15 @@
 # Instrument fact sheet — sepolia-cash-usdc
 
-Adapted from the authoritative instrument-fact-sheet template. Version 0.1.0.
+Adapted from the authoritative instrument-fact-sheet template. Version 0.3.0.
 
 ## Status
 
 - Verification: `TO_VERIFY`; disabled.
 - Environment and chain: ethereum-sepolia; see `config/v1/networks.json` for documented identity. RPC verification outstanding.
-- Contract address and code/version evidence: unresolved (`null`); no deployment claimed.
-- Asset and decimals: USDC; decimals require contract verification.
-- Date checked and official sources: documentation reviewed 2026-09-08; no on-chain check. https://developers.circle.com/stablecoins/usdc-contract-addresses
-- Adapter and manifest versions: cash-ethereum-sepolia 0.0.0 (reserved identity, mechanics not implemented); manifest 0.1.0.
+- Contract address and code/version evidence: official candidate `0x1c7d4b196cb0c7b01d743fbc6116a902379c7238`; runtime code remains unverified.
+- Asset and decimals: USDC, 6 decimals.
+- Date checked and official sources: source review 2026-09-09; no on-chain check. https://developers.circle.com/stablecoins/usdc-contract-addresses
+- Adapter and manifest versions: cash-ethereum-sepolia 1.0.0; manifest 0.3.0.
 
 ## Economic mechanics
 
@@ -43,7 +43,7 @@ Adapted from the authoritative instrument-fact-sheet template. Version 0.1.0.
 
 ## Test evidence
 
-- Unit/fixture: M0 validates this manifest and disabled dependency fixture; no economic behavior claimed.
+- Unit/fixture: M5 uses strict six-decimal transfer and vault accounting; live token reads remain gated.
 - Fixed-block fork, deposit/withdraw round trip, limits, gas and rounding: not run; assigned M2 for Ethereum and M5 for test vaults.
 - Latest evidence links/hashes: none; `verification.evidence` is empty.
 
@@ -51,5 +51,5 @@ Adapted from the authoritative instrument-fact-sheet template. Version 0.1.0.
 
 - Enabled profiles: none.
 - Locked assumptions: no auto funding; prospective receipt; separated provenance; same global capital across chains.
-- Remaining blockers: all evidence kinds in the manifest, plus exact addresses, code, capacity and data.
-- Decision: ADR-0002 and ADR-0003. New manifest/profile version before X; never rewrite an experiment.
+- Remaining blockers: matching-chain bytecode, balance and decimals evidence in the M5 credentialed gate.
+- Decision: ADR-0014. New manifest/profile version before X; never rewrite an experiment.

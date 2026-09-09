@@ -1,6 +1,6 @@
 {
   "schemaVersion": "proof-of-alpha/network-manifest/v1",
-  "manifestVersion": "0.2.0",
+  "manifestVersion": "0.3.0",
   "networks": [
     {
       "networkId": "ethereum-mainnet",
@@ -72,10 +72,12 @@
       "networkId": "ethereum-sepolia",
       "environment": "testnet",
       "chainId": "11155111",
-      "documentationCheckedAt": "2026-09-08T00:00:00.000Z",
+      "documentationCheckedAt": "2026-09-09T00:00:00.000Z",
       "officialSources": [
         "https://ethereum.org/en/developers/docs/networks/",
-        "https://developers.circle.com/cctp/concepts/supported-chains-and-domains"
+        "https://developers.circle.com/stablecoins/usdc-contract-addresses",
+        "https://developers.circle.com/cctp/concepts/supported-chains-and-domains",
+        "https://developers.circle.com/cctp/references/contract-addresses"
       ],
       "rpc": {
         "endpointEnvironmentVariable": "ETHEREUM_SEPOLIA_RPC_URL",
@@ -88,8 +90,8 @@
         {
           "assetId": "usdc",
           "symbol": "USDC",
-          "address": null,
-          "decimals": null
+          "address": "0x1c7d4b196cb0c7b01d743fbc6116a902379c7238",
+          "decimals": 6
         }
       ],
       "contracts": {
@@ -98,8 +100,8 @@
       },
       "cctp": {
         "domain": "0",
-        "tokenMessenger": null,
-        "messageTransmitter": null,
+        "tokenMessenger": "0x8fe6b999dc680ccfdd5bf7eb0974218be2542daa",
+        "messageTransmitter": "0xe737e5cebeeba77efe34d4aa090756590b1ce275",
         "attestationEnvironment": "testnet"
       },
       "verification": {
@@ -115,7 +117,7 @@
         ],
         "evidence": [],
         "blockers": [
-          "Resolve exact contracts and token scales from official deployments and matching chain RPC.",
+          "Official addresses and token scale are source-reviewed but require matching-chain bytecode evidence.",
           "Archive block/hash, bytecode and finality policy evidence."
         ]
       }
@@ -124,10 +126,13 @@
       "networkId": "arc-testnet",
       "environment": "testnet",
       "chainId": "5042002",
-      "documentationCheckedAt": "2026-09-08T00:00:00.000Z",
+      "documentationCheckedAt": "2026-09-09T00:00:00.000Z",
       "officialSources": [
-        "https://docs.arc.io/arc/references/connect-to-arc",
-        "https://developers.circle.com/cctp/concepts/supported-chains-and-domains"
+        "https://docs.arc.io/integrate/connect-to-arc",
+        "https://docs.arc.io/integrate/infrastructure/bridges",
+        "https://developers.circle.com/stablecoins/usdc-contract-addresses",
+        "https://developers.circle.com/cctp/concepts/supported-chains-and-domains",
+        "https://developers.circle.com/cctp/references/contract-addresses"
       ],
       "rpc": {
         "endpointEnvironmentVariable": "ARC_TESTNET_RPC_URL",
@@ -140,8 +145,8 @@
         {
           "assetId": "usdc",
           "symbol": "USDC",
-          "address": null,
-          "decimals": null
+          "address": "0x3600000000000000000000000000000000000000",
+          "decimals": 6
         }
       ],
       "contracts": {
@@ -150,8 +155,8 @@
       },
       "cctp": {
         "domain": "26",
-        "tokenMessenger": null,
-        "messageTransmitter": null,
+        "tokenMessenger": "0x8fe6b999dc680ccfdd5bf7eb0974218be2542daa",
+        "messageTransmitter": "0xe737e5cebeeba77efe34d4aa090756590b1ce275",
         "attestationEnvironment": "testnet"
       },
       "verification": {
@@ -167,7 +172,7 @@
         ],
         "evidence": [],
         "blockers": [
-          "Resolve exact contracts and token scales from official deployments and matching chain RPC.",
+          "Official addresses, aliases and token scale are source-reviewed but require matching-chain bytecode evidence.",
           "Archive block/hash, bytecode and finality policy evidence."
         ]
       }

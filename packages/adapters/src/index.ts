@@ -80,6 +80,7 @@ function gasCost(
   gas: Captured<GasPayloadData>,
   conversion: Captured<EthUsdcConversionPayloadData>,
   category: AccountingCostData['category'],
+  networkId = 'ethereum-mainnet',
 ): AccountingCostData {
   const wei =
     BigInt(gas.payload.gasUnits) * BigInt(gas.payload.effectiveGasPriceWei);
@@ -98,7 +99,7 @@ function gasCost(
     category,
     funding: 'PAYABLE',
     amountUsdcMinor: amount,
-    networkId: 'ethereum-mainnet',
+    networkId,
     cashBalanceFamilyId: null,
     sourceHash: contentHash({
       gas: gas.observation.rawObject.objectHash,
@@ -160,7 +161,12 @@ export async function erc20Approval(
   archive: ObjectArchive,
   context: ReceiptContext,
   input: {
-    adapterId: 'aave-v3-ethereum' | 'erc4626-ethereum' | 'uniswap-v3-ethereum';
+    adapterId:
+      | 'aave-v3-ethereum'
+      | 'erc4626-ethereum'
+      | 'demo-vault-ethereum-sepolia'
+      | 'demo-vault-arc-testnet'
+      | 'uniswap-v3-ethereum';
     operationId: string;
     allowanceId: string;
     assetId: 'usdc' | 'usdt';
@@ -542,6 +548,11 @@ export async function vaultDeposit(
     vault: ArchivedObservationData;
     gas: ArchivedObservationData;
     conversion: ArchivedObservationData;
+    adapterId?:
+      | 'erc4626-ethereum'
+      | 'demo-vault-ethereum-sepolia'
+      | 'demo-vault-arc-testnet';
+    networkId?: string;
   },
 ) {
   const vault = await load(
@@ -585,6 +596,7 @@ export async function vaultDeposit(
     gas,
     conversion,
     'EXECUTION_GAS',
+    input.networkId,
   );
   const fee = mulDiv(
     input.amountMinor,
@@ -599,7 +611,7 @@ export async function vaultDeposit(
       category: 'PROTOCOL_FEE',
       funding: 'WITHHELD',
       amountUsdcMinor: fee,
-      networkId: 'ethereum-mainnet',
+      networkId: input.networkId ?? 'ethereum-mainnet',
       cashBalanceFamilyId: null,
       sourceHash: vault.observation.rawObject.objectHash,
     });
@@ -625,7 +637,7 @@ export async function vaultDeposit(
     inputUsdcMinor: input.amountMinor,
   };
   return result(
-    'erc4626-ethereum',
+    input.adapterId ?? 'erc4626-ethereum',
     'vault-deposit',
     context,
     source.refs,
@@ -644,6 +656,11 @@ export async function vaultRedeem(
     vault: ArchivedObservationData;
     gas: ArchivedObservationData;
     conversion: ArchivedObservationData;
+    adapterId?:
+      | 'erc4626-ethereum'
+      | 'demo-vault-ethereum-sepolia'
+      | 'demo-vault-arc-testnet';
+    networkId?: string;
   },
 ) {
   const vault = await load(
@@ -707,6 +724,7 @@ export async function vaultRedeem(
     gas,
     conversion,
     'EXECUTION_GAS',
+    input.networkId,
   );
   const economicGap = BigInt(input.bookValueMinor) - cashCredit;
   const costs: AccountingCostData[] = [gasCharge];
@@ -716,7 +734,7 @@ export async function vaultRedeem(
       category: 'PROTOCOL_FEE',
       funding: 'WITHHELD',
       amountUsdcMinor: economicGap.toString(),
-      networkId: 'ethereum-mainnet',
+      networkId: input.networkId ?? 'ethereum-mainnet',
       cashBalanceFamilyId: null,
       sourceHash: vault.observation.rawObject.objectHash,
     });
@@ -738,7 +756,7 @@ export async function vaultRedeem(
     cashCreditUsdcMinor: cashCredit.toString(),
   };
   return result(
-    'erc4626-ethereum',
+    input.adapterId ?? 'erc4626-ethereum',
     'vault-redeem',
     context,
     source.refs,

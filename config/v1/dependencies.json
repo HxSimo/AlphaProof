@@ -1,6 +1,6 @@
 {
   "schemaVersion": "proof-of-alpha/dependency-manifest/v1",
-  "manifestVersion": "0.2.0",
+  "manifestVersion": "0.3.0",
   "dependencies": [
     {
       "dependencyId": "rpc-ethereum-mainnet",
@@ -57,7 +57,8 @@
       "networkIds": ["arc-testnet"],
       "direction": null,
       "officialSources": [
-        "https://docs.arc.io/arc/references/connect-to-arc",
+        "https://docs.arc.io/integrate/connect-to-arc",
+        "https://docs.arc.io/integrate/infrastructure/bridges",
         "https://developers.circle.com/cctp/concepts/supported-chains-and-domains"
       ],
       "instructions": "Configure ARC_TESTNET_RPC_URL; assert eth_chainId, archive a fixed block/header and historical eth_call, verify limits and finality/reorg detection. No latest-state substitution.",
@@ -337,7 +338,7 @@
       "direction": null,
       "officialSources": [
         "https://eips.ethereum.org/EIPS/eip-4626",
-        "https://docs.arc.io/arc/references/connect-to-arc"
+        "https://developers.circle.com/stablecoins/usdc-contract-addresses"
       ],
       "instructions": "Deploy or select an ERC-4626 test USDC vault. Archive deployment bytecode/address, admin powers and decimals. Publish finite funded test-yield budget/schedule before X. Record actual deposit/withdraw test-token receipts and limits/rounding fixtures; no commercial APY claim.",
       "fixture": "tests/fixtures/dependency-unavailable.json",
@@ -367,7 +368,8 @@
       "direction": null,
       "officialSources": [
         "https://eips.ethereum.org/EIPS/eip-4626",
-        "https://docs.arc.io/arc/references/connect-to-arc"
+        "https://docs.arc.io/integrate/connect-to-arc",
+        "https://developers.circle.com/stablecoins/usdc-contract-addresses"
       ],
       "instructions": "Deploy or select an ERC-4626 test USDC vault. Archive deployment bytecode/address, admin powers and decimals. Publish finite funded test-yield budget/schedule before X. Record actual deposit/withdraw test-token receipts and limits/rounding fixtures; no commercial APY claim.",
       "fixture": "tests/fixtures/dependency-unavailable.json",
@@ -429,8 +431,11 @@
       },
       "officialSources": [
         "https://developers.circle.com/cctp/concepts/supported-chains-and-domains",
+        "https://developers.circle.com/cctp/references/contract-addresses",
+        "https://developers.circle.com/cctp/references/contract-interfaces",
         "https://developers.circle.com/cctp/concepts/fees",
-        "https://developers.circle.com/cctp/concepts/finality-and-block-confirmations"
+        "https://developers.circle.com/cctp/references/technical-guide",
+        "https://developers.circle.com/cctp/quickstarts/transfer-usdc-ethereum-to-arc"
       ],
       "instructions": "Verify this exact direction and environment: domains (not chain IDs), current TokenMessenger/MessageTransmitter, attestation endpoint, message derivation, Standard fee switch and net receipt. Record source, destination and retry gas plus relayer charge without double counting. On testnet record actual burn/attestation/mint, duplicate receive rejection and return flow. Calibrate direction-specific shadow delay separately.",
       "fixture": "tests/fixtures/dependency-unavailable.json",
@@ -467,8 +472,11 @@
       },
       "officialSources": [
         "https://developers.circle.com/cctp/concepts/supported-chains-and-domains",
+        "https://developers.circle.com/cctp/references/contract-addresses",
+        "https://developers.circle.com/cctp/references/contract-interfaces",
         "https://developers.circle.com/cctp/concepts/fees",
-        "https://developers.circle.com/cctp/concepts/finality-and-block-confirmations"
+        "https://developers.circle.com/cctp/references/technical-guide",
+        "https://developers.circle.com/cctp/quickstarts/transfer-usdc-ethereum-to-arc"
       ],
       "instructions": "Verify this exact direction and environment: domains (not chain IDs), current TokenMessenger/MessageTransmitter, attestation endpoint, message derivation, Standard fee switch and net receipt. Record source, destination and retry gas plus relayer charge without double counting. On testnet record actual burn/attestation/mint, duplicate receive rejection and return flow. Calibrate direction-specific shadow delay separately.",
       "fixture": "tests/fixtures/dependency-unavailable.json",
@@ -602,7 +610,7 @@
       "scope": "MVP_REQUIRED",
       "networkIds": ["ethereum-sepolia", "arc-testnet"],
       "direction": null,
-      "officialSources": ["https://docs.arc.io/arc/references/gas-and-fees"],
+      "officialSources": ["https://docs.arc.io/integrate/connect-to-arc"],
       "instructions": "Lock an explicitly synthetic testnet ETH/USDC conversion fixture and finite relayer funding convention; calibrate actual testnet native gas separately. Fixture ratios are technical assumptions, never mainnet quotes.",
       "fixture": "tests/fixtures/dependency-unavailable.json",
       "verification": {

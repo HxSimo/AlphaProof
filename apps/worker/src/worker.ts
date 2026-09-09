@@ -3,11 +3,17 @@ import {
   archiveConfiguration,
   databaseReady,
   ExperimentRepository,
+  TransferRepository,
   type Pool,
 } from '@poa/storage';
 import { PoaError } from '@poa/domain';
 import { prepareSyntheticM3Execution } from '@poa/experiments';
 import type { AccountingReceiptData, ProfileData } from '@poa/schemas';
+import type {
+  AccountingCostData,
+  CctpTransferData,
+  TransferLifecycleEventData,
+} from '@poa/schemas';
 
 export async function runFoundationCheck(pool: Pool) {
   const config = loadBundle();
@@ -109,6 +115,56 @@ export async function runActionWorkerOnce(
       };
     }
     await repository.retryJob(job.actionId, 'WORKER_INTERRUPTED');
+    throw error;
+  }
+}
+
+export type TransferObservation =
+  | { kind: 'WAITING'; reasonCode: string }
+  | {
+      kind: 'EVENT';
+      event: TransferLifecycleEventData;
+      costs?: AccountingCostData[];
+    };
+
+export interface TransferEventProvider {
+  observe(transfer: CctpTransferData): Promise<TransferObservation>;
+}
+
+/** Runs one durable transfer transition. The provider must supply verified
+ * evidence; this worker never promotes a timer to burn, attestation, or mint. */
+export async function runTransferWorkerOnce(
+  repository: TransferRepository,
+  provider: TransferEventProvider,
+  workerId = `transfer-worker-${process.pid}`,
+) {
+  const job = await repository.claim(workerId, 1);
+  if (!job) return { status: 'IDLE' as const };
+  try {
+    const transfer = await repository.load(job.transferId);
+    const observation = await provider.observe(transfer);
+    if (observation.kind === 'WAITING') {
+      await repository.retry(job.transferId, observation.reasonCode, 30);
+      return {
+        status: 'WAITING' as const,
+        transferId: job.transferId,
+        reasonCode: observation.reasonCode,
+      };
+    }
+    const next = await repository.appendEvent(
+      job.transferId,
+      observation.event,
+      observation.costs,
+    );
+    return {
+      status: next.state as CctpTransferData['state'],
+      transferId: job.transferId,
+    };
+  } catch (error) {
+    await repository.retry(
+      job.transferId,
+      error instanceof PoaError ? error.code : 'WORKER_INTERRUPTED',
+    );
     throw error;
   }
 }

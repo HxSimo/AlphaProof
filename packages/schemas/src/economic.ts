@@ -100,29 +100,38 @@ export const AaveReservePayload = z.strictObject({
   liquidityIndexRay: PositiveUInt,
 });
 
-export const Erc4626Payload = z.strictObject({
-  schemaVersion: z.literal('proof-of-alpha/erc4626-state/v1'),
-  chainId: z.literal('1'),
-  family: z.literal('MORPHO_METAMORPHO_V1'),
-  vault: Address,
-  asset: Address,
-  assetDecimals: z.literal(6),
-  shareDecimals: z.number().int().min(0).max(36),
-  totalAssetsMinor: UInt,
-  totalSupplyShares: UInt,
-  maxDepositAssetsMinor: UInt,
-  maxMintShares: UInt,
-  maxWithdrawAssetsMinor: UInt,
-  maxRedeemShares: UInt,
-  availableExitAssetsMinor: UInt,
-  depositFeeBps: Bps,
-  redeemFeeBps: Bps,
-  testAmountAssetsMinor: PositiveUInt,
-  previewDepositShares: UInt,
-  previewMintAssetsMinor: UInt,
-  previewWithdrawShares: UInt,
-  previewRedeemAssetsMinor: UInt,
-});
+export const Erc4626Payload = z
+  .strictObject({
+    schemaVersion: z.literal('proof-of-alpha/erc4626-state/v1'),
+    chainId: z.enum(['1', '11155111', '5042002']),
+    family: z.enum(['MORPHO_METAMORPHO_V1', 'POA_FINITE_TEST_VAULT_V1']),
+    vault: Address,
+    asset: Address,
+    assetDecimals: z.literal(6),
+    shareDecimals: z.number().int().min(0).max(36),
+    totalAssetsMinor: UInt,
+    totalSupplyShares: UInt,
+    maxDepositAssetsMinor: UInt,
+    maxMintShares: UInt,
+    maxWithdrawAssetsMinor: UInt,
+    maxRedeemShares: UInt,
+    availableExitAssetsMinor: UInt,
+    depositFeeBps: Bps,
+    redeemFeeBps: Bps,
+    testAmountAssetsMinor: PositiveUInt,
+    previewDepositShares: UInt,
+    previewMintAssetsMinor: UInt,
+    previewWithdrawShares: UInt,
+    previewRedeemAssetsMinor: UInt,
+  })
+  .superRefine((value, ctx) => {
+    if ((value.family === 'MORPHO_METAMORPHO_V1') !== (value.chainId === '1'))
+      ctx.addIssue({
+        code: 'custom',
+        path: ['family'],
+        message: 'Vault family and chain identity are incompatible',
+      });
+  });
 
 export const UniswapV3QuotePayload = z.strictObject({
   schemaVersion: z.literal('proof-of-alpha/uniswap-v3-exact-input-quote/v1'),

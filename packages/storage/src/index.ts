@@ -78,3 +78,4 @@ export async function archiveConfiguration(pool: Pool, payload: unknown) {
 }
 export type { Pool } from 'pg';
 export * from './m3.js';
+export * from './m5.js';

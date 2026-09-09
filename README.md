@@ -2,7 +2,7 @@
 
 Prospective evaluation for self-hosted stablecoin treasury agents. The intended MVP receives signed allocation intents, evaluates future consequences with virtual capital and observed market data, and publishes reproducible results. It never automatically allocates real funds.
 
-**Current delivery: M4 multi-capital and reference evaluation.** The M3 signed-intent flow now drives separate 1,000, 10,000 and 100,000 USDC portfolios. Each has cash and frozen conservative-yield references with equal starting capital, distinct financial identities and amount-specific synthetic inputs. `@poa/valuation` accrues inactive positions and separates mark from liquidation value; `@poa/evaluation` publishes deterministic descriptive differences, costs and drawdown at common checkpoints. All external adapters and profiles remain disabled. Synthetic results are correlated policy views, statistical inference is `NOT_ASSESSED`, and real-capital eligibility is disabled. No live performance, liquidity, deployed registry or chain transaction is claimed.
+**Current delivery: M5 is implemented and locally verified but blocked on mandatory live testnet evidence.** The durable CCTP lifecycle preserves one source debit, one unavailable receivable and at most one destination credit across retries and restarts. Sepolia and Arc Testnet share a finite funded test-vault implementation; Arc native/ERC-20 USDC aliases one balance. All external adapters and profiles remain disabled. The credentialed runner has not executed because RPC credentials, disposable keys and faucet balances are unavailable, so no deployment, attestation or chain transaction is claimed and M6 has not started.
 
 ## Run with Docker
 
@@ -40,15 +40,18 @@ Run `pnpm build` before using `pnpm --filter @poa/web start`. API and worker loa
 pnpm check
 pnpm test:replay
 pnpm test:fork
-pnpm plan M4
+pnpm plan M5
 pnpm test:db
 pnpm test:e2e:signed-intent
 pnpm test:e2e:scenarios
+forge fmt --check --root contracts
+forge test --root contracts
+pnpm test:live:testnet
 pnpm smoke
 git diff --check
 ```
 
-`check` runs formatting, type checks, manifest/seal validation, generated-schema drift, unit/boundary tests and builds. `test:replay` restores M2 inputs and reproduces M4 checkpoint/evaluation hashes in another process. `test:fork` skips with an explicit `TO_VERIFY` result unless the credential gate described in the [M2 verification runbook](docs/runbooks/m2-integration-verification.md) is enabled. `test:db` requires PostgreSQL and `DATABASE_URL`; it creates/removes only uniquely named schemas. `test:e2e:signed-intent` retains the external agent and restart-safe worker path. `test:e2e:scenarios` covers the complete local M4 path. `smoke` requires the running web/API/PostgreSQL stack.
+`check` runs formatting, type checks, manifest/seal validation, generated-schema drift, unit/boundary tests and builds. `test:replay` reproduces M2, M4 and M5 results in fresh processes. `test:fork` skips with an explicit `TO_VERIFY` result unless the [M2 gate](docs/runbooks/m2-integration-verification.md) is enabled. `test:live:testnet` skips unless the explicit [M5 live gate](docs/runbooks/m5-testnet-lifecycle.md) is enabled and then fails closed on missing evidence. `test:db` requires PostgreSQL and `DATABASE_URL`; it creates/removes only uniquely named schemas. `smoke` requires the running web/API/PostgreSQL stack.
 
 ## Configuration and evidence
 
@@ -66,6 +69,7 @@ The three proposed scenario amounts are independent global treasuries, with no d
 - [Canonical schemas](docs/schemas.md) and [generated JSON Schema](schemas/generated/v1.json)
 - [M3 API and signing contract](docs/api/m3.md)
 - [M4 API](docs/api/m4.md), [validation evidence](docs/evidence/m4-validation.md), [scenario/reference decision](docs/adr/0011-m4-scenarios-and-fixed-references.md), [checkpoint/evaluation decision](docs/adr/0012-m4-checkpoints-and-descriptive-evaluation.md), and [runbook](docs/runbooks/m4-scenarios-and-evaluation.md)
+- [M5 validation evidence](docs/evidence/m5-validation.md), [finite-vault decision](docs/adr/0013-m5-finite-test-vault.md), [CCTP lifecycle decision](docs/adr/0014-m5-durable-cctp-lifecycle.md), and [live gate](docs/runbooks/m5-testnet-lifecycle.md)
 - [M1 accounting decision](docs/adr/0006-deterministic-accounting.md) and [synthetic replay fixture](tests/fixtures/m1-accounting-transfer.json)
 - [M2 validation evidence](docs/evidence/m2-validation.md), [archive decision](docs/adr/0007-content-addressed-economic-inputs.md), [adapter decision](docs/adr/0008-m2-ethereum-adapter-boundaries.md), and [activation runbook](docs/runbooks/m2-integration-verification.md)
 - [M3 validation evidence](docs/evidence/m3-validation.md), [signed boundary decision](docs/adr/0009-m3-signed-experiment-boundary.md), [job transaction decision](docs/adr/0010-m3-journal-and-job-transactions.md), and [signed-intent runbook](docs/runbooks/m3-signed-intent.md)

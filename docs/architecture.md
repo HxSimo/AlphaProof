@@ -1,19 +1,20 @@
 # Architecture and persistence
 
-M0 accepts the v0.3 architecture in ADR-0001. There are three applications and PostgreSQL. Raw external data will use S3-compatible storage in M2. No Redis, message broker, inference hosting or additional services are required.
+ADR-0001 defines the v0.3 architecture. There are three applications, PostgreSQL and content-addressed object storage. No Redis, message broker, inference hosting or additional service is required.
 
-| Boundary   | Implemented in M0                                                                           | Next responsibility                                                                                 |
-| ---------- | ------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| domain     | Stable error codes, canonical JSON, content hashes, provenance/scenario constants           | Keep free of RPC and UI                                                                             |
-| schemas    | Strict wire contracts and generated JSON Schema, including M1 accounting receipts/state     | Expand with tested versioned adapter contracts as behavior arrives                                  |
-| accounting | Pure receipt reducer, conservation, bigint rounding, transfers and valuation views          | M2 supplies archived mechanics/observations; M3 persists reductions atomically                      |
-| config     | Relational manifest validation, seal checking, fail-closed dependency gate                  | Frozen experiment snapshots at M3                                                                   |
-| storage    | PostgreSQL pool, checksummed transactional migrations and immutable configuration snapshots | Economic event store and queue at M3; S3 archival at M2                                             |
-| api        | Live/ready health and validated `/v1/profiles` catalog                                      | Authentication, signing, locking and atomic durable intent receipt at M3                            |
-| worker     | Repeated configuration validation/archive with restart-safe insertion                       | Resumable planning, capture, execution, transfers, valuations and publication as distinct job types |
-| web        | Server-rendered canonical API catalog and explicit unavailable state                        | Read-only economic results, proofs and exports; no browser accounting                               |
+| Boundary   | Implemented in M0                                                                             | Next responsibility                                                                                 |
+| ---------- | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| domain     | Stable error codes, canonical JSON, content hashes, provenance/scenario constants             | Keep free of RPC and UI                                                                             |
+| schemas    | Strict wire contracts and generated JSON Schema, including M1 accounting receipts/state       | Expand with tested versioned adapter contracts as behavior arrives                                  |
+| accounting | Pure receipt reducer, conservation, bigint rounding, transfers and valuation views            | M2 supplies archived mechanics/observations; M3 persists reductions atomically                      |
+| transfers  | Versioned CCTP lifecycle, finalized-evidence gate, Arc alias/gas rules and M1 receipt mapping | Live providers parse and archive chain/attestation evidence without owning policy or eligibility    |
+| config     | Relational manifest validation, seal checking, fail-closed dependency gate                    | Frozen experiment snapshots at M3                                                                   |
+| storage    | PostgreSQL pool, checksummed transactional migrations and immutable configuration snapshots   | Economic event store and queue at M3; S3 archival at M2                                             |
+| api        | Live/ready health and validated `/v1/profiles` catalog                                        | Authentication, signing, locking and atomic durable intent receipt at M3                            |
+| worker     | Repeated configuration validation/archive with restart-safe insertion                         | Resumable planning, capture, execution, transfers, valuations and publication as distinct job types |
+| web        | Server-rendered canonical API catalog and explicit unavailable state                          | Read-only economic results, proofs and exports; no browser accounting                               |
 
-Package imports form an acyclic graph: domain → schemas → accounting; config consumes domain/schemas; storage depends on domain; API/worker consume config/storage. Web consumes schemas/API output. Accounting has no RPC, database or UI dependency. Packages for adapters, market-data, SDK, experiments, execution, valuation, evaluation and commitments are created when they have executable consumers in their assigned milestone. A conceptual interface is not a finished integration.
+Package imports form an acyclic graph: domain → schemas → accounting; transfers consumes those pure boundaries; config consumes domain/schemas; storage composes accounting/transfers with PostgreSQL; API/worker consume config/storage. Web consumes schemas/API output. Accounting and transfers have no RPC, database or UI dependency. Adapters, market-data, SDK, experiments, execution, valuation and evaluation exist with executable consumers; commitments remains an M6 package. A conceptual interface is not a finished integration.
 
 ## Deterministic accounting boundary
 

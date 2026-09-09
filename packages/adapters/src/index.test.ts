@@ -408,6 +408,74 @@ describe('ERC-4626 captured previews and limits', () => {
     });
   }
 
+  it.each([
+    ['ethereum-sepolia', 'demo-vault-ethereum-sepolia'],
+    ['arc-testnet', 'demo-vault-arc-testnet'],
+  ] as const)(
+    'binds the test-vault receipt and costs to %s',
+    async (networkId, adapterId) => {
+      const archive = new MemoryObjectArchive();
+      const amount = '1000000';
+      const conversion = await capture(
+        archive,
+        `${networkId}-conversion`,
+        conversionPayload,
+      );
+      const vault = await capture(
+        archive,
+        `${networkId}-vault`,
+        Erc4626Payload.parse({
+          schemaVersion: 'proof-of-alpha/erc4626-state/v1',
+          chainId: networkId === 'arc-testnet' ? '5042002' : '11155111',
+          family: 'POA_FINITE_TEST_VAULT_V1',
+          vault: addr('6'),
+          asset: addr('2'),
+          assetDecimals: 6,
+          shareDecimals: 6,
+          totalAssetsMinor: '100000000',
+          totalSupplyShares: '100000000',
+          maxDepositAssetsMinor: '100000000',
+          maxMintShares: '100000000',
+          maxWithdrawAssetsMinor: '100000000',
+          maxRedeemShares: '100000000',
+          availableExitAssetsMinor: '100000000',
+          depositFeeBps: 0,
+          redeemFeeBps: 0,
+          testAmountAssetsMinor: amount,
+          previewDepositShares: amount,
+          previewMintAssetsMinor: amount,
+          previewWithdrawShares: amount,
+          previewRedeemAssetsMinor: amount,
+        }),
+      );
+      const gas = await capture(
+        archive,
+        `${networkId}-gas`,
+        gasPayload('VAULT_DEPOSIT', amount),
+      );
+      const result = await vaultDeposit(
+        archive,
+        context(`${networkId}-scenario`, '0', T0, `${networkId}-view`),
+        {
+          amountMinor: amount,
+          instrumentId: `${networkId}-vault-usdc`,
+          positionId: `${networkId}-position`,
+          vault,
+          gas,
+          conversion,
+          adapterId,
+          networkId,
+        },
+      );
+      expect(result.adapterId).toBe(adapterId);
+      const receipt = result.receipts[0]!;
+      expect(receipt.sourceHashes.length).toBeGreaterThan(0);
+      expect(receipt.kind).toBe('DEPOSIT');
+      if (receipt.kind !== 'DEPOSIT') throw new Error('Expected deposit');
+      expect(receipt.costs[0]!.networkId).toBe(networkId);
+    },
+  );
+
   it('rejects captured entry capacity and exit liquidity failures', async () => {
     const archive = new MemoryObjectArchive();
     const amount = STANDARD_CAPITAL[0];
