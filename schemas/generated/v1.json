@@ -2,6 +2,85 @@
   "schemaVersion": "proof-of-alpha/schema-catalog/v1",
   "semanticValidation": "packages/schemas + packages/config; see docs/schemas.md",
   "schemas": {
+    "AaveReservePayload": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "string",
+          "const": "proof-of-alpha/aave-v3-reserve/v1"
+        },
+        "chainId": {
+          "type": "string",
+          "const": "1"
+        },
+        "pool": {
+          "type": "string",
+          "pattern": "^0x[0-9a-f]{40}$"
+        },
+        "underlying": {
+          "type": "string",
+          "pattern": "^0x[0-9a-f]{40}$"
+        },
+        "aToken": {
+          "type": "string",
+          "pattern": "^0x[0-9a-f]{40}$"
+        },
+        "assetId": {
+          "type": "string",
+          "enum": [
+            "usdc",
+            "usdt"
+          ]
+        },
+        "decimals": {
+          "type": "number",
+          "const": 6
+        },
+        "active": {
+          "type": "boolean"
+        },
+        "frozen": {
+          "type": "boolean"
+        },
+        "paused": {
+          "type": "boolean"
+        },
+        "supplyCapMinor": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        },
+        "totalSuppliedMinor": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        },
+        "availableLiquidityMinor": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        },
+        "liquidityIndexRay": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "chainId",
+        "pool",
+        "underlying",
+        "aToken",
+        "assetId",
+        "decimals",
+        "active",
+        "frozen",
+        "paused",
+        "supplyCapMinor",
+        "totalSuppliedMinor",
+        "availableLiquidityMinor",
+        "liquidityIndexRay"
+      ],
+      "additionalProperties": false
+    },
     "AccountingCost": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "type": "object",
@@ -2519,7 +2598,13 @@
               "OPERATION_CONFLICT",
               "INVALID_TRANSITION",
               "CLOSED_PORTFOLIO",
-              "PAYABLE_NOT_FOUND"
+              "PAYABLE_NOT_FOUND",
+              "ARCHIVE_INTEGRITY",
+              "DATA_STALE",
+              "LIMIT_EXCEEDED",
+              "LIQUIDITY_UNAVAILABLE",
+              "SLIPPAGE_EXCEEDED",
+              "REPLAY_MISMATCH"
             ]
           }
         }
@@ -2647,6 +2732,2438 @@
         "maxCostUsdcMinor",
         "maxTransferUsdcMinor",
         "maxSlippageBps"
+      ],
+      "additionalProperties": false
+    },
+    "AdapterResult": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "string",
+          "const": "proof-of-alpha/adapter-result/v1"
+        },
+        "adapterId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "adapterVersion": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        "operation": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "resultProvenance": {
+          "type": "string",
+          "enum": [
+            "FORWARD_SHADOW",
+            "HISTORICAL_REPLAY",
+            "SYNTHETIC_TEST",
+            "LIVE_SEPARATE",
+            "CROSS_CHAIN_TESTNET",
+            "MIXED_DIAGNOSTIC"
+          ]
+        },
+        "sourceRefs": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "sourceId": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]{0,95}$"
+              },
+              "sourceVersion": {
+                "type": "string",
+                "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+              },
+              "requestedAt": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+              },
+              "observedAt": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+              },
+              "block": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "networkId": {
+                        "type": "string",
+                        "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                      },
+                      "environment": {
+                        "type": "string",
+                        "enum": [
+                          "mainnet",
+                          "testnet"
+                        ]
+                      },
+                      "chainId": {
+                        "type": "string",
+                        "pattern": "^(0|[1-9][0-9]{0,77})$"
+                      },
+                      "number": {
+                        "type": "string",
+                        "pattern": "^(0|[1-9][0-9]{0,77})$"
+                      },
+                      "hash": {
+                        "type": "string",
+                        "pattern": "^0x[0-9a-f]{64}$"
+                      },
+                      "timestamp": {
+                        "type": "string",
+                        "format": "date-time",
+                        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+                      },
+                      "finality": {
+                        "type": "string",
+                        "enum": [
+                          "PROVISIONAL",
+                          "FINALIZED",
+                          "INVALIDATED"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "networkId",
+                      "environment",
+                      "chainId",
+                      "number",
+                      "hash",
+                      "timestamp",
+                      "finality"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "rawObjectHash": {
+                "type": "string",
+                "pattern": "^0x[0-9a-f]{64}$"
+              },
+              "parserVersion": {
+                "type": "string",
+                "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+              },
+              "adapterVersion": {
+                "type": "string",
+                "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+              },
+              "freshness": {
+                "type": "string",
+                "enum": [
+                  "FRESH",
+                  "STALE",
+                  "UNAVAILABLE"
+                ]
+              },
+              "resultProvenance": {
+                "type": "string",
+                "enum": [
+                  "FORWARD_SHADOW",
+                  "HISTORICAL_REPLAY",
+                  "SYNTHETIC_TEST",
+                  "LIVE_SEPARATE",
+                  "CROSS_CHAIN_TESTNET",
+                  "MIXED_DIAGNOSTIC"
+                ]
+              }
+            },
+            "required": [
+              "sourceId",
+              "sourceVersion",
+              "requestedAt",
+              "observedAt",
+              "block",
+              "rawObjectHash",
+              "parserVersion",
+              "adapterVersion",
+              "freshness",
+              "resultProvenance"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "sourceHash": {
+          "type": "string",
+          "pattern": "^0x[0-9a-f]{64}$"
+        },
+        "receipts": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "schemaVersion": {
+                    "type": "string",
+                    "const": "proof-of-alpha/accounting-receipt/v1"
+                  },
+                  "accountingVersion": {
+                    "type": "string",
+                    "const": "1.0.0"
+                  },
+                  "operationId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "experimentId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "scenarioId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "expectedPortfolioVersion": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "observedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+                  },
+                  "resultProvenance": {
+                    "type": "string",
+                    "enum": [
+                      "FORWARD_SHADOW",
+                      "HISTORICAL_REPLAY",
+                      "SYNTHETIC_TEST",
+                      "LIVE_SEPARATE",
+                      "CROSS_CHAIN_TESTNET",
+                      "MIXED_DIAGNOSTIC"
+                    ]
+                  },
+                  "sourceHashes": {
+                    "minItems": 1,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^0x[0-9a-f]{64}$"
+                    }
+                  },
+                  "kind": {
+                    "type": "string",
+                    "const": "NO_EFFECT"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "REJECTED_BEFORE_ATTEMPT",
+                      "SKIPPED"
+                    ]
+                  },
+                  "reasonCode": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "costs": {
+                    "type": "array",
+                    "prefixItems": [],
+                    "items": false,
+                    "maxItems": 0
+                  }
+                },
+                "required": [
+                  "schemaVersion",
+                  "accountingVersion",
+                  "operationId",
+                  "experimentId",
+                  "scenarioId",
+                  "expectedPortfolioVersion",
+                  "observedAt",
+                  "resultProvenance",
+                  "sourceHashes",
+                  "kind",
+                  "status",
+                  "reasonCode",
+                  "costs"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "schemaVersion": {
+                    "type": "string",
+                    "const": "proof-of-alpha/accounting-receipt/v1"
+                  },
+                  "accountingVersion": {
+                    "type": "string",
+                    "const": "1.0.0"
+                  },
+                  "operationId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "experimentId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "scenarioId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "expectedPortfolioVersion": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "observedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+                  },
+                  "resultProvenance": {
+                    "type": "string",
+                    "enum": [
+                      "FORWARD_SHADOW",
+                      "HISTORICAL_REPLAY",
+                      "SYNTHETIC_TEST",
+                      "LIVE_SEPARATE",
+                      "CROSS_CHAIN_TESTNET",
+                      "MIXED_DIAGNOSTIC"
+                    ]
+                  },
+                  "sourceHashes": {
+                    "minItems": 1,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^0x[0-9a-f]{64}$"
+                    }
+                  },
+                  "costs": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "costId": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                        },
+                        "category": {
+                          "type": "string",
+                          "enum": [
+                            "APPROVAL_GAS",
+                            "EXECUTION_GAS",
+                            "SOURCE_GAS",
+                            "DESTINATION_GAS",
+                            "RETRY_GAS",
+                            "PROTOCOL_FEE",
+                            "SWAP_FEE_IMPACT",
+                            "TRANSFER_FEE",
+                            "RELAYER"
+                          ]
+                        },
+                        "funding": {
+                          "type": "string",
+                          "enum": [
+                            "AVAILABLE_CASH",
+                            "PAYABLE",
+                            "WITHHELD"
+                          ]
+                        },
+                        "amountUsdcMinor": {
+                          "type": "string",
+                          "pattern": "^(0|[1-9][0-9]{0,77})$"
+                        },
+                        "networkId": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                        },
+                        "cashBalanceFamilyId": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "sourceHash": {
+                          "type": "string",
+                          "pattern": "^0x[0-9a-f]{64}$"
+                        }
+                      },
+                      "required": [
+                        "costId",
+                        "category",
+                        "funding",
+                        "amountUsdcMinor",
+                        "networkId",
+                        "cashBalanceFamilyId",
+                        "sourceHash"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "kind": {
+                    "type": "string",
+                    "const": "RESERVE"
+                  },
+                  "reservationId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "cashViewId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "amountUsdcMinor": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  }
+                },
+                "required": [
+                  "schemaVersion",
+                  "accountingVersion",
+                  "operationId",
+                  "experimentId",
+                  "scenarioId",
+                  "expectedPortfolioVersion",
+                  "observedAt",
+                  "resultProvenance",
+                  "sourceHashes",
+                  "costs",
+                  "kind",
+                  "reservationId",
+                  "cashViewId",
+                  "amountUsdcMinor"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "schemaVersion": {
+                    "type": "string",
+                    "const": "proof-of-alpha/accounting-receipt/v1"
+                  },
+                  "accountingVersion": {
+                    "type": "string",
+                    "const": "1.0.0"
+                  },
+                  "operationId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "experimentId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "scenarioId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "expectedPortfolioVersion": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "observedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+                  },
+                  "resultProvenance": {
+                    "type": "string",
+                    "enum": [
+                      "FORWARD_SHADOW",
+                      "HISTORICAL_REPLAY",
+                      "SYNTHETIC_TEST",
+                      "LIVE_SEPARATE",
+                      "CROSS_CHAIN_TESTNET",
+                      "MIXED_DIAGNOSTIC"
+                    ]
+                  },
+                  "sourceHashes": {
+                    "minItems": 1,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^0x[0-9a-f]{64}$"
+                    }
+                  },
+                  "costs": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "costId": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                        },
+                        "category": {
+                          "type": "string",
+                          "enum": [
+                            "APPROVAL_GAS",
+                            "EXECUTION_GAS",
+                            "SOURCE_GAS",
+                            "DESTINATION_GAS",
+                            "RETRY_GAS",
+                            "PROTOCOL_FEE",
+                            "SWAP_FEE_IMPACT",
+                            "TRANSFER_FEE",
+                            "RELAYER"
+                          ]
+                        },
+                        "funding": {
+                          "type": "string",
+                          "enum": [
+                            "AVAILABLE_CASH",
+                            "PAYABLE",
+                            "WITHHELD"
+                          ]
+                        },
+                        "amountUsdcMinor": {
+                          "type": "string",
+                          "pattern": "^(0|[1-9][0-9]{0,77})$"
+                        },
+                        "networkId": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                        },
+                        "cashBalanceFamilyId": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "sourceHash": {
+                          "type": "string",
+                          "pattern": "^0x[0-9a-f]{64}$"
+                        }
+                      },
+                      "required": [
+                        "costId",
+                        "category",
+                        "funding",
+                        "amountUsdcMinor",
+                        "networkId",
+                        "cashBalanceFamilyId",
+                        "sourceHash"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "kind": {
+                    "type": "string",
+                    "const": "COST"
+                  },
+                  "status": {
+                    "type": "string",
+                    "const": "FAILED_AFTER_ATTEMPT"
+                  },
+                  "reasonCode": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "schemaVersion",
+                  "accountingVersion",
+                  "operationId",
+                  "experimentId",
+                  "scenarioId",
+                  "expectedPortfolioVersion",
+                  "observedAt",
+                  "resultProvenance",
+                  "sourceHashes",
+                  "costs",
+                  "kind",
+                  "status",
+                  "reasonCode"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "schemaVersion": {
+                    "type": "string",
+                    "const": "proof-of-alpha/accounting-receipt/v1"
+                  },
+                  "accountingVersion": {
+                    "type": "string",
+                    "const": "1.0.0"
+                  },
+                  "operationId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "experimentId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "scenarioId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "expectedPortfolioVersion": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "observedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+                  },
+                  "resultProvenance": {
+                    "type": "string",
+                    "enum": [
+                      "FORWARD_SHADOW",
+                      "HISTORICAL_REPLAY",
+                      "SYNTHETIC_TEST",
+                      "LIVE_SEPARATE",
+                      "CROSS_CHAIN_TESTNET",
+                      "MIXED_DIAGNOSTIC"
+                    ]
+                  },
+                  "sourceHashes": {
+                    "minItems": 1,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^0x[0-9a-f]{64}$"
+                    }
+                  },
+                  "costs": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "costId": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                        },
+                        "category": {
+                          "type": "string",
+                          "enum": [
+                            "APPROVAL_GAS",
+                            "EXECUTION_GAS",
+                            "SOURCE_GAS",
+                            "DESTINATION_GAS",
+                            "RETRY_GAS",
+                            "PROTOCOL_FEE",
+                            "SWAP_FEE_IMPACT",
+                            "TRANSFER_FEE",
+                            "RELAYER"
+                          ]
+                        },
+                        "funding": {
+                          "type": "string",
+                          "enum": [
+                            "AVAILABLE_CASH",
+                            "PAYABLE",
+                            "WITHHELD"
+                          ]
+                        },
+                        "amountUsdcMinor": {
+                          "type": "string",
+                          "pattern": "^(0|[1-9][0-9]{0,77})$"
+                        },
+                        "networkId": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                        },
+                        "cashBalanceFamilyId": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "sourceHash": {
+                          "type": "string",
+                          "pattern": "^0x[0-9a-f]{64}$"
+                        }
+                      },
+                      "required": [
+                        "costId",
+                        "category",
+                        "funding",
+                        "amountUsdcMinor",
+                        "networkId",
+                        "cashBalanceFamilyId",
+                        "sourceHash"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "kind": {
+                    "type": "string",
+                    "const": "APPROVE"
+                  },
+                  "allowanceId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "networkId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "assetId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "spenderId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "amountMinor": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  }
+                },
+                "required": [
+                  "schemaVersion",
+                  "accountingVersion",
+                  "operationId",
+                  "experimentId",
+                  "scenarioId",
+                  "expectedPortfolioVersion",
+                  "observedAt",
+                  "resultProvenance",
+                  "sourceHashes",
+                  "costs",
+                  "kind",
+                  "allowanceId",
+                  "networkId",
+                  "assetId",
+                  "spenderId",
+                  "amountMinor"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "schemaVersion": {
+                    "type": "string",
+                    "const": "proof-of-alpha/accounting-receipt/v1"
+                  },
+                  "accountingVersion": {
+                    "type": "string",
+                    "const": "1.0.0"
+                  },
+                  "operationId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "experimentId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "scenarioId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "expectedPortfolioVersion": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "observedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+                  },
+                  "resultProvenance": {
+                    "type": "string",
+                    "enum": [
+                      "FORWARD_SHADOW",
+                      "HISTORICAL_REPLAY",
+                      "SYNTHETIC_TEST",
+                      "LIVE_SEPARATE",
+                      "CROSS_CHAIN_TESTNET",
+                      "MIXED_DIAGNOSTIC"
+                    ]
+                  },
+                  "sourceHashes": {
+                    "minItems": 1,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^0x[0-9a-f]{64}$"
+                    }
+                  },
+                  "costs": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "costId": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                        },
+                        "category": {
+                          "type": "string",
+                          "enum": [
+                            "APPROVAL_GAS",
+                            "EXECUTION_GAS",
+                            "SOURCE_GAS",
+                            "DESTINATION_GAS",
+                            "RETRY_GAS",
+                            "PROTOCOL_FEE",
+                            "SWAP_FEE_IMPACT",
+                            "TRANSFER_FEE",
+                            "RELAYER"
+                          ]
+                        },
+                        "funding": {
+                          "type": "string",
+                          "enum": [
+                            "AVAILABLE_CASH",
+                            "PAYABLE",
+                            "WITHHELD"
+                          ]
+                        },
+                        "amountUsdcMinor": {
+                          "type": "string",
+                          "pattern": "^(0|[1-9][0-9]{0,77})$"
+                        },
+                        "networkId": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                        },
+                        "cashBalanceFamilyId": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "sourceHash": {
+                          "type": "string",
+                          "pattern": "^0x[0-9a-f]{64}$"
+                        }
+                      },
+                      "required": [
+                        "costId",
+                        "category",
+                        "funding",
+                        "amountUsdcMinor",
+                        "networkId",
+                        "cashBalanceFamilyId",
+                        "sourceHash"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "kind": {
+                    "type": "string",
+                    "const": "DEPOSIT"
+                  },
+                  "cashViewId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "positionId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "instrumentId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "sharesCreditMinor": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "indexNumerator": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "indexDenominator": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "inputUsdcMinor": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  }
+                },
+                "required": [
+                  "schemaVersion",
+                  "accountingVersion",
+                  "operationId",
+                  "experimentId",
+                  "scenarioId",
+                  "expectedPortfolioVersion",
+                  "observedAt",
+                  "resultProvenance",
+                  "sourceHashes",
+                  "costs",
+                  "kind",
+                  "cashViewId",
+                  "positionId",
+                  "instrumentId",
+                  "sharesCreditMinor",
+                  "indexNumerator",
+                  "indexDenominator",
+                  "inputUsdcMinor"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "schemaVersion": {
+                    "type": "string",
+                    "const": "proof-of-alpha/accounting-receipt/v1"
+                  },
+                  "accountingVersion": {
+                    "type": "string",
+                    "const": "1.0.0"
+                  },
+                  "operationId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "experimentId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "scenarioId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "expectedPortfolioVersion": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "observedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+                  },
+                  "resultProvenance": {
+                    "type": "string",
+                    "enum": [
+                      "FORWARD_SHADOW",
+                      "HISTORICAL_REPLAY",
+                      "SYNTHETIC_TEST",
+                      "LIVE_SEPARATE",
+                      "CROSS_CHAIN_TESTNET",
+                      "MIXED_DIAGNOSTIC"
+                    ]
+                  },
+                  "sourceHashes": {
+                    "minItems": 1,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^0x[0-9a-f]{64}$"
+                    }
+                  },
+                  "costs": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "costId": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                        },
+                        "category": {
+                          "type": "string",
+                          "enum": [
+                            "APPROVAL_GAS",
+                            "EXECUTION_GAS",
+                            "SOURCE_GAS",
+                            "DESTINATION_GAS",
+                            "RETRY_GAS",
+                            "PROTOCOL_FEE",
+                            "SWAP_FEE_IMPACT",
+                            "TRANSFER_FEE",
+                            "RELAYER"
+                          ]
+                        },
+                        "funding": {
+                          "type": "string",
+                          "enum": [
+                            "AVAILABLE_CASH",
+                            "PAYABLE",
+                            "WITHHELD"
+                          ]
+                        },
+                        "amountUsdcMinor": {
+                          "type": "string",
+                          "pattern": "^(0|[1-9][0-9]{0,77})$"
+                        },
+                        "networkId": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                        },
+                        "cashBalanceFamilyId": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "sourceHash": {
+                          "type": "string",
+                          "pattern": "^0x[0-9a-f]{64}$"
+                        }
+                      },
+                      "required": [
+                        "costId",
+                        "category",
+                        "funding",
+                        "amountUsdcMinor",
+                        "networkId",
+                        "cashBalanceFamilyId",
+                        "sourceHash"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "kind": {
+                    "type": "string",
+                    "const": "WITHDRAW"
+                  },
+                  "cashViewId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "positionId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "sharesDebitMinor": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "cashCreditUsdcMinor": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  }
+                },
+                "required": [
+                  "schemaVersion",
+                  "accountingVersion",
+                  "operationId",
+                  "experimentId",
+                  "scenarioId",
+                  "expectedPortfolioVersion",
+                  "observedAt",
+                  "resultProvenance",
+                  "sourceHashes",
+                  "costs",
+                  "kind",
+                  "cashViewId",
+                  "positionId",
+                  "sharesDebitMinor",
+                  "cashCreditUsdcMinor"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "schemaVersion": {
+                    "type": "string",
+                    "const": "proof-of-alpha/accounting-receipt/v1"
+                  },
+                  "accountingVersion": {
+                    "type": "string",
+                    "const": "1.0.0"
+                  },
+                  "operationId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "experimentId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "scenarioId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "expectedPortfolioVersion": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "observedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+                  },
+                  "resultProvenance": {
+                    "type": "string",
+                    "enum": [
+                      "FORWARD_SHADOW",
+                      "HISTORICAL_REPLAY",
+                      "SYNTHETIC_TEST",
+                      "LIVE_SEPARATE",
+                      "CROSS_CHAIN_TESTNET",
+                      "MIXED_DIAGNOSTIC"
+                    ]
+                  },
+                  "sourceHashes": {
+                    "minItems": 1,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^0x[0-9a-f]{64}$"
+                    }
+                  },
+                  "costs": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "costId": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                        },
+                        "category": {
+                          "type": "string",
+                          "enum": [
+                            "APPROVAL_GAS",
+                            "EXECUTION_GAS",
+                            "SOURCE_GAS",
+                            "DESTINATION_GAS",
+                            "RETRY_GAS",
+                            "PROTOCOL_FEE",
+                            "SWAP_FEE_IMPACT",
+                            "TRANSFER_FEE",
+                            "RELAYER"
+                          ]
+                        },
+                        "funding": {
+                          "type": "string",
+                          "enum": [
+                            "AVAILABLE_CASH",
+                            "PAYABLE",
+                            "WITHHELD"
+                          ]
+                        },
+                        "amountUsdcMinor": {
+                          "type": "string",
+                          "pattern": "^(0|[1-9][0-9]{0,77})$"
+                        },
+                        "networkId": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                        },
+                        "cashBalanceFamilyId": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "sourceHash": {
+                          "type": "string",
+                          "pattern": "^0x[0-9a-f]{64}$"
+                        }
+                      },
+                      "required": [
+                        "costId",
+                        "category",
+                        "funding",
+                        "amountUsdcMinor",
+                        "networkId",
+                        "cashBalanceFamilyId",
+                        "sourceHash"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "kind": {
+                    "type": "string",
+                    "const": "SWAP"
+                  },
+                  "sourceCashViewId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "destinationCashViewId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "sourceDebitUsdcMinor": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "destinationCreditUsdcMinor": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  }
+                },
+                "required": [
+                  "schemaVersion",
+                  "accountingVersion",
+                  "operationId",
+                  "experimentId",
+                  "scenarioId",
+                  "expectedPortfolioVersion",
+                  "observedAt",
+                  "resultProvenance",
+                  "sourceHashes",
+                  "costs",
+                  "kind",
+                  "sourceCashViewId",
+                  "destinationCashViewId",
+                  "sourceDebitUsdcMinor",
+                  "destinationCreditUsdcMinor"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "schemaVersion": {
+                    "type": "string",
+                    "const": "proof-of-alpha/accounting-receipt/v1"
+                  },
+                  "accountingVersion": {
+                    "type": "string",
+                    "const": "1.0.0"
+                  },
+                  "operationId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "experimentId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "scenarioId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "expectedPortfolioVersion": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "observedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+                  },
+                  "resultProvenance": {
+                    "type": "string",
+                    "enum": [
+                      "FORWARD_SHADOW",
+                      "HISTORICAL_REPLAY",
+                      "SYNTHETIC_TEST",
+                      "LIVE_SEPARATE",
+                      "CROSS_CHAIN_TESTNET",
+                      "MIXED_DIAGNOSTIC"
+                    ]
+                  },
+                  "sourceHashes": {
+                    "minItems": 1,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^0x[0-9a-f]{64}$"
+                    }
+                  },
+                  "kind": {
+                    "type": "string",
+                    "const": "PAYABLE_SETTLED"
+                  },
+                  "payableId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "cashViewId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  }
+                },
+                "required": [
+                  "schemaVersion",
+                  "accountingVersion",
+                  "operationId",
+                  "experimentId",
+                  "scenarioId",
+                  "expectedPortfolioVersion",
+                  "observedAt",
+                  "resultProvenance",
+                  "sourceHashes",
+                  "kind",
+                  "payableId",
+                  "cashViewId"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "schemaVersion": {
+                    "type": "string",
+                    "const": "proof-of-alpha/accounting-receipt/v1"
+                  },
+                  "accountingVersion": {
+                    "type": "string",
+                    "const": "1.0.0"
+                  },
+                  "operationId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "experimentId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "scenarioId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "expectedPortfolioVersion": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "observedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+                  },
+                  "resultProvenance": {
+                    "type": "string",
+                    "enum": [
+                      "FORWARD_SHADOW",
+                      "HISTORICAL_REPLAY",
+                      "SYNTHETIC_TEST",
+                      "LIVE_SEPARATE",
+                      "CROSS_CHAIN_TESTNET",
+                      "MIXED_DIAGNOSTIC"
+                    ]
+                  },
+                  "sourceHashes": {
+                    "minItems": 1,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^0x[0-9a-f]{64}$"
+                    }
+                  },
+                  "costs": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "costId": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                        },
+                        "category": {
+                          "type": "string",
+                          "enum": [
+                            "APPROVAL_GAS",
+                            "EXECUTION_GAS",
+                            "SOURCE_GAS",
+                            "DESTINATION_GAS",
+                            "RETRY_GAS",
+                            "PROTOCOL_FEE",
+                            "SWAP_FEE_IMPACT",
+                            "TRANSFER_FEE",
+                            "RELAYER"
+                          ]
+                        },
+                        "funding": {
+                          "type": "string",
+                          "enum": [
+                            "AVAILABLE_CASH",
+                            "PAYABLE",
+                            "WITHHELD"
+                          ]
+                        },
+                        "amountUsdcMinor": {
+                          "type": "string",
+                          "pattern": "^(0|[1-9][0-9]{0,77})$"
+                        },
+                        "networkId": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                        },
+                        "cashBalanceFamilyId": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "sourceHash": {
+                          "type": "string",
+                          "pattern": "^0x[0-9a-f]{64}$"
+                        }
+                      },
+                      "required": [
+                        "costId",
+                        "category",
+                        "funding",
+                        "amountUsdcMinor",
+                        "networkId",
+                        "cashBalanceFamilyId",
+                        "sourceHash"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "kind": {
+                    "type": "string",
+                    "const": "TRANSFER_SOURCE_FAILED"
+                  },
+                  "reservationId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  }
+                },
+                "required": [
+                  "schemaVersion",
+                  "accountingVersion",
+                  "operationId",
+                  "experimentId",
+                  "scenarioId",
+                  "expectedPortfolioVersion",
+                  "observedAt",
+                  "resultProvenance",
+                  "sourceHashes",
+                  "costs",
+                  "kind",
+                  "reservationId"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "schemaVersion": {
+                    "type": "string",
+                    "const": "proof-of-alpha/accounting-receipt/v1"
+                  },
+                  "accountingVersion": {
+                    "type": "string",
+                    "const": "1.0.0"
+                  },
+                  "operationId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "experimentId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "scenarioId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "expectedPortfolioVersion": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "observedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+                  },
+                  "resultProvenance": {
+                    "type": "string",
+                    "enum": [
+                      "FORWARD_SHADOW",
+                      "HISTORICAL_REPLAY",
+                      "SYNTHETIC_TEST",
+                      "LIVE_SEPARATE",
+                      "CROSS_CHAIN_TESTNET",
+                      "MIXED_DIAGNOSTIC"
+                    ]
+                  },
+                  "sourceHashes": {
+                    "minItems": 1,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^0x[0-9a-f]{64}$"
+                    }
+                  },
+                  "costs": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "costId": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                        },
+                        "category": {
+                          "type": "string",
+                          "enum": [
+                            "APPROVAL_GAS",
+                            "EXECUTION_GAS",
+                            "SOURCE_GAS",
+                            "DESTINATION_GAS",
+                            "RETRY_GAS",
+                            "PROTOCOL_FEE",
+                            "SWAP_FEE_IMPACT",
+                            "TRANSFER_FEE",
+                            "RELAYER"
+                          ]
+                        },
+                        "funding": {
+                          "type": "string",
+                          "enum": [
+                            "AVAILABLE_CASH",
+                            "PAYABLE",
+                            "WITHHELD"
+                          ]
+                        },
+                        "amountUsdcMinor": {
+                          "type": "string",
+                          "pattern": "^(0|[1-9][0-9]{0,77})$"
+                        },
+                        "networkId": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                        },
+                        "cashBalanceFamilyId": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "sourceHash": {
+                          "type": "string",
+                          "pattern": "^0x[0-9a-f]{64}$"
+                        }
+                      },
+                      "required": [
+                        "costId",
+                        "category",
+                        "funding",
+                        "amountUsdcMinor",
+                        "networkId",
+                        "cashBalanceFamilyId",
+                        "sourceHash"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "kind": {
+                    "type": "string",
+                    "const": "TRANSFER_BURNED"
+                  },
+                  "reservationId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "transferId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "messageIdentity": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "destinationNetworkId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "destinationCashViewId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "netReceivableUsdcMinor": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  }
+                },
+                "required": [
+                  "schemaVersion",
+                  "accountingVersion",
+                  "operationId",
+                  "experimentId",
+                  "scenarioId",
+                  "expectedPortfolioVersion",
+                  "observedAt",
+                  "resultProvenance",
+                  "sourceHashes",
+                  "costs",
+                  "kind",
+                  "reservationId",
+                  "transferId",
+                  "messageIdentity",
+                  "destinationNetworkId",
+                  "destinationCashViewId",
+                  "netReceivableUsdcMinor"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "schemaVersion": {
+                    "type": "string",
+                    "const": "proof-of-alpha/accounting-receipt/v1"
+                  },
+                  "accountingVersion": {
+                    "type": "string",
+                    "const": "1.0.0"
+                  },
+                  "operationId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "experimentId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "scenarioId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "expectedPortfolioVersion": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "observedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+                  },
+                  "resultProvenance": {
+                    "type": "string",
+                    "enum": [
+                      "FORWARD_SHADOW",
+                      "HISTORICAL_REPLAY",
+                      "SYNTHETIC_TEST",
+                      "LIVE_SEPARATE",
+                      "CROSS_CHAIN_TESTNET",
+                      "MIXED_DIAGNOSTIC"
+                    ]
+                  },
+                  "sourceHashes": {
+                    "minItems": 1,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^0x[0-9a-f]{64}$"
+                    }
+                  },
+                  "costs": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "costId": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                        },
+                        "category": {
+                          "type": "string",
+                          "enum": [
+                            "APPROVAL_GAS",
+                            "EXECUTION_GAS",
+                            "SOURCE_GAS",
+                            "DESTINATION_GAS",
+                            "RETRY_GAS",
+                            "PROTOCOL_FEE",
+                            "SWAP_FEE_IMPACT",
+                            "TRANSFER_FEE",
+                            "RELAYER"
+                          ]
+                        },
+                        "funding": {
+                          "type": "string",
+                          "enum": [
+                            "AVAILABLE_CASH",
+                            "PAYABLE",
+                            "WITHHELD"
+                          ]
+                        },
+                        "amountUsdcMinor": {
+                          "type": "string",
+                          "pattern": "^(0|[1-9][0-9]{0,77})$"
+                        },
+                        "networkId": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                        },
+                        "cashBalanceFamilyId": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "sourceHash": {
+                          "type": "string",
+                          "pattern": "^0x[0-9a-f]{64}$"
+                        }
+                      },
+                      "required": [
+                        "costId",
+                        "category",
+                        "funding",
+                        "amountUsdcMinor",
+                        "networkId",
+                        "cashBalanceFamilyId",
+                        "sourceHash"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "kind": {
+                    "type": "string",
+                    "const": "TRANSFER_READY"
+                  },
+                  "transferId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  }
+                },
+                "required": [
+                  "schemaVersion",
+                  "accountingVersion",
+                  "operationId",
+                  "experimentId",
+                  "scenarioId",
+                  "expectedPortfolioVersion",
+                  "observedAt",
+                  "resultProvenance",
+                  "sourceHashes",
+                  "costs",
+                  "kind",
+                  "transferId"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "schemaVersion": {
+                    "type": "string",
+                    "const": "proof-of-alpha/accounting-receipt/v1"
+                  },
+                  "accountingVersion": {
+                    "type": "string",
+                    "const": "1.0.0"
+                  },
+                  "operationId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "experimentId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "scenarioId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "expectedPortfolioVersion": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "observedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+                  },
+                  "resultProvenance": {
+                    "type": "string",
+                    "enum": [
+                      "FORWARD_SHADOW",
+                      "HISTORICAL_REPLAY",
+                      "SYNTHETIC_TEST",
+                      "LIVE_SEPARATE",
+                      "CROSS_CHAIN_TESTNET",
+                      "MIXED_DIAGNOSTIC"
+                    ]
+                  },
+                  "sourceHashes": {
+                    "minItems": 1,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^0x[0-9a-f]{64}$"
+                    }
+                  },
+                  "costs": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "costId": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                        },
+                        "category": {
+                          "type": "string",
+                          "enum": [
+                            "APPROVAL_GAS",
+                            "EXECUTION_GAS",
+                            "SOURCE_GAS",
+                            "DESTINATION_GAS",
+                            "RETRY_GAS",
+                            "PROTOCOL_FEE",
+                            "SWAP_FEE_IMPACT",
+                            "TRANSFER_FEE",
+                            "RELAYER"
+                          ]
+                        },
+                        "funding": {
+                          "type": "string",
+                          "enum": [
+                            "AVAILABLE_CASH",
+                            "PAYABLE",
+                            "WITHHELD"
+                          ]
+                        },
+                        "amountUsdcMinor": {
+                          "type": "string",
+                          "pattern": "^(0|[1-9][0-9]{0,77})$"
+                        },
+                        "networkId": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                        },
+                        "cashBalanceFamilyId": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "sourceHash": {
+                          "type": "string",
+                          "pattern": "^0x[0-9a-f]{64}$"
+                        }
+                      },
+                      "required": [
+                        "costId",
+                        "category",
+                        "funding",
+                        "amountUsdcMinor",
+                        "networkId",
+                        "cashBalanceFamilyId",
+                        "sourceHash"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "kind": {
+                    "type": "string",
+                    "const": "TRANSFER_DELAYED"
+                  },
+                  "transferId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  }
+                },
+                "required": [
+                  "schemaVersion",
+                  "accountingVersion",
+                  "operationId",
+                  "experimentId",
+                  "scenarioId",
+                  "expectedPortfolioVersion",
+                  "observedAt",
+                  "resultProvenance",
+                  "sourceHashes",
+                  "costs",
+                  "kind",
+                  "transferId"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "schemaVersion": {
+                    "type": "string",
+                    "const": "proof-of-alpha/accounting-receipt/v1"
+                  },
+                  "accountingVersion": {
+                    "type": "string",
+                    "const": "1.0.0"
+                  },
+                  "operationId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "experimentId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "scenarioId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "expectedPortfolioVersion": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "observedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+                  },
+                  "resultProvenance": {
+                    "type": "string",
+                    "enum": [
+                      "FORWARD_SHADOW",
+                      "HISTORICAL_REPLAY",
+                      "SYNTHETIC_TEST",
+                      "LIVE_SEPARATE",
+                      "CROSS_CHAIN_TESTNET",
+                      "MIXED_DIAGNOSTIC"
+                    ]
+                  },
+                  "sourceHashes": {
+                    "minItems": 1,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^0x[0-9a-f]{64}$"
+                    }
+                  },
+                  "costs": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "costId": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                        },
+                        "category": {
+                          "type": "string",
+                          "enum": [
+                            "APPROVAL_GAS",
+                            "EXECUTION_GAS",
+                            "SOURCE_GAS",
+                            "DESTINATION_GAS",
+                            "RETRY_GAS",
+                            "PROTOCOL_FEE",
+                            "SWAP_FEE_IMPACT",
+                            "TRANSFER_FEE",
+                            "RELAYER"
+                          ]
+                        },
+                        "funding": {
+                          "type": "string",
+                          "enum": [
+                            "AVAILABLE_CASH",
+                            "PAYABLE",
+                            "WITHHELD"
+                          ]
+                        },
+                        "amountUsdcMinor": {
+                          "type": "string",
+                          "pattern": "^(0|[1-9][0-9]{0,77})$"
+                        },
+                        "networkId": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                        },
+                        "cashBalanceFamilyId": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "sourceHash": {
+                          "type": "string",
+                          "pattern": "^0x[0-9a-f]{64}$"
+                        }
+                      },
+                      "required": [
+                        "costId",
+                        "category",
+                        "funding",
+                        "amountUsdcMinor",
+                        "networkId",
+                        "cashBalanceFamilyId",
+                        "sourceHash"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "kind": {
+                    "type": "string",
+                    "const": "TRANSFER_DESTINATION_RETRY"
+                  },
+                  "transferId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  }
+                },
+                "required": [
+                  "schemaVersion",
+                  "accountingVersion",
+                  "operationId",
+                  "experimentId",
+                  "scenarioId",
+                  "expectedPortfolioVersion",
+                  "observedAt",
+                  "resultProvenance",
+                  "sourceHashes",
+                  "costs",
+                  "kind",
+                  "transferId"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "schemaVersion": {
+                    "type": "string",
+                    "const": "proof-of-alpha/accounting-receipt/v1"
+                  },
+                  "accountingVersion": {
+                    "type": "string",
+                    "const": "1.0.0"
+                  },
+                  "operationId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "experimentId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "scenarioId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "expectedPortfolioVersion": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "observedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+                  },
+                  "resultProvenance": {
+                    "type": "string",
+                    "enum": [
+                      "FORWARD_SHADOW",
+                      "HISTORICAL_REPLAY",
+                      "SYNTHETIC_TEST",
+                      "LIVE_SEPARATE",
+                      "CROSS_CHAIN_TESTNET",
+                      "MIXED_DIAGNOSTIC"
+                    ]
+                  },
+                  "sourceHashes": {
+                    "minItems": 1,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^0x[0-9a-f]{64}$"
+                    }
+                  },
+                  "costs": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "costId": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                        },
+                        "category": {
+                          "type": "string",
+                          "enum": [
+                            "APPROVAL_GAS",
+                            "EXECUTION_GAS",
+                            "SOURCE_GAS",
+                            "DESTINATION_GAS",
+                            "RETRY_GAS",
+                            "PROTOCOL_FEE",
+                            "SWAP_FEE_IMPACT",
+                            "TRANSFER_FEE",
+                            "RELAYER"
+                          ]
+                        },
+                        "funding": {
+                          "type": "string",
+                          "enum": [
+                            "AVAILABLE_CASH",
+                            "PAYABLE",
+                            "WITHHELD"
+                          ]
+                        },
+                        "amountUsdcMinor": {
+                          "type": "string",
+                          "pattern": "^(0|[1-9][0-9]{0,77})$"
+                        },
+                        "networkId": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                        },
+                        "cashBalanceFamilyId": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "sourceHash": {
+                          "type": "string",
+                          "pattern": "^0x[0-9a-f]{64}$"
+                        }
+                      },
+                      "required": [
+                        "costId",
+                        "category",
+                        "funding",
+                        "amountUsdcMinor",
+                        "networkId",
+                        "cashBalanceFamilyId",
+                        "sourceHash"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "kind": {
+                    "type": "string",
+                    "const": "TRANSFER_SETTLED"
+                  },
+                  "transferId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "destinationCreditUsdcMinor": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  }
+                },
+                "required": [
+                  "schemaVersion",
+                  "accountingVersion",
+                  "operationId",
+                  "experimentId",
+                  "scenarioId",
+                  "expectedPortfolioVersion",
+                  "observedAt",
+                  "resultProvenance",
+                  "sourceHashes",
+                  "costs",
+                  "kind",
+                  "transferId",
+                  "destinationCreditUsdcMinor"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "schemaVersion": {
+                    "type": "string",
+                    "const": "proof-of-alpha/accounting-receipt/v1"
+                  },
+                  "accountingVersion": {
+                    "type": "string",
+                    "const": "1.0.0"
+                  },
+                  "operationId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "experimentId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "scenarioId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "expectedPortfolioVersion": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "observedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+                  },
+                  "resultProvenance": {
+                    "type": "string",
+                    "enum": [
+                      "FORWARD_SHADOW",
+                      "HISTORICAL_REPLAY",
+                      "SYNTHETIC_TEST",
+                      "LIVE_SEPARATE",
+                      "CROSS_CHAIN_TESTNET",
+                      "MIXED_DIAGNOSTIC"
+                    ]
+                  },
+                  "sourceHashes": {
+                    "minItems": 1,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^0x[0-9a-f]{64}$"
+                    }
+                  },
+                  "costs": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "costId": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                        },
+                        "category": {
+                          "type": "string",
+                          "enum": [
+                            "APPROVAL_GAS",
+                            "EXECUTION_GAS",
+                            "SOURCE_GAS",
+                            "DESTINATION_GAS",
+                            "RETRY_GAS",
+                            "PROTOCOL_FEE",
+                            "SWAP_FEE_IMPACT",
+                            "TRANSFER_FEE",
+                            "RELAYER"
+                          ]
+                        },
+                        "funding": {
+                          "type": "string",
+                          "enum": [
+                            "AVAILABLE_CASH",
+                            "PAYABLE",
+                            "WITHHELD"
+                          ]
+                        },
+                        "amountUsdcMinor": {
+                          "type": "string",
+                          "pattern": "^(0|[1-9][0-9]{0,77})$"
+                        },
+                        "networkId": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                        },
+                        "cashBalanceFamilyId": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "sourceHash": {
+                          "type": "string",
+                          "pattern": "^0x[0-9a-f]{64}$"
+                        }
+                      },
+                      "required": [
+                        "costId",
+                        "category",
+                        "funding",
+                        "amountUsdcMinor",
+                        "networkId",
+                        "cashBalanceFamilyId",
+                        "sourceHash"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "kind": {
+                    "type": "string",
+                    "const": "ACCRUE"
+                  },
+                  "positionId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "nextIndexNumerator": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "nextIndexDenominator": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  }
+                },
+                "required": [
+                  "schemaVersion",
+                  "accountingVersion",
+                  "operationId",
+                  "experimentId",
+                  "scenarioId",
+                  "expectedPortfolioVersion",
+                  "observedAt",
+                  "resultProvenance",
+                  "sourceHashes",
+                  "costs",
+                  "kind",
+                  "positionId",
+                  "nextIndexNumerator",
+                  "nextIndexDenominator"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "schemaVersion": {
+                    "type": "string",
+                    "const": "proof-of-alpha/accounting-receipt/v1"
+                  },
+                  "accountingVersion": {
+                    "type": "string",
+                    "const": "1.0.0"
+                  },
+                  "operationId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "experimentId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "scenarioId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "expectedPortfolioVersion": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "observedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+                  },
+                  "resultProvenance": {
+                    "type": "string",
+                    "enum": [
+                      "FORWARD_SHADOW",
+                      "HISTORICAL_REPLAY",
+                      "SYNTHETIC_TEST",
+                      "LIVE_SEPARATE",
+                      "CROSS_CHAIN_TESTNET",
+                      "MIXED_DIAGNOSTIC"
+                    ]
+                  },
+                  "sourceHashes": {
+                    "minItems": 1,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^0x[0-9a-f]{64}$"
+                    }
+                  },
+                  "kind": {
+                    "type": "string",
+                    "const": "CLOSE"
+                  },
+                  "closedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+                  },
+                  "costs": {
+                    "type": "array",
+                    "prefixItems": [],
+                    "items": false,
+                    "maxItems": 0
+                  }
+                },
+                "required": [
+                  "schemaVersion",
+                  "accountingVersion",
+                  "operationId",
+                  "experimentId",
+                  "scenarioId",
+                  "expectedPortfolioVersion",
+                  "observedAt",
+                  "resultProvenance",
+                  "sourceHashes",
+                  "kind",
+                  "closedAt",
+                  "costs"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          }
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "adapterId",
+        "adapterVersion",
+        "operation",
+        "resultProvenance",
+        "sourceRefs",
+        "sourceHash",
+        "receipts"
       ],
       "additionalProperties": false
     },
@@ -2931,6 +5448,174 @@
         "operationId",
         "receiptHash",
         "versionApplied"
+      ],
+      "additionalProperties": false
+    },
+    "ArchivedObservation": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "string",
+          "const": "proof-of-alpha/archived-observation/v1"
+        },
+        "observationId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "sourceId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "sourceVersion": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        "parserVersion": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        "adapterVersion": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        "requestedAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+        },
+        "observedAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+        },
+        "expiresAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+        },
+        "block": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "networkId": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                },
+                "environment": {
+                  "type": "string",
+                  "enum": [
+                    "mainnet",
+                    "testnet"
+                  ]
+                },
+                "chainId": {
+                  "type": "string",
+                  "pattern": "^(0|[1-9][0-9]{0,77})$"
+                },
+                "number": {
+                  "type": "string",
+                  "pattern": "^(0|[1-9][0-9]{0,77})$"
+                },
+                "hash": {
+                  "type": "string",
+                  "pattern": "^0x[0-9a-f]{64}$"
+                },
+                "timestamp": {
+                  "type": "string",
+                  "format": "date-time",
+                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+                },
+                "finality": {
+                  "type": "string",
+                  "enum": [
+                    "PROVISIONAL",
+                    "FINALIZED",
+                    "INVALIDATED"
+                  ]
+                }
+              },
+              "required": [
+                "networkId",
+                "environment",
+                "chainId",
+                "number",
+                "hash",
+                "timestamp",
+                "finality"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "rawObject": {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "type": "string",
+              "const": "proof-of-alpha/raw-object/v1"
+            },
+            "objectHash": {
+              "type": "string",
+              "pattern": "^0x[0-9a-f]{64}$"
+            },
+            "objectKey": {
+              "type": "string",
+              "pattern": "^raw\\/keccak256\\/0x[0-9a-f]{64}$"
+            },
+            "mediaType": {
+              "type": "string",
+              "const": "application/json"
+            },
+            "contentLengthBytes": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,77})$"
+            },
+            "capturedAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "objectHash",
+            "objectKey",
+            "mediaType",
+            "contentLengthBytes",
+            "capturedAt"
+          ],
+          "additionalProperties": false
+        },
+        "resultProvenance": {
+          "type": "string",
+          "enum": [
+            "FORWARD_SHADOW",
+            "HISTORICAL_REPLAY",
+            "SYNTHETIC_TEST",
+            "LIVE_SEPARATE",
+            "CROSS_CHAIN_TESTNET",
+            "MIXED_DIAGNOSTIC"
+          ]
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "observationId",
+        "sourceId",
+        "sourceVersion",
+        "parserVersion",
+        "adapterVersion",
+        "requestedAt",
+        "observedAt",
+        "expiresAt",
+        "block",
+        "rawObject",
+        "resultProvenance"
       ],
       "additionalProperties": false
     },
@@ -3572,6 +6257,10 @@
               "type": "string",
               "pattern": "^[a-z][a-z0-9-]{0,95}$"
             },
+            "sourceVersion": {
+              "type": "string",
+              "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+            },
             "requestedAt": {
               "type": "string",
               "format": "date-time",
@@ -3674,6 +6363,7 @@
           },
           "required": [
             "sourceId",
+            "sourceVersion",
             "requestedAt",
             "observedAt",
             "block",
@@ -4169,6 +6859,818 @@
       ],
       "additionalProperties": false
     },
+    "EconomicReplayBundle": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "string",
+          "const": "proof-of-alpha/economic-replay/v1"
+        },
+        "bundleVersion": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+        },
+        "resultProvenance": {
+          "type": "string",
+          "enum": [
+            "FORWARD_SHADOW",
+            "HISTORICAL_REPLAY",
+            "SYNTHETIC_TEST",
+            "LIVE_SEPARATE",
+            "CROSS_CHAIN_TESTNET",
+            "MIXED_DIAGNOSTIC"
+          ]
+        },
+        "initialPortfolio": {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "type": "string",
+              "const": "proof-of-alpha/shadow-portfolio/v1"
+            },
+            "accountingVersion": {
+              "type": "string",
+              "const": "1.0.0"
+            },
+            "experimentId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "scenarioId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "portfolioId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,95}$"
+            },
+            "resultProvenance": {
+              "type": "string",
+              "enum": [
+                "FORWARD_SHADOW",
+                "HISTORICAL_REPLAY",
+                "SYNTHETIC_TEST",
+                "LIVE_SEPARATE",
+                "CROSS_CHAIN_TESTNET",
+                "MIXED_DIAGNOSTIC"
+              ]
+            },
+            "unitOfAccount": {
+              "type": "string",
+              "const": "USDC"
+            },
+            "unitDecimals": {
+              "type": "number",
+              "const": 6
+            },
+            "initialValueUsdcMinor": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,77})$"
+            },
+            "maxDestinationAttempts": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,77})$"
+            },
+            "version": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,77})$"
+            },
+            "balanceViews": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "viewId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "networkId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "assetId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "balanceFamilyId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "decimals": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 36
+                  },
+                  "canonicalDecimals": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 36
+                  }
+                },
+                "required": [
+                  "viewId",
+                  "networkId",
+                  "assetId",
+                  "balanceFamilyId",
+                  "decimals",
+                  "canonicalDecimals"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "cash": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "balanceFamilyId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "networkId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "assetId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "amountUsdcMinor": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  }
+                },
+                "required": [
+                  "balanceFamilyId",
+                  "networkId",
+                  "assetId",
+                  "amountUsdcMinor"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "reservations": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "reservationId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "operationId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "balanceFamilyId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "networkId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "assetId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "amountUsdcMinor": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  }
+                },
+                "required": [
+                  "reservationId",
+                  "operationId",
+                  "balanceFamilyId",
+                  "networkId",
+                  "assetId",
+                  "amountUsdcMinor"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "positions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "positionId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "networkId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "instrumentId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "assetId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "sharesMinor": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "indexNumerator": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "indexDenominator": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "bookValueUsdcMinor": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "roundingRemainderNumerator": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "lastSourceHash": {
+                    "type": "string",
+                    "pattern": "^0x[0-9a-f]{64}$"
+                  },
+                  "lastObservedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+                  }
+                },
+                "required": [
+                  "positionId",
+                  "networkId",
+                  "instrumentId",
+                  "assetId",
+                  "sharesMinor",
+                  "indexNumerator",
+                  "indexDenominator",
+                  "bookValueUsdcMinor",
+                  "roundingRemainderNumerator",
+                  "lastSourceHash",
+                  "lastObservedAt"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "receivables": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "transferId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "messageIdentity": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "sourceNetworkId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "destinationNetworkId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "destinationBalanceFamilyId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "amountUsdcMinor": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "state": {
+                    "type": "string",
+                    "enum": [
+                      "IN_TRANSIT",
+                      "READY_TO_RECEIVE",
+                      "DELAYED",
+                      "DESTINATION_RETRY"
+                    ]
+                  },
+                  "destinationAttempts": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "createdAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+                  },
+                  "updatedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+                  }
+                },
+                "required": [
+                  "transferId",
+                  "messageIdentity",
+                  "sourceNetworkId",
+                  "destinationNetworkId",
+                  "destinationBalanceFamilyId",
+                  "amountUsdcMinor",
+                  "state",
+                  "destinationAttempts",
+                  "createdAt",
+                  "updatedAt"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "payables": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "payableId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "costId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "networkId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "amountUsdcMinor": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  }
+                },
+                "required": [
+                  "payableId",
+                  "costId",
+                  "networkId",
+                  "amountUsdcMinor"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "allowances": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "allowanceId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "networkId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "assetId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "spenderId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "amountMinor": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  }
+                },
+                "required": [
+                  "allowanceId",
+                  "networkId",
+                  "assetId",
+                  "spenderId",
+                  "amountMinor"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "recognizedCosts": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "costId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "category": {
+                    "type": "string",
+                    "enum": [
+                      "APPROVAL_GAS",
+                      "EXECUTION_GAS",
+                      "SOURCE_GAS",
+                      "DESTINATION_GAS",
+                      "RETRY_GAS",
+                      "PROTOCOL_FEE",
+                      "SWAP_FEE_IMPACT",
+                      "TRANSFER_FEE",
+                      "RELAYER"
+                    ]
+                  },
+                  "funding": {
+                    "type": "string",
+                    "enum": [
+                      "AVAILABLE_CASH",
+                      "PAYABLE",
+                      "WITHHELD"
+                    ]
+                  },
+                  "amountUsdcMinor": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "networkId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "cashBalanceFamilyId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "sourceHash": {
+                    "type": "string",
+                    "pattern": "^0x[0-9a-f]{64}$"
+                  },
+                  "operationId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  }
+                },
+                "required": [
+                  "costId",
+                  "category",
+                  "funding",
+                  "amountUsdcMinor",
+                  "networkId",
+                  "cashBalanceFamilyId",
+                  "sourceHash",
+                  "operationId"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "modeledPnlUsdcMinor": {
+              "type": "string",
+              "pattern": "^(0|-?[1-9][0-9]{0,77})$"
+            },
+            "appliedReceipts": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "operationId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                  },
+                  "receiptHash": {
+                    "type": "string",
+                    "pattern": "^0x[0-9a-f]{64}$"
+                  },
+                  "versionApplied": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  }
+                },
+                "required": [
+                  "operationId",
+                  "receiptHash",
+                  "versionApplied"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "lastAppliedAt": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time",
+                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "closedAt": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time",
+                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "deadlineStateHash": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^0x[0-9a-f]{64}$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "accountingVersion",
+            "experimentId",
+            "scenarioId",
+            "portfolioId",
+            "resultProvenance",
+            "unitOfAccount",
+            "unitDecimals",
+            "initialValueUsdcMinor",
+            "maxDestinationAttempts",
+            "version",
+            "balanceViews",
+            "cash",
+            "reservations",
+            "positions",
+            "receivables",
+            "payables",
+            "allowances",
+            "recognizedCosts",
+            "modeledPnlUsdcMinor",
+            "appliedReceipts",
+            "lastAppliedAt",
+            "closedAt",
+            "deadlineStateHash"
+          ],
+          "additionalProperties": false
+        },
+        "observations": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "schemaVersion": {
+                "type": "string",
+                "const": "proof-of-alpha/archived-observation/v1"
+              },
+              "observationId": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]{0,95}$"
+              },
+              "sourceId": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]{0,95}$"
+              },
+              "sourceVersion": {
+                "type": "string",
+                "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+              },
+              "parserVersion": {
+                "type": "string",
+                "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+              },
+              "adapterVersion": {
+                "type": "string",
+                "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+              },
+              "requestedAt": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+              },
+              "observedAt": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+              },
+              "expiresAt": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+              },
+              "block": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "networkId": {
+                        "type": "string",
+                        "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                      },
+                      "environment": {
+                        "type": "string",
+                        "enum": [
+                          "mainnet",
+                          "testnet"
+                        ]
+                      },
+                      "chainId": {
+                        "type": "string",
+                        "pattern": "^(0|[1-9][0-9]{0,77})$"
+                      },
+                      "number": {
+                        "type": "string",
+                        "pattern": "^(0|[1-9][0-9]{0,77})$"
+                      },
+                      "hash": {
+                        "type": "string",
+                        "pattern": "^0x[0-9a-f]{64}$"
+                      },
+                      "timestamp": {
+                        "type": "string",
+                        "format": "date-time",
+                        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+                      },
+                      "finality": {
+                        "type": "string",
+                        "enum": [
+                          "PROVISIONAL",
+                          "FINALIZED",
+                          "INVALIDATED"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "networkId",
+                      "environment",
+                      "chainId",
+                      "number",
+                      "hash",
+                      "timestamp",
+                      "finality"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "rawObject": {
+                "type": "object",
+                "properties": {
+                  "schemaVersion": {
+                    "type": "string",
+                    "const": "proof-of-alpha/raw-object/v1"
+                  },
+                  "objectHash": {
+                    "type": "string",
+                    "pattern": "^0x[0-9a-f]{64}$"
+                  },
+                  "objectKey": {
+                    "type": "string",
+                    "pattern": "^raw\\/keccak256\\/0x[0-9a-f]{64}$"
+                  },
+                  "mediaType": {
+                    "type": "string",
+                    "const": "application/json"
+                  },
+                  "contentLengthBytes": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,77})$"
+                  },
+                  "capturedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+                  }
+                },
+                "required": [
+                  "schemaVersion",
+                  "objectHash",
+                  "objectKey",
+                  "mediaType",
+                  "contentLengthBytes",
+                  "capturedAt"
+                ],
+                "additionalProperties": false
+              },
+              "resultProvenance": {
+                "type": "string",
+                "enum": [
+                  "FORWARD_SHADOW",
+                  "HISTORICAL_REPLAY",
+                  "SYNTHETIC_TEST",
+                  "LIVE_SEPARATE",
+                  "CROSS_CHAIN_TESTNET",
+                  "MIXED_DIAGNOSTIC"
+                ]
+              }
+            },
+            "required": [
+              "schemaVersion",
+              "observationId",
+              "sourceId",
+              "sourceVersion",
+              "parserVersion",
+              "adapterVersion",
+              "requestedAt",
+              "observedAt",
+              "expiresAt",
+              "block",
+              "rawObject",
+              "resultProvenance"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "steps": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "stepId": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]{0,95}$"
+              },
+              "adapterId": {
+                "type": "string",
+                "enum": [
+                  "aave-v3-ethereum",
+                  "erc4626-ethereum",
+                  "uniswap-v3-ethereum"
+                ]
+              },
+              "operation": {
+                "type": "string",
+                "enum": [
+                  "AAVE_SUPPLY",
+                  "AAVE_WITHDRAW",
+                  "VAULT_DEPOSIT",
+                  "VAULT_REDEEM",
+                  "SWAP"
+                ]
+              },
+              "input": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                },
+                "additionalProperties": {
+                  "type": [
+                    "string",
+                    "boolean"
+                  ]
+                }
+              },
+              "observationIds": {
+                "minItems": 1,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9-]{0,95}$"
+                }
+              }
+            },
+            "required": [
+              "stepId",
+              "adapterId",
+              "operation",
+              "input",
+              "observationIds"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "expectedFinalPortfolioHash": {
+          "type": "string",
+          "pattern": "^0x[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "bundleVersion",
+        "createdAt",
+        "resultProvenance",
+        "initialPortfolio",
+        "observations",
+        "steps",
+        "expectedFinalPortfolioHash"
+      ],
+      "additionalProperties": false
+    },
     "Environment": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "type": "string",
@@ -4176,6 +7678,123 @@
         "mainnet",
         "testnet"
       ]
+    },
+    "Erc4626Payload": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "string",
+          "const": "proof-of-alpha/erc4626-state/v1"
+        },
+        "chainId": {
+          "type": "string",
+          "const": "1"
+        },
+        "family": {
+          "type": "string",
+          "const": "MORPHO_METAMORPHO_V1"
+        },
+        "vault": {
+          "type": "string",
+          "pattern": "^0x[0-9a-f]{40}$"
+        },
+        "asset": {
+          "type": "string",
+          "pattern": "^0x[0-9a-f]{40}$"
+        },
+        "assetDecimals": {
+          "type": "number",
+          "const": 6
+        },
+        "shareDecimals": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 36
+        },
+        "totalAssetsMinor": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        },
+        "totalSupplyShares": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        },
+        "maxDepositAssetsMinor": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        },
+        "maxMintShares": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        },
+        "maxWithdrawAssetsMinor": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        },
+        "maxRedeemShares": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        },
+        "availableExitAssetsMinor": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        },
+        "depositFeeBps": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10000
+        },
+        "redeemFeeBps": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10000
+        },
+        "testAmountAssetsMinor": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        },
+        "previewDepositShares": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        },
+        "previewMintAssetsMinor": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        },
+        "previewWithdrawShares": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        },
+        "previewRedeemAssetsMinor": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "chainId",
+        "family",
+        "vault",
+        "asset",
+        "assetDecimals",
+        "shareDecimals",
+        "totalAssetsMinor",
+        "totalSupplyShares",
+        "maxDepositAssetsMinor",
+        "maxMintShares",
+        "maxWithdrawAssetsMinor",
+        "maxRedeemShares",
+        "availableExitAssetsMinor",
+        "depositFeeBps",
+        "redeemFeeBps",
+        "testAmountAssetsMinor",
+        "previewDepositShares",
+        "previewMintAssetsMinor",
+        "previewWithdrawShares",
+        "previewRedeemAssetsMinor"
+      ],
+      "additionalProperties": false
     },
     "ErrorCode": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -4204,8 +7823,54 @@
         "OPERATION_CONFLICT",
         "INVALID_TRANSITION",
         "CLOSED_PORTFOLIO",
-        "PAYABLE_NOT_FOUND"
+        "PAYABLE_NOT_FOUND",
+        "ARCHIVE_INTEGRITY",
+        "DATA_STALE",
+        "LIMIT_EXCEEDED",
+        "LIQUIDITY_UNAVAILABLE",
+        "SLIPPAGE_EXCEEDED",
+        "REPLAY_MISMATCH"
       ]
+    },
+    "EthUsdcConversionPayload": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "string",
+          "const": "proof-of-alpha/eth-usdc-conversion/v1"
+        },
+        "usdcMinorNumerator": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        },
+        "weiDenominator": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        },
+        "roundId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "answerUpdatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+        },
+        "heartbeatSeconds": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "usdcMinorNumerator",
+        "weiDenominator",
+        "roundId",
+        "answerUpdatedAt",
+        "heartbeatSeconds"
+      ],
+      "additionalProperties": false
     },
     "EvaluationReceipt": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -4770,6 +8435,10 @@
                           "type": "string",
                           "pattern": "^[a-z][a-z0-9-]{0,95}$"
                         },
+                        "sourceVersion": {
+                          "type": "string",
+                          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+                        },
                         "requestedAt": {
                           "type": "string",
                           "format": "date-time",
@@ -4872,6 +8541,7 @@
                       },
                       "required": [
                         "sourceId",
+                        "sourceVersion",
                         "requestedAt",
                         "observedAt",
                         "block",
@@ -4989,7 +8659,13 @@
                     "OPERATION_CONFLICT",
                     "INVALID_TRANSITION",
                     "CLOSED_PORTFOLIO",
-                    "PAYABLE_NOT_FOUND"
+                    "PAYABLE_NOT_FOUND",
+                    "ARCHIVE_INTEGRITY",
+                    "DATA_STALE",
+                    "LIMIT_EXCEEDED",
+                    "LIQUIDITY_UNAVAILABLE",
+                    "SLIPPAGE_EXCEEDED",
+                    "REPLAY_MISMATCH"
                   ]
                 }
               }
@@ -5259,6 +8935,47 @@
         "costId",
         "networkId",
         "amountUsdcMinor"
+      ],
+      "additionalProperties": false
+    },
+    "GasPayload": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "string",
+          "const": "proof-of-alpha/gas-input/v1"
+        },
+        "operation": {
+          "type": "string",
+          "enum": [
+            "APPROVE",
+            "SUPPLY",
+            "WITHDRAW",
+            "SWAP",
+            "VAULT_DEPOSIT",
+            "VAULT_REDEEM"
+          ]
+        },
+        "amountInMinor": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        },
+        "gasUnits": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        },
+        "effectiveGasPriceWei": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "operation",
+        "amountInMinor",
+        "gasUnits",
+        "effectiveGasPriceWei"
       ],
       "additionalProperties": false
     },
@@ -6735,6 +10452,10 @@
                     "type": "string",
                     "pattern": "^[a-z][a-z0-9-]{0,95}$"
                   },
+                  "sourceVersion": {
+                    "type": "string",
+                    "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+                  },
                   "requestedAt": {
                     "type": "string",
                     "format": "date-time",
@@ -6837,6 +10558,7 @@
                 },
                 "required": [
                   "sourceId",
+                  "sourceVersion",
                   "requestedAt",
                   "observedAt",
                   "block",
@@ -6954,7 +10676,13 @@
               "OPERATION_CONFLICT",
               "INVALID_TRANSITION",
               "CLOSED_PORTFOLIO",
-              "PAYABLE_NOT_FOUND"
+              "PAYABLE_NOT_FOUND",
+              "ARCHIVE_INTEGRITY",
+              "DATA_STALE",
+              "LIMIT_EXCEEDED",
+              "LIQUIDITY_UNAVAILABLE",
+              "SLIPPAGE_EXCEEDED",
+              "REPLAY_MISMATCH"
             ]
           }
         }
@@ -8499,6 +12227,46 @@
         "MIXED_DIAGNOSTIC"
       ]
     },
+    "RawObjectDescriptor": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "string",
+          "const": "proof-of-alpha/raw-object/v1"
+        },
+        "objectHash": {
+          "type": "string",
+          "pattern": "^0x[0-9a-f]{64}$"
+        },
+        "objectKey": {
+          "type": "string",
+          "pattern": "^raw\\/keccak256\\/0x[0-9a-f]{64}$"
+        },
+        "mediaType": {
+          "type": "string",
+          "const": "application/json"
+        },
+        "contentLengthBytes": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        },
+        "capturedAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}(?:Z))$"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "objectHash",
+        "objectKey",
+        "mediaType",
+        "contentLengthBytes",
+        "capturedAt"
+      ],
+      "additionalProperties": false
+    },
     "RecognizedCost": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "type": "object",
@@ -8566,6 +12334,62 @@
         "cashBalanceFamilyId",
         "sourceHash",
         "operationId"
+      ],
+      "additionalProperties": false
+    },
+    "ReplayStep": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "stepId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "adapterId": {
+          "type": "string",
+          "enum": [
+            "aave-v3-ethereum",
+            "erc4626-ethereum",
+            "uniswap-v3-ethereum"
+          ]
+        },
+        "operation": {
+          "type": "string",
+          "enum": [
+            "AAVE_SUPPLY",
+            "AAVE_WITHDRAW",
+            "VAULT_DEPOSIT",
+            "VAULT_REDEEM",
+            "SWAP"
+          ]
+        },
+        "input": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {
+            "type": [
+              "string",
+              "boolean"
+            ]
+          }
+        },
+        "observationIds": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]{0,95}$"
+          }
+        }
+      },
+      "required": [
+        "stepId",
+        "adapterId",
+        "operation",
+        "input",
+        "observationIds"
       ],
       "additionalProperties": false
     },
@@ -9304,6 +13128,10 @@
           "type": "string",
           "pattern": "^[a-z][a-z0-9-]{0,95}$"
         },
+        "sourceVersion": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
         "requestedAt": {
           "type": "string",
           "format": "date-time",
@@ -9406,6 +13234,7 @@
       },
       "required": [
         "sourceId",
+        "sourceVersion",
         "requestedAt",
         "observedAt",
         "block",
@@ -9727,6 +13556,10 @@
                     "type": "string",
                     "pattern": "^[a-z][a-z0-9-]{0,95}$"
                   },
+                  "sourceVersion": {
+                    "type": "string",
+                    "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+                  },
                   "requestedAt": {
                     "type": "string",
                     "format": "date-time",
@@ -9829,6 +13662,7 @@
                 },
                 "required": [
                   "sourceId",
+                  "sourceVersion",
                   "requestedAt",
                   "observedAt",
                   "block",
@@ -10007,6 +13841,106 @@
       "type": "string",
       "pattern": "^(0|[1-9][0-9]{0,77})$"
     },
+    "UniswapV3QuotePayload": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "string",
+          "const": "proof-of-alpha/uniswap-v3-exact-input-quote/v1"
+        },
+        "chainId": {
+          "type": "string",
+          "const": "1"
+        },
+        "router": {
+          "type": "string",
+          "pattern": "^0x[0-9a-f]{40}$"
+        },
+        "quoter": {
+          "type": "string",
+          "pattern": "^0x[0-9a-f]{40}$"
+        },
+        "pool": {
+          "type": "string",
+          "pattern": "^0x[0-9a-f]{40}$"
+        },
+        "poolId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "tokenIn": {
+          "type": "string",
+          "pattern": "^0x[0-9a-f]{40}$"
+        },
+        "tokenOut": {
+          "type": "string",
+          "pattern": "^0x[0-9a-f]{40}$"
+        },
+        "assetIn": {
+          "type": "string",
+          "enum": [
+            "usdc",
+            "usdt"
+          ]
+        },
+        "assetOut": {
+          "type": "string",
+          "enum": [
+            "usdc",
+            "usdt"
+          ]
+        },
+        "feeTier": {
+          "type": "string",
+          "enum": [
+            "100",
+            "500",
+            "3000",
+            "10000"
+          ]
+        },
+        "amountInMinor": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        },
+        "amountOutMinor": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        },
+        "sqrtPriceX96After": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        },
+        "initializedTicksCrossed": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        },
+        "quoteGasEstimate": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "chainId",
+        "router",
+        "quoter",
+        "pool",
+        "poolId",
+        "tokenIn",
+        "tokenOut",
+        "assetIn",
+        "assetOut",
+        "feeTier",
+        "amountInMinor",
+        "amountOutMinor",
+        "sqrtPriceX96After",
+        "initializedTicksCrossed",
+        "quoteGasEstimate"
+      ],
+      "additionalProperties": false
+    },
     "ValuationCheckpoint": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "type": "object",
@@ -10113,6 +14047,10 @@
                 "type": "string",
                 "pattern": "^[a-z][a-z0-9-]{0,95}$"
               },
+              "sourceVersion": {
+                "type": "string",
+                "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+              },
               "requestedAt": {
                 "type": "string",
                 "format": "date-time",
@@ -10215,6 +14153,7 @@
             },
             "required": [
               "sourceId",
+              "sourceVersion",
               "requestedAt",
               "observedAt",
               "block",
@@ -10255,7 +14194,13 @@
               "OPERATION_CONFLICT",
               "INVALID_TRANSITION",
               "CLOSED_PORTFOLIO",
-              "PAYABLE_NOT_FOUND"
+              "PAYABLE_NOT_FOUND",
+              "ARCHIVE_INTEGRITY",
+              "DATA_STALE",
+              "LIMIT_EXCEEDED",
+              "LIQUIDITY_UNAVAILABLE",
+              "SLIPPAGE_EXCEEDED",
+              "REPLAY_MISMATCH"
             ]
           }
         }

@@ -1,13 +1,12 @@
 # Instrument fact sheet — eth-cash-usdc
 
-Adapted from the authoritative instrument-fact-sheet template. Version 0.1.0.
+Adapted from the authoritative instrument-fact-sheet template. Version 0.2.0.
 
 ## Status
 
 - Verification: `TO_VERIFY`; disabled.
 - Environment and chain: ethereum-mainnet; see `config/v1/networks.json` for documented identity. RPC verification outstanding.
-- Contract address and code/version evidence: unresolved (`null`); no deployment claimed.
-- Asset and decimals: USDC; decimals require contract verification.
+- Official source candidate recorded in manifest: USDC `0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48`, 6 decimals. Runtime code remains unverified and the instrument disabled.
 - Date checked and official sources: documentation reviewed 2026-09-08; no on-chain check. https://developers.circle.com/stablecoins/usdc-contract-addresses
 - Adapter and manifest versions: cash-ethereum-mainnet 0.0.0 (reserved identity, mechanics not implemented); manifest 0.1.0.
 

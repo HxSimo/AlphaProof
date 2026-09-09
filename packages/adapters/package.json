@@ -1,0 +1,19 @@
+{
+  "name": "@poa/adapters",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsc --noEmit",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@poa/accounting": "workspace:*",
+    "@poa/domain": "workspace:*",
+    "@poa/market-data": "workspace:*",
+    "@poa/schemas": "workspace:*"
+  }
+}

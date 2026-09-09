@@ -25,6 +25,12 @@ export const ERROR_CODES = [
   'INVALID_TRANSITION',
   'CLOSED_PORTFOLIO',
   'PAYABLE_NOT_FOUND',
+  'ARCHIVE_INTEGRITY',
+  'DATA_STALE',
+  'LIMIT_EXCEEDED',
+  'LIQUIDITY_UNAVAILABLE',
+  'SLIPPAGE_EXCEEDED',
+  'REPLAY_MISMATCH',
 ] as const;
 export type ErrorCode = (typeof ERROR_CODES)[number];
 export class PoaError extends Error {
@@ -105,6 +111,8 @@ export function canonicalJson(value: unknown): string {
 
 export const contentHash = (value: unknown): `0x${string}` =>
   keccak256(toBytes(canonicalJson(value)));
+export const rawBytesHash = (value: Uint8Array): `0x${string}` =>
+  keccak256(value);
 export const RESULT_PROVENANCE = [
   'FORWARD_SHADOW',
   'HISTORICAL_REPLAY',

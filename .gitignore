@@ -12,4 +12,6 @@ coverage/
 contracts/cache/
 contracts/out/
 contracts/broadcast/
+/cache/
+/out/
 artifacts/local/

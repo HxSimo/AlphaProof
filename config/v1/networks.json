@@ -1,15 +1,16 @@
 {
   "schemaVersion": "proof-of-alpha/network-manifest/v1",
-  "manifestVersion": "0.1.0",
+  "manifestVersion": "0.2.0",
   "networks": [
     {
       "networkId": "ethereum-mainnet",
       "environment": "mainnet",
       "chainId": "1",
-      "documentationCheckedAt": "2026-09-08T00:00:00.000Z",
+      "documentationCheckedAt": "2026-09-09T00:00:00.000Z",
       "officialSources": [
         "https://ethereum.org/en/developers/docs/networks/",
-        "https://developers.circle.com/cctp/concepts/supported-chains-and-domains"
+        "https://developers.circle.com/cctp/concepts/supported-chains-and-domains",
+        "https://github.com/aave-dao/aave-address-book/blob/09a66451e85dfaf056d2ce16fb1f226f3bd0dcd9/src/AaveV3Ethereum.sol"
       ],
       "rpc": {
         "endpointEnvironmentVariable": "ETHEREUM_MAINNET_RPC_URL",
@@ -22,14 +23,14 @@
         {
           "assetId": "usdc",
           "symbol": "USDC",
-          "address": null,
-          "decimals": null
+          "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+          "decimals": 6
         },
         {
           "assetId": "usdt",
           "symbol": "USDT",
-          "address": null,
-          "decimals": null
+          "address": "0xdac17f958d2ee523a2206206994597c13d831ec7",
+          "decimals": 6
         }
       ],
       "contracts": {
@@ -45,17 +46,24 @@
       "verification": {
         "status": "TO_VERIFY",
         "enabled": false,
-        "checkedAt": null,
-        "checkedBy": null,
+        "checkedAt": "2026-09-09T00:00:00.000Z",
+        "checkedBy": "codex-m2-source-review",
         "requiredEvidence": [
           "OFFICIAL_SOURCE",
           "ARCHIVE_READ",
           "ONCHAIN_CODE",
           "FINALITY"
         ],
-        "evidence": [],
+        "evidence": [
+          {
+            "kind": "OFFICIAL_SOURCE",
+            "uri": "https://github.com/aave-dao/aave-address-book/blob/09a66451e85dfaf056d2ce16fb1f226f3bd0dcd9/src/AaveV3Ethereum.sol",
+            "contentHash": "0x253ed5028ff169c6f82d325e59613267baf3c71f3a7396223e27bc7bcfb8eb78",
+            "observedAt": "2026-09-09T00:00:00.000Z"
+          }
+        ],
         "blockers": [
-          "Resolve exact contracts and token scales from official deployments and matching chain RPC.",
+          "Official token identities/scales recorded; matching chain RPC and runtime code remain unverified.",
           "Archive block/hash, bytecode and finality policy evidence."
         ]
       }

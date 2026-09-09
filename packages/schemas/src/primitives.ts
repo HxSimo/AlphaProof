@@ -54,6 +54,7 @@ export const Amount = z.strictObject({
 });
 export const SourceRef = z.strictObject({
   sourceId: Id,
+  sourceVersion: Version,
   requestedAt: Timestamp,
   observedAt: Timestamp,
   block: BlockRef.nullable(),

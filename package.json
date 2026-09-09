@@ -13,6 +13,9 @@
     "typecheck": "tsc --noEmit && pnpm -r typecheck",
     "test": "vitest run",
     "test:db": "node --env-file-if-exists=.env --import tsx tests/database/foundation.ts",
+    "test:replay": "node --import tsx tests/replay/m2.ts",
+    "test:fork": "node --import tsx tests/fork/m2-gate.ts",
+    "replay:m2": "node --import tsx scripts/replay-m2.ts",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "config:validate": "node --env-file-if-exists=.env --import tsx scripts/config.ts check",
@@ -37,6 +40,9 @@
     "@poa/schemas": "workspace:*",
     "@poa/config": "workspace:*",
     "@poa/accounting": "workspace:*",
-    "@poa/storage": "workspace:*"
+    "@poa/storage": "workspace:*",
+    "@poa/market-data": "workspace:*",
+    "@poa/adapters": "workspace:*",
+    "@poa/experiments": "workspace:*"
   }
 }

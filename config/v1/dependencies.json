@@ -1,6 +1,6 @@
 {
   "schemaVersion": "proof-of-alpha/dependency-manifest/v1",
-  "manifestVersion": "0.1.0",
+  "manifestVersion": "0.2.0",
   "dependencies": [
     {
       "dependencyId": "rpc-ethereum-mainnet",
@@ -221,15 +221,16 @@
       "direction": null,
       "officialSources": [
         "https://aave.com/docs/resources/addresses",
-        "https://aave.com/docs/aave-v3/markets/data"
+        "https://aave.com/docs/aave-v3/markets/data",
+        "https://github.com/aave-dao/aave-address-book/blob/09a66451e85dfaf056d2ce16fb1f226f3bd0dcd9/src/AaveV3Ethereum.sol"
       ],
-      "instructions": "Pin official Aave V3 address book commit, pool, USDC/USDT reserves, receipt token and decimals. Archive reserve index, caps, liquidity, pause/freeze flags and bytecode. Fork supply/accrue/withdraw at a fixed block for all three amounts, limits, gas and failed exits.",
+      "instructions": "Using the pinned official Aave V3 identities, verify chain and proxy/implementation bytecode at one finalized archive block. Archive reserve index, caps, liquidity and pause/freeze flags. Fork supply/accrue/withdraw for all three amounts, limits, gas and failed exits.",
       "fixture": "tests/fixtures/dependency-unavailable.json",
       "verification": {
         "status": "TO_VERIFY",
         "enabled": false,
-        "checkedAt": null,
-        "checkedBy": null,
+        "checkedAt": "2026-09-09T00:00:00.000Z",
+        "checkedBy": "codex-m2-source-review",
         "requiredEvidence": [
           "OFFICIAL_SOURCE",
           "ONCHAIN_CODE",
@@ -238,9 +239,16 @@
           "GAS_CALIBRATION",
           "REPLAY"
         ],
-        "evidence": [],
+        "evidence": [
+          {
+            "kind": "OFFICIAL_SOURCE",
+            "uri": "https://github.com/aave-dao/aave-address-book/blob/09a66451e85dfaf056d2ce16fb1f226f3bd0dcd9/src/AaveV3Ethereum.sol",
+            "contentHash": "0x253ed5028ff169c6f82d325e59613267baf3c71f3a7396223e27bc7bcfb8eb78",
+            "observedAt": "2026-09-09T00:00:00.000Z"
+          }
+        ],
         "blockers": [
-          "Pin official Aave V3 address book commit, pool, USDC/USDT reserves, receipt token and decimals. Archive reserve index, caps, liquidity, pause/freeze flags and bytecode. Fork supply/accrue/withdraw at a fixed block for all three amounts, limits, gas and failed exits."
+          "Archive-RPC chain/block/code evidence, current reserve indices/caps/flags/liquidity, exact-size fork results and gas calibration are unavailable."
         ]
       }
     },
@@ -252,15 +260,16 @@
       "direction": null,
       "officialSources": [
         "https://docs.morpho.org/developers/contracts/addresses/",
-        "https://eips.ethereum.org/EIPS/eip-4626"
+        "https://eips.ethereum.org/EIPS/eip-4626",
+        "https://github.com/morpho-org/metamorpho/blob/ded84e59668155b34d3c24906c4f7461c12828af/src/MetaMorpho.sol"
       ],
-      "instructions": "Select one synchronous USDC vault after reviewing Gauntlet Prime/Core candidates. Pin exact version/address/asset and governance dependencies. Verify conversions, all previews/max methods, fees, available exits, virtual-holder capacity, rounding and gas on fixed-block forks; archive raw reads.",
+      "instructions": "MetaMorpho V1 is the selected synchronous ERC-4626 family. Select an exact active USDC instance and pin address/asset/curator/governance dependencies. Verify conversions, all previews/max methods, fees, available exits, virtual-holder capacity, rounding and gas on fixed-block forks; archive raw reads.",
       "fixture": "tests/fixtures/dependency-unavailable.json",
       "verification": {
         "status": "TO_VERIFY",
         "enabled": false,
-        "checkedAt": null,
-        "checkedBy": null,
+        "checkedAt": "2026-09-09T00:00:00.000Z",
+        "checkedBy": "codex-m2-source-review",
         "requiredEvidence": [
           "OFFICIAL_SOURCE",
           "ONCHAIN_CODE",
@@ -269,9 +278,16 @@
           "GAS_CALIBRATION",
           "REPLAY"
         ],
-        "evidence": [],
+        "evidence": [
+          {
+            "kind": "OFFICIAL_SOURCE",
+            "uri": "https://github.com/morpho-org/metamorpho/blob/ded84e59668155b34d3c24906c4f7461c12828af/src/MetaMorpho.sol",
+            "contentHash": "0x9e3f778a1e53c6c0dcaaedeb043883205ae79c4b0ad18fc1ec7cadea73b640e7",
+            "observedAt": "2026-09-09T00:00:00.000Z"
+          }
+        ],
         "blockers": [
-          "Select one synchronous USDC vault after reviewing Gauntlet Prime/Core candidates. Pin exact version/address/asset and governance dependencies. Verify conversions, all previews/max methods, fees, available exits, virtual-holder capacity, rounding and gas on fixed-block forks; archive raw reads."
+          "MetaMorpho V1 family selected; exact current USDC instance, code, curator, queues, caps, fees, liquidity and fixed-block round trip remain TO_VERIFY."
         ]
       }
     },
@@ -282,15 +298,16 @@
       "networkIds": ["ethereum-mainnet"],
       "direction": null,
       "officialSources": [
-        "https://developers.uniswap.org/docs/protocols/v3/deployments/v3-ethereum-deployments"
+        "https://developers.uniswap.org/docs/protocols/v3/deployments/v3-ethereum-deployments",
+        "https://github.com/Uniswap/v3-periphery/blob/0682387198a24c7cd63566a2c58398533860a5d1/deploys.md"
       ],
-      "instructions": "Pin direct USDC/USDT pools, fee tiers, token order, quoter and router. Fork exact-in quotes in both directions at each capital size and capture gas, slippage and failure behavior. Quote includes fee/impact once; choose net-of-gas output with pool-ID tie break.",
+      "instructions": "Using the pinned original V3 router/quoter identities, resolve direct USDC/USDT pools, fee tiers and token order at one finalized block. Fork exact-in quotes in both directions at each capital size and capture gas, slippage and failure behavior. Quote includes fee/impact once; choose net-of-gas output with pool-ID tie break.",
       "fixture": "tests/fixtures/dependency-unavailable.json",
       "verification": {
         "status": "TO_VERIFY",
         "enabled": false,
-        "checkedAt": null,
-        "checkedBy": null,
+        "checkedAt": "2026-09-09T00:00:00.000Z",
+        "checkedBy": "codex-m2-source-review",
         "requiredEvidence": [
           "OFFICIAL_SOURCE",
           "ONCHAIN_CODE",
@@ -299,9 +316,16 @@
           "GAS_CALIBRATION",
           "REPLAY"
         ],
-        "evidence": [],
+        "evidence": [
+          {
+            "kind": "OFFICIAL_SOURCE",
+            "uri": "https://github.com/Uniswap/v3-periphery/blob/0682387198a24c7cd63566a2c58398533860a5d1/deploys.md",
+            "contentHash": "0x953eae3d4f569f5b65582a3d9e38266744b6d8c2ba2fbd36f80303cd7abca5b8",
+            "observedAt": "2026-09-09T00:00:00.000Z"
+          }
+        ],
         "blockers": [
-          "Pin direct USDC/USDT pools, fee tiers, token order, quoter and router. Fork exact-in quotes in both directions at each capital size and capture gas, slippage and failure behavior. Quote includes fee/impact once; choose net-of-gas output with pool-ID tie break."
+          "Direct pool/fee selection, archive-block code/liquidity, six exact-size live quotes, fork execution and gas calibration are unavailable."
         ]
       }
     },

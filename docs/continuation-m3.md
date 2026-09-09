@@ -1,0 +1,11 @@
+# Exact continuation prompt for M3
+
+```text
+Use $proof-of-alpha at .agents/skills/proof-of-alpha/SKILL.md as the authoritative workflow and project context. Continue from the verified M2 local Ethereum economic slice. Inspect Git status and preserve all existing changes, then read docs/project-state.md, all accepted ADRs, docs/milestones.json, docs/integrations.md, the M2 verification runbook, and every skill reference required for experiments, API, SDK, signing, persistence, queues, replay and testing. Consult the complete v0.3 source specification for missing or conflicting details. Run pnpm plan M3.
+
+Your objective is M3 only: implement the prospective experiment, API and external-agent flow. Add the agent/version registry, immutable experiment creation with frozen policy/config/profile/adapter/parser hashes, EIP-712 signed intents and injected-signer SDK, nonce and expiry enforcement, deterministic planning, database-backed jobs, atomic receipt/state persistence, and an external example agent. The API and worker must consume M2 archived observations and M1 receipts; adapters must not own policy or eligibility.
+
+Make duplicate submissions, concurrent requests, stale portfolio versions, used nonces, signature/domain mismatches, partial execution and worker restarts deterministic and idempotent. A request received after its decision time is not prospective. Persist the signed bytes and durable receive time before execution. Preserve successful prior steps and actual costs when later steps fail. Never infer chain success without a verified receipt, and never enable an external dependency or profile whose manifest gate remains TO_VERIFY.
+
+Satisfy every M3 observable exit in docs/milestones.json. Add meaningful schema, signature, API, transaction/concurrency, queue retry, crash/restart, idempotency, replay and external SDK tests. Use deterministic synthetic observations wherever M2 external gates remain disabled. Run all relevant validation, migrations and local service tests; update generated schemas, project state and integration documentation; record material decisions as ADRs; and make a focused verified M3 commit. Do not begin M4. Finish with the exact continuation prompt for M4.
+```

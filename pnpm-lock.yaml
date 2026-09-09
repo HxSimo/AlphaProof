@@ -11,12 +11,21 @@ importers:
       '@poa/accounting':
         specifier: workspace:*
         version: link:packages/accounting
+      '@poa/adapters':
+        specifier: workspace:*
+        version: link:packages/adapters
       '@poa/config':
         specifier: workspace:*
         version: link:packages/config
       '@poa/domain':
         specifier: workspace:*
         version: link:packages/domain
+      '@poa/experiments':
+        specifier: workspace:*
+        version: link:packages/experiments
+      '@poa/market-data':
+        specifier: workspace:*
+        version: link:packages/market-data
       '@poa/schemas':
         specifier: workspace:*
         version: link:packages/schemas
@@ -105,6 +114,21 @@ importers:
         specifier: workspace:*
         version: link:../schemas
 
+  packages/adapters:
+    dependencies:
+      '@poa/accounting':
+        specifier: workspace:*
+        version: link:../accounting
+      '@poa/domain':
+        specifier: workspace:*
+        version: link:../domain
+      '@poa/market-data':
+        specifier: workspace:*
+        version: link:../market-data
+      '@poa/schemas':
+        specifier: workspace:*
+        version: link:../schemas
+
   packages/config:
     dependencies:
       '@poa/domain':
@@ -119,6 +143,33 @@ importers:
       viem:
         specifier: 2.56.3
         version: 2.56.3(typescript@5.9.3)(zod@4.5.4)
+
+  packages/experiments:
+    dependencies:
+      '@poa/accounting':
+        specifier: workspace:*
+        version: link:../accounting
+      '@poa/adapters':
+        specifier: workspace:*
+        version: link:../adapters
+      '@poa/domain':
+        specifier: workspace:*
+        version: link:../domain
+      '@poa/market-data':
+        specifier: workspace:*
+        version: link:../market-data
+      '@poa/schemas':
+        specifier: workspace:*
+        version: link:../schemas
+
+  packages/market-data:
+    dependencies:
+      '@poa/domain':
+        specifier: workspace:*
+        version: link:../domain
+      '@poa/schemas':
+        specifier: workspace:*
+        version: link:../schemas
 
   packages/schemas:
     dependencies:

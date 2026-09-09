@@ -1,4 +1,4 @@
-name: M0 validation
+name: Proof of Alpha validation
 on: [push, pull_request]
 permissions:
   contents: read
@@ -16,6 +16,7 @@ jobs:
       - run: pnpm check
         env:
           NEXT_TELEMETRY_DISABLED: '1'
+      - run: pnpm test:replay && pnpm test:fork
       - run: docker compose config --quiet
       - run: docker compose up --build -d
       - run: pnpm test:db && pnpm smoke
