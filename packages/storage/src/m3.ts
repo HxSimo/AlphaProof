@@ -1,10 +1,13 @@
 import type { Pool, PoolClient } from 'pg';
 import { createPortfolio, applyReceipt } from '@poa/accounting';
 import type { ConfigBundle } from '@poa/config';
-import { profileReadiness } from '@poa/config';
+import { profileReadiness, loadOperationsPolicy } from '@poa/config';
+import { OperationsRepository } from './operations.js';
 import { contentHash, PoaError } from '@poa/domain';
 import { planAllocation } from '@poa/execution';
 import {
+  Profile,
+  SyntheticProfile,
   ActionEnvelope,
   ActionRecord,
   AgentRecord,
@@ -59,11 +62,15 @@ export interface ExperimentRepositoryOptions {
 
 export class ExperimentRepository {
   constructor(
-    private readonly pool: Pool,
+    readonly pool: Pool,
     private readonly options: ExperimentRepositoryOptions,
   ) {}
 
-  private async transaction<T>(fn: (client: PoolClient) => Promise<T>) {
+  private async transaction<T>(
+    fn: (client: PoolClient) => Promise<T>,
+    existing?: PoolClient,
+  ) {
+    if (existing) return fn(existing);
     const client = await this.pool.connect();
     try {
       await client.query('BEGIN');
@@ -198,11 +205,13 @@ export class ExperimentRepository {
       return {
         ...structuredClone(base),
         profileId: SYNTHETIC_PROFILE_ID,
+        profileVersion: '0.7.0',
         enabled: true,
         resultProvenance: 'SYNTHETIC_TEST',
         requiredDependencyIds: [],
         limitations: [
           'Local deterministic M3 fixture; excluded from real-capital eligibility.',
+          'Synthetic clock maps one declared block offset to one second; compressed software timing is not a chain observation.',
           'Uses archived synthetic observations and a zero-address EIP-712 domain; no deployment is claimed.',
         ],
       };
@@ -255,6 +264,29 @@ export class ExperimentRepository {
       if (version.revoked_at)
         throw new PoaError('KEY_REVOKED', 'Agent version was revoked');
       const profile = this.resolveProfile(experiment.profile_id);
+      await client.query('SELECT pg_advisory_xact_lock(hashtext($1))', [
+        'active-experiment-quota',
+      ]);
+      const quota = loadOperationsPolicy();
+      const active = (
+        await client.query(
+          "SELECT agent_id,profile_id FROM experiments WHERE state='STARTED'",
+        )
+      ).rows;
+      if (
+        active.some(
+          (row) =>
+            row.agent_id === experiment.agent_id &&
+            row.profile_id === experiment.profile_id,
+        ) ||
+        (!active.some((row) => row.agent_id === experiment.agent_id) &&
+          new Set(active.map((row) => row.agent_id)).size >=
+            quota.maxActiveAgents)
+      )
+        throw new PoaError(
+          'QUOTA_EXCEEDED',
+          'Active agent or agent/profile experiment quota reached',
+        );
       const lockedAt = iso(
         first(
           (await client.query<{ now: Date }>('SELECT clock_timestamp() AS now'))
@@ -354,6 +386,10 @@ export class ExperimentRepository {
         automaticFundingEnabled: false,
       });
       const policyHash = contentHash(policy);
+      await client.query(
+        'INSERT INTO experiment_profile_snapshots(experiment_id,profile_hash,payload) VALUES($1,$2,$3::jsonb)',
+        [experimentId, profileHash, json(profile)],
+      );
       await client.query(
         "UPDATE experiments SET state='STARTED',locked_at=$2,policy=$3::jsonb,policy_hash=$4,configuration_hash=$5,profile_hash=$6,adapter_set_hash=$7,parser_set_hash=$8 WHERE experiment_id=$1",
         [
@@ -555,6 +591,38 @@ export class ExperimentRepository {
     };
   }
 
+  async frozenProfile(
+    experimentId: string,
+    client: Pool | PoolClient = this.pool,
+  ): Promise<ProfileData> {
+    const exp = (
+      await client.query(
+        'SELECT profile_id,profile_hash FROM experiments WHERE experiment_id=$1',
+        [experimentId],
+      )
+    ).rows[0];
+    if (!exp)
+      throw new PoaError('EXPERIMENT_NOT_FOUND', 'Experiment not found');
+    const snapshot = (
+      await client.query(
+        'SELECT payload FROM experiment_profile_snapshots WHERE experiment_id=$1',
+        [experimentId],
+      )
+    ).rows[0];
+    const profile = snapshot
+      ? (exp.profile_id === SYNTHETIC_PROFILE_ID
+          ? SyntheticProfile
+          : Profile
+        ).parse(snapshot.payload)
+      : this.resolveProfile(exp.profile_id);
+    if (contentHash(profile) !== exp.profile_hash)
+      throw new PoaError(
+        'VERSION_DRIFT',
+        'Frozen profile is unavailable; restore its exact archived version',
+      );
+    return profile;
+  }
+
   async acceptAction(experimentId: string, input: ActionEnvelopeData) {
     const envelope = ActionEnvelope.parse(input);
     return this.transaction(async (client) => {
@@ -571,13 +639,28 @@ export class ExperimentRepository {
             state: string;
             profile_id: string;
           }>(
-            'SELECT policy,policy_hash,version_id,state,profile_id FROM experiments WHERE experiment_id=$1',
+            'SELECT policy,policy_hash,version_id,state,profile_id FROM experiments WHERE experiment_id=$1 FOR SHARE',
             [experimentId],
           )
         ).rows,
         'EXPERIMENT_NOT_FOUND',
         'Experiment not found',
       );
+      const requestHash = contentHash(envelope);
+      const priorKey = (
+        await client.query<{ action_id: string; request_hash: string }>(
+          'SELECT action_id,request_hash FROM action_intents WHERE experiment_id=$1 AND idempotency_key=$2',
+          [experimentId, envelope.request.idempotencyKey],
+        )
+      ).rows[0];
+      if (priorKey) {
+        if (priorKey.request_hash !== requestHash)
+          throw new PoaError(
+            'IDEMPOTENCY_CONFLICT',
+            'Idempotency key was reused with different content',
+          );
+        return this.getActionWith(client, experimentId, priorKey.action_id);
+      }
       if (exp.state !== 'STARTED' || !exp.policy)
         throw new PoaError(
           'EXPERIMENT_NOT_STARTED',
@@ -640,21 +723,6 @@ export class ExperimentRepository {
           'INVALID_SIGNATURE',
           'Signer is not an authorized decision key',
         );
-      const requestHash = contentHash(envelope);
-      const priorKey = (
-        await client.query<{ action_id: string; request_hash: string }>(
-          'SELECT action_id,request_hash FROM action_intents WHERE experiment_id=$1 AND idempotency_key=$2',
-          [experimentId, envelope.request.idempotencyKey],
-        )
-      ).rows[0];
-      if (priorKey) {
-        if (priorKey.request_hash !== requestHash)
-          throw new PoaError(
-            'IDEMPOTENCY_CONFLICT',
-            'Idempotency key was reused with different content',
-          );
-        return this.getActionWith(client, experimentId, priorKey.action_id);
-      }
       if (
         (
           await client.query(
@@ -691,13 +759,9 @@ export class ExperimentRepository {
           'SCENARIO_BUSY',
           'Scenario already has an active action',
         );
-      const profileSource =
-        policy.profileId === SYNTHETIC_PROFILE_ID
-          ? 'ethereum-forward'
-          : policy.profileId;
-      const profile = this.options.bundle.profiles.profiles.find(
-        (x) => x.profileId === profileSource,
-      )!;
+      const profile = await this.frozenProfile(experimentId, client);
+      if (Date.parse(receivedAt) >= Date.parse(policy.endsAt))
+        throw new PoaError('EXPIRED', 'Experiment deadline has passed');
       const count = Number(
         first(
           (
@@ -889,19 +953,27 @@ export class ExperimentRepository {
   async claimJob(workerId: string, leaseSeconds = 30) {
     return this.transaction(async (client) => {
       const row = (
-        await client.query<{ job_id: string; payload: any; attempt: number }>(
-          "SELECT job_id,payload,attempt FROM jobs WHERE (state IN ('READY','RETRY') AND available_at <= clock_timestamp()) OR (state='RUNNING' AND leased_until < clock_timestamp()) ORDER BY available_at,job_id FOR UPDATE SKIP LOCKED LIMIT 1",
+        await client.query<{
+          job_id: string;
+          payload: any;
+          attempt: number;
+          max_attempts: number;
+          state: string;
+        }>(
+          "SELECT job_id,payload,attempt,max_attempts,state FROM jobs WHERE (state IN ('READY','RETRY') AND available_at <= clock_timestamp()) OR (state='RUNNING' AND leased_until < clock_timestamp()) ORDER BY available_at,job_id FOR UPDATE SKIP LOCKED LIMIT 1",
         )
       ).rows[0];
       if (!row) return null;
       await client.query(
-        "UPDATE jobs SET state='RUNNING',attempt=attempt+1,worker_id=$2,leased_until=clock_timestamp()+($3 * interval '1 second'),updated_at=clock_timestamp() WHERE job_id=$1",
+        "UPDATE jobs SET state='RUNNING',attempt=least(attempt+1,max_attempts),worker_id=$2,leased_until=clock_timestamp()+($3 * interval '1 second'),updated_at=clock_timestamp() WHERE job_id=$1",
         [row.job_id, workerId, leaseSeconds],
       );
       return {
         jobId: row.job_id,
         actionId: row.payload.actionId as string,
-        attempt: row.attempt + 1,
+        attempt: Math.min(row.attempt + 1, row.max_attempts),
+        exhausted: row.attempt >= row.max_attempts,
+        recoveredLease: row.state === 'RUNNING',
       };
     });
   }
@@ -926,6 +998,7 @@ export class ExperimentRepository {
       portfolio: row.portfolio as ShadowPortfolioData,
       receivedAt: iso(row.received_at),
       status: row.status as string,
+      profile: await this.frozenProfile(row.experiment_id),
     };
   }
 
@@ -934,20 +1007,51 @@ export class ExperimentRepository {
     plan: unknown,
     syntheticInputBundle: unknown,
   ) {
-    const hash = contentHash(plan);
-    await this.pool.query(
-      'INSERT INTO execution_plans(action_id,plan_hash,payload,synthetic_input_bundle) VALUES ($1,$2,$3::jsonb,$4::jsonb) ON CONFLICT(action_id) DO NOTHING',
-      [actionId, hash, json(plan), json(syntheticInputBundle)],
-    );
-    await this.pool.query(
-      "UPDATE action_intents SET status='IN_PROGRESS',plan_hash=COALESCE(plan_hash,$2),before_portfolio_hash=COALESCE(before_portfolio_hash,$3) WHERE action_id=$1",
-      [
-        actionId,
-        hash,
-        contentHash((await this.loadExecution(actionId)).portfolio),
-      ],
-    );
-    return hash;
+    return this.transaction(async (client) => {
+      const hash = contentHash(plan);
+      const action = first(
+        (
+          await client.query(
+            'SELECT a.status,s.portfolio FROM action_intents a JOIN capital_scenarios s ON s.experiment_id=a.experiment_id AND s.scenario_id=a.scenario_id WHERE a.action_id=$1 FOR UPDATE OF a,s',
+            [actionId],
+          )
+        ).rows,
+        'DATA_UNAVAILABLE',
+        'Action not found',
+      );
+      const prior = (
+        await client.query(
+          'SELECT plan_hash,synthetic_input_bundle FROM execution_plans WHERE action_id=$1',
+          [actionId],
+        )
+      ).rows[0];
+      if (prior) {
+        if (
+          prior.plan_hash !== hash ||
+          contentHash(prior.synthetic_input_bundle) !==
+            contentHash(syntheticInputBundle)
+        )
+          throw new PoaError(
+            'OPERATION_CONFLICT',
+            'Durable plan or archived inputs differ on retry',
+          );
+        return hash;
+      }
+      if (action.status !== 'ACCEPTED')
+        throw new PoaError(
+          'OPERATION_CONFLICT',
+          'Only an accepted action can acquire its first plan',
+        );
+      await client.query(
+        'INSERT INTO execution_plans(action_id,plan_hash,payload,synthetic_input_bundle) VALUES($1,$2,$3::jsonb,$4::jsonb)',
+        [actionId, hash, json(plan), json(syntheticInputBundle)],
+      );
+      await client.query(
+        "UPDATE action_intents SET status='IN_PROGRESS',plan_hash=$2,before_portfolio_hash=$3 WHERE action_id=$1",
+        [actionId, hash, contentHash(action.portfolio)],
+      );
+      return hash;
+    });
   }
 
   async loadPlan(actionId: string) {
@@ -966,7 +1070,7 @@ export class ExperimentRepository {
       const action = first(
         (
           await client.query<any>(
-            'SELECT experiment_id,scenario_id FROM action_intents WHERE action_id=$1 FOR UPDATE',
+            'SELECT experiment_id,scenario_id,status FROM action_intents WHERE action_id=$1 FOR UPDATE',
             [actionId],
           )
         ).rows,
@@ -985,11 +1089,27 @@ export class ExperimentRepository {
       );
       const prior = (
         await client.query(
-          'SELECT 1 FROM accounting_receipts WHERE action_id=$1 AND operation_id=$2',
+          'SELECT receipt_hash FROM accounting_receipts WHERE action_id=$1 AND operation_id=$2',
           [actionId, receipt.operationId],
         )
-      ).rowCount;
-      if (prior) return scenario.portfolio as ShadowPortfolioData;
+      ).rows[0];
+      if (prior) {
+        if (prior.receipt_hash !== contentHash(receipt))
+          throw new PoaError(
+            'OPERATION_CONFLICT',
+            'Persisted receipt differs on retry',
+          );
+        return scenario.portfolio as ShadowPortfolioData;
+      }
+      if (
+        ['SUCCEEDED', 'PARTIALLY_SUCCEEDED', 'FAILED', 'EXPIRED'].includes(
+          action.status,
+        )
+      )
+        throw new PoaError(
+          'OPERATION_CONFLICT',
+          'Terminal action cannot gain another financial effect',
+        );
       const next = applyReceipt(
         scenario.portfolio as ShadowPortfolioData,
         receipt,
@@ -1016,18 +1136,25 @@ export class ExperimentRepository {
     actionId: string,
     status: 'SUCCEEDED' | 'PARTIALLY_SUCCEEDED' | 'FAILED' | 'EXPIRED',
     reasonCodes: string[] = [],
+    transaction?: PoolClient,
   ) {
     return this.transaction(async (client) => {
       const row = first(
         (
           await client.query<any>(
-            'SELECT a.experiment_id,a.scenario_id,e.policy,s.portfolio FROM action_intents a JOIN experiments e USING(experiment_id) JOIN capital_scenarios s ON s.experiment_id=a.experiment_id AND s.scenario_id=a.scenario_id WHERE action_id=$1 FOR UPDATE',
+            'SELECT a.status,a.experiment_id,a.scenario_id,e.policy,s.portfolio FROM action_intents a JOIN experiments e USING(experiment_id) JOIN capital_scenarios s ON s.experiment_id=a.experiment_id AND s.scenario_id=a.scenario_id WHERE action_id=$1 FOR UPDATE',
             [actionId],
           )
         ).rows,
         'DATA_UNAVAILABLE',
         'Action not found',
       );
+      if (
+        ['SUCCEEDED', 'PARTIALLY_SUCCEEDED', 'FAILED', 'EXPIRED'].includes(
+          row.status,
+        )
+      )
+        return;
       const now = iso(
         first(
           (await client.query<{ now: Date }>('SELECT clock_timestamp() AS now'))
@@ -1048,6 +1175,25 @@ export class ExperimentRepository {
         "UPDATE jobs SET state=CASE WHEN $2='FAILED' THEN 'FAILED' ELSE 'COMPLETED' END,leased_until=NULL,updated_at=clock_timestamp() WHERE financial_identity=$1",
         [actionId, status],
       );
+      if (status !== 'SUCCEEDED')
+        await new OperationsRepository(this.pool).recordIncident(
+          {
+            incidentId: actionId + '-terminal',
+            experimentId: row.experiment_id,
+            scenarioId: row.scenario_id,
+            code:
+              status === 'PARTIALLY_SUCCEEDED'
+                ? 'PARTIAL_EXECUTION'
+                : status === 'EXPIRED'
+                  ? 'INTENT_EXPIRED'
+                  : 'EXECUTION_FAILED',
+            severity: 'WARNING',
+            message: `Action ${status}; reasons: ${reasonCodes.join(', ') || 'none'}. Successful prior effects and incurred costs are retained.`,
+            evidenceHashes: [contentHash(row.portfolio)],
+            resolvesIncidentId: null,
+          },
+          client,
+        );
       await this.appendEvent(
         client,
         row.experiment_id,
@@ -1061,14 +1207,61 @@ export class ExperimentRepository {
         },
         ExperimentPolicy.parse(row.policy).resultProvenance,
       );
-    });
+    }, transaction);
   }
 
   async retryJob(actionId: string, code: string) {
-    await this.pool.query(
-      "UPDATE jobs SET state=CASE WHEN attempt>=max_attempts THEN 'FAILED' ELSE 'RETRY' END,last_error_code=$2,available_at=clock_timestamp(),leased_until=NULL,updated_at=clock_timestamp() WHERE financial_identity=$1",
-      [actionId, code],
-    );
+    return this.transaction(async (client) => {
+      const action = (
+        await client.query(
+          'SELECT experiment_id,scenario_id FROM action_intents WHERE action_id=$1 FOR UPDATE',
+          [actionId],
+        )
+      ).rows[0];
+      const job = (
+        await client.query(
+          "UPDATE jobs SET state=CASE WHEN attempt>=max_attempts THEN 'FAILED' ELSE 'RETRY' END,last_error_code=$2,available_at=clock_timestamp(),leased_until=NULL,updated_at=clock_timestamp() WHERE financial_identity=$1 AND state NOT IN ('COMPLETED','FAILED') RETURNING attempt,state",
+          [actionId, code],
+        )
+      ).rows[0];
+      if (!job) return;
+      const exhausted = job.state === 'FAILED';
+      if (exhausted) {
+        const n = (
+          await client.query(
+            'SELECT count(*)::int AS n FROM accounting_receipts WHERE action_id=$1',
+            [actionId],
+          )
+        ).rows[0].n;
+        await this.completeAction(
+          actionId,
+          n ? 'PARTIALLY_SUCCEEDED' : 'FAILED',
+          ['RETRY_EXHAUSTED', code],
+          client,
+        );
+        await client.query(
+          "UPDATE jobs SET state='FAILED' WHERE financial_identity=$1",
+          [actionId],
+        );
+      }
+      await new OperationsRepository(this.pool).recordIncident(
+        {
+          incidentId: actionId + '-retry-' + job.attempt,
+          experimentId: action.experiment_id,
+          scenarioId: action.scenario_id,
+          code: exhausted ? 'RETRY_EXHAUSTED' : 'WORKER_INTERRUPTED',
+          severity: exhausted ? 'ERROR' : 'WARNING',
+          message: exhausted
+            ? 'Worker retry bound reached; prior financial effects retained and scenario released.'
+            : 'Worker interrupted; the same durable plan will resume.',
+          evidenceHashes: [
+            contentHash({ actionId, attempt: job.attempt, code }),
+          ],
+          resolvesIncidentId: null,
+        },
+        client,
+      );
+    });
   }
 
   async receiptCount(actionId: string) {

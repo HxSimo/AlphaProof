@@ -215,6 +215,16 @@ export async function replaySyntheticReferenceEntryBundle(bundle: any) {
     bundle.observations[0].observedAt,
     bundle.failAfterApproval,
   );
+  if (
+    contentHash(replayed.bundle.rawObjects) !==
+      contentHash(bundle.rawObjects) ||
+    contentHash(replayed.bundle.observations) !==
+      contentHash(bundle.observations)
+  )
+    throw new PoaError(
+      'ARCHIVE_INTEGRITY',
+      'Reference entry requires the complete exact archived input set',
+    );
   for (const object of bundle.rawObjects) {
     const expected = replayed.bundle.rawObjects.find(
       (candidate) => candidate.objectKey === object.objectKey,

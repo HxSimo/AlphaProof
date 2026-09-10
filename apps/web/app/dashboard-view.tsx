@@ -1,4 +1,4 @@
-import type { DashboardResponseData } from '@poa/schemas';
+import { IncidentRecord, type DashboardResponseData } from '@poa/schemas';
 
 const usdc = (minor: string | null) => {
   if (minor === null) return 'Unavailable';
@@ -171,34 +171,63 @@ export function DashboardView({ data }: { data: DashboardResponseData }) {
           );
         })}
       </div>
-      <section className="proof" aria-label="Commitment proof">
-        <p className="eyebrow">ARC TESTNET INTEGRITY ANCHOR</p>
-        <h2>Selected proof verified</h2>
-        <div className="proof-grid">
-          <Metric label="Batch" value={data.commitment.batch.batchId} />
-          <Metric
-            label="Sequences"
-            value={`${data.commitment.batch.firstSequence}–${data.commitment.batch.lastSequence}`}
-          />
-          <Metric label="Root" value={data.commitment.batch.root} />
-          <Metric
-            label="Transaction"
-            value={data.commitment.registryReceipt.transactionHash}
-          />
-        </div>
-        <p>
-          This periodic post-execution anchor proves integrity from publication.
-          It does not independently prove that the server received an intent
-          before execution.
-        </p>
-      </section>
+      {data.commitment ? (
+        <section className="proof" aria-label="Commitment proof">
+          <p className="eyebrow">ARC TESTNET INTEGRITY ANCHOR</p>
+          <h2>Selected proof verified</h2>
+          <div className="proof-grid">
+            <Metric label="Batch" value={data.commitment.batch.batchId} />
+            <Metric
+              label="Sequences"
+              value={`${data.commitment.batch.firstSequence}–${data.commitment.batch.lastSequence}`}
+            />
+            <Metric label="Root" value={data.commitment.batch.root} />
+            <Metric
+              label="Transaction"
+              value={data.commitment.registryReceipt.transactionHash}
+            />
+          </div>
+          <p>
+            This periodic post-execution anchor proves integrity from
+            publication. It does not independently prove that the server
+            received an intent before execution.
+          </p>
+        </section>
+      ) : (
+        <aside role="status">
+          Commitment publication unavailable. These canonical results have no
+          confirmed integrity anchor yet; economic history and incidents remain
+          visible.
+        </aside>
+      )}
+      <p>
+        <a href={'/exports/' + data.experimentId}>
+          Download canonical session export
+        </a>
+      </p>
       <section>
         <h2>Incidents</h2>
         {data.incidents.length ? (
           <ul>
-            {data.incidents.map((incident) => (
-              <li key={incident.contentHash}>{incident.contentHash}</li>
-            ))}
+            {data.incidents.map((object) => {
+              const incident = IncidentRecord.parse(object.payload);
+              return (
+                <li key={object.contentHash}>
+                  <strong>
+                    {incident.severity} · {incident.code}
+                  </strong>{' '}
+                  · {incident.occurredAt}
+                  <p>{incident.message}</p>
+                  <p>
+                    {incident.resultProvenance}
+                    {incident.resolvesIncidentId
+                      ? ' · resolves ' + incident.resolvesIncidentId
+                      : ''}
+                  </p>
+                  <code>{object.contentHash}</code>
+                </li>
+              );
+            })}
           </ul>
         ) : (
           <p>No incidents are recorded in this canonical view.</p>

@@ -80,3 +80,5 @@ export type { Pool } from 'pg';
 export * from './m3.js';
 export * from './m5.js';
 export * from './m6.js';
+
+export * from './operations.js';

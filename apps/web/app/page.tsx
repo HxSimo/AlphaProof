@@ -1,4 +1,9 @@
-import { CatalogResponse, DashboardResponse } from '@poa/schemas';
+import {
+  CatalogResponse,
+  DashboardResponse,
+  OperationsSnapshot,
+} from '@poa/schemas';
+import { OperationsView } from './operations-view.js';
 import { DashboardView } from './dashboard-view.js';
 
 export const dynamic = 'force-dynamic';
@@ -32,10 +37,22 @@ async function getDashboard() {
   }
 }
 
+async function getOperations() {
+  try {
+    const response = await fetch(`${API}/health/operations`, {
+      cache: 'no-store',
+      signal: AbortSignal.timeout(3000),
+    });
+    return response.ok ? OperationsSnapshot.parse(await response.json()) : null;
+  } catch {
+    return null;
+  }
+}
 export default async function Page() {
-  const [dashboard, catalog] = await Promise.all([
+  const [dashboard, catalog, operations] = await Promise.all([
     getDashboard(),
     getCatalog(),
+    getOperations(),
   ]);
   return (
     <main>
@@ -54,6 +71,7 @@ export default async function Page() {
           cached result is substituted.
         </aside>
       )}
+      <OperationsView data={operations} />
       {catalog && (
         <details className="catalog">
           <summary>Profile activation and limitations</summary>

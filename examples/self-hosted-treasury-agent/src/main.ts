@@ -19,7 +19,10 @@ if (!privateKey)
   );
 const account = privateKeyToAccount(privateKey);
 const client = new ProofOfAlphaClient(
-  new FetchTransport(process.env.POA_API_URL ?? 'http://localhost:3001'),
+  new FetchTransport(
+    process.env.POA_API_URL ?? 'http://localhost:3001',
+    process.env.POA_OPERATOR_TOKEN,
+  ),
 );
 const agentId = process.env.POA_AGENT_ID ?? 'example-agent';
 const versionId = process.env.POA_AGENT_VERSION_ID ?? 'example-agent-v1';
@@ -64,7 +67,13 @@ const portfolios = (await client.getPortfolios(experimentId)) as {
   }[];
 };
 await client.getInstruments(experimentId);
-const scenario = portfolios.scenarios[0]!;
+const scenario = process.env.POA_SCENARIO_ID
+  ? portfolios.scenarios.find(
+      (item) => item.scenarioId === process.env.POA_SCENARIO_ID,
+    )
+  : portfolios.scenarios[0];
+if (!scenario)
+  throw new PoaError('POLICY_VIOLATION', 'Requested scenario is absent');
 // The example visibly varies its target by capital and contains no hidden model call.
 const aaveWeight =
   BigInt(scenario.portfolio.initialValueUsdcMinor) >= 100_000_000_000n

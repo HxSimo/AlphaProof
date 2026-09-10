@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "proof-of-alpha/m7-registry-evidence/v1",
+  "observedAt": "2026-09-10T21:52:56.970Z",
+  "sessionHash": "0xd90d9560fc5c2738c7fb8cc6896ddd88b9043ef0838223e5287c925477af1325",
+  "publishedSessionHash": "0x63069c3ccb07193f7ce1341eeb819f3e893c68c541c39e3a7b09927dde8252f8",
+  "publication": {
+    "schemaVersion": "proof-of-alpha/registry-publication-receipt/v1",
+    "batchId": "m7-demo-1789077091857-batch",
+    "batchHash": "0xd9b80629f9abad83699aaa4dba64e6db48fbba43f75a4ef58e66fb21546ef8e6",
+    "experimentIdHash": "0x77463a0cedc84b71171bae8aafc774c170ea5aa6c2695e4e32c569209883fdb9",
+    "registryNetworkId": "arc-testnet",
+    "chainId": "5042002",
+    "registryAddress": "0xc391ad7e4826a2c1ecc56e845098b8c1b580eebd",
+    "registryCodeHash": "0x673c72cbffbf8f0ea9b0e8bbbf806e2a881455e6abb5193f813cf1ded13d8b62",
+    "publisherAddress": "0xe21954315857a6fcfb23dfd455b117c7c607be2c",
+    "transactionHash": "0xaf36221703a5bddc41939861d49461284bb930e62a61dc071ce8a30c31f1929c",
+    "block": {
+      "networkId": "arc-testnet",
+      "environment": "testnet",
+      "chainId": "5042002",
+      "number": "61463142",
+      "hash": "0x1c038ffa9a7fb1b969d381d17fe2e3b5a3fb0f47291205a8e9b9b0afc6095736",
+      "timestamp": "2026-09-10T21:52:55.000Z",
+      "finality": "FINALIZED"
+    },
+    "observedAt": "2026-09-10T21:52:56.970Z",
+    "status": "CONFIRMED"
+  },
+  "raw": {
+    "schemaVersion": "proof-of-alpha/raw-object/v1",
+    "objectHash": "0x9c1936690b493547a8962ec4f5c5f93640f4baaaf43310dc6af96b937eb0f6af",
+    "objectKey": "raw/keccak256/0x9c1936690b493547a8962ec4f5c5f93640f4baaaf43310dc6af96b937eb0f6af",
+    "mediaType": "application/json",
+    "contentLengthBytes": "14687",
+    "capturedAt": "2026-09-10T21:52:56.970Z"
+  }
+}

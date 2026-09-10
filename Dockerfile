@@ -19,6 +19,7 @@ COPY packages/sdk/package.json packages/sdk/package.json
 COPY packages/valuation/package.json packages/valuation/package.json
 COPY packages/evaluation/package.json packages/evaluation/package.json
 COPY packages/transfers/package.json packages/transfers/package.json
+COPY packages/commitments/package.json packages/commitments/package.json
 COPY examples/self-hosted-treasury-agent/package.json examples/self-hosted-treasury-agent/package.json
 RUN pnpm install --frozen-lockfile
 COPY . .

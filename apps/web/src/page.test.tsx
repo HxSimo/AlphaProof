@@ -99,3 +99,56 @@ it('renders canonical three-scenario, reference, status, evidence and proof fiel
   expect(html).toContain(hash);
   expect(html).toContain('Automatic funding disabled');
 });
+
+it('keeps failed comparisons, incidents, missing values and an unavailable anchor visible', () => {
+  const failed = scenario('1000000000');
+  const data = {
+    experimentId: 'm7-ui',
+    resultProvenance: 'SYNTHETIC_TEST',
+    scenarios: [
+      {
+        ...failed,
+        descriptiveEvaluation: {
+          ...failed.descriptiveEvaluation,
+          agent: {
+            ...failed.descriptiveEvaluation.agent,
+            markValueUsdcMinor: null,
+            liquidationValueUsdcMinor: null,
+            dataQuality: 'MISSING',
+          },
+          comparisonAvailability: { conservativeYield: false },
+          differenceVsConservativeYieldMarkUsdcMinor: null,
+        },
+      },
+      scenario('10000000000'),
+      scenario('100000000000'),
+    ],
+    commitment: null,
+    incidents: [
+      {
+        contentHash: hash,
+        payload: {
+          schemaVersion: 'proof-of-alpha/incident/v1',
+          incidentId: 'incident-ui',
+          experimentId: 'm7-ui',
+          scenarioId: null,
+          code: 'REFERENCE_UNAVAILABLE',
+          severity: 'WARNING',
+          message: 'Failed entry retained cash and incurred costs.',
+          evidenceHashes: [hash],
+          resolvesIncidentId: null,
+          occurredAt: '2026-09-10T12:00:00.000Z',
+          resultProvenance: 'SYNTHETIC_TEST',
+        },
+      },
+    ],
+    limitations: ['No fresh Ethereum forward session.'],
+  } as unknown as DashboardResponseData;
+  const html = renderToStaticMarkup(createElement(DashboardView, { data }));
+  expect(html).toContain('REFERENCE_UNAVAILABLE');
+  expect(html).toContain('Failed entry retained cash');
+  expect(html).toContain('MISSING');
+  expect(html).not.toContain('Selected proof verified');
+  expect(html).toContain('/exports/m7-ui');
+  expect(html).toContain('Unavailable');
+});

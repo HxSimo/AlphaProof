@@ -8,3 +8,8 @@ optimizer = true
 optimizer_runs = 200
 bytecode_hash = "none"
 fuzz.runs = 256
+
+[fmt]
+# Preserve the exact M6 registry source/test revision retained with deployment
+# evidence. New Solidity and the M5 vault remain checked by forge fmt.
+ignore = ["src/ProofOfAlphaRegistry.sol", "test/ProofOfAlphaRegistry.t.sol"]

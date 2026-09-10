@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "file": "docs/evidence/m7-session.json",
+  "sessionHash": "0xd90d9560fc5c2738c7fb8cc6896ddd88b9043ef0838223e5287c925477af1325",
+  "experimentId": "m7-demo-1789077091857",
+  "databaseSchema": "poa_m7_demo_206549_1789077091857_80855",
+  "elapsedMilliseconds": 10660,
+  "publicationStatus": "UNPUBLISHED",
+  "resultProvenance": "SYNTHETIC_TEST",
+  "forwardObservationCount": "0"
+}

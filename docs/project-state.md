@@ -2,9 +2,9 @@
 
 ## Current milestone
 
-- Milestone: **M6 complete and verified. M7 is the next milestone and has not started.**
-- Target observable outcome: satisfied with separate eligibility dimensions, append-only corrections and audit events, two ordered Arc Testnet commitment batches, full export/replay verification, canonical API reads and a read-only dashboard.
-- Last updated: 2026-09-10.
+- Milestone: **M7 complete and verified. Requested M0–M7 implementation scope is finished; no later milestone has started.**
+- Target observable outcome: complete local signer→durable receipt→economic consequence→references→evaluation→Arc proof/export rehearsal, operational monitoring/quotas/incidents/recovery and explicit provenance boundaries. Mainnet-forward activation remains blocked.
+- Last updated: 2026-09-11 (Europe/Paris; retained evidence timestamps are UTC).
 - Baseline: repository contained the authoritative skill only, no implementation or commits. Existing skill files are preserved unchanged.
 
 ## Implemented and verified
@@ -18,7 +18,7 @@
 | API catalog and liveness/readiness                                                     | Fastify injection tests, shared output schema, unavailable DB state without leaked details                                                                                                         | Local configuration review                         |
 | Web configuration review                                                               | Next production build and Docker web/API smoke passed; page renders exact API bundle hash                                                                                                          | No accounting in browser                           |
 | Worker configuration archival and migration                                            | Eight PostgreSQL checks: concurrent migrations/delivery, restart/reconnect, hash, mutation rejection, drift and rollback                                                                           | Local PostgreSQL 17.9                              |
-| Milestone plan and decisions                                                           | `pnpm plan M0` through `M7`; sixteen accepted ADRs                                                                                                                                                 | Requested scope ends at M6                         |
+| Milestone plan and decisions                                                           | `pnpm plan M0` through `M7`; eighteen accepted ADRs                                                                                                                                                | Requested scope ends at M7                         |
 | Deterministic global accounting                                                        | Conservation asserted after every receipt; cash, reservations, indexed positions, receivables, payables and allowances                                                                             | Synthetic M1 only                                  |
 | Rounding and balance aliases                                                           | 500 bigint floor/ceil cases with remainders; Arc native/ERC-20 aliases share one balance family                                                                                                    | No live asset balance claimed                      |
 | Receipt idempotency and partial failure                                                | Exact duplicate no-op, changed duplicate conflict, stale-version rejection, approval/withdrawal/failed-swap cases                                                                                  | Pure reducer, no database queue yet                |
@@ -48,7 +48,17 @@
 | Reproducible export                                                                    | 116 schemas, all frozen hashes/versions, signed bytes, raw inputs, receipts, checkpoint/evaluations, audit events, leaves, batches, proofs and receipts                                            | Synthetic fixture; fresh-process replay            |
 | Canonical API and dashboard                                                            | Read-only eligibility/audit/batch/proof/export/dashboard routes and UI for three correlated scenarios, both references, values, statuses, evidence, incidents and limitations                      | Browser performs no accounting                     |
 
-## Completed milestone
+## M7 completed milestone
+
+The retained session `m7-demo-1789077091857` contains three independent signed intents, plans, portfolios and checkpoint/evaluation streams, six references, two visible incidents, 37 archived source/version files and 19 ordered audit events. The 1k conservative entry failed with cash and costs retained and no replacement. All observed economics remain synthetic; the abbreviated period is `UNASSESSABLE`, inference remains `NOT_ASSESSED`, and every scenario is `NOT_ELIGIBLE_FOR_REAL_CAPITAL`.
+
+The pending export hash is `0xd90d9560fc5c2738c7fb8cc6896ddd88b9043ef0838223e5287c925477af1325`. Its immutable published revision has hash `0x63069c3ccb07193f7ce1341eeb819f3e893c68c541c39e3a7b09927dde8252f8`. Actual Arc Testnet transaction `0xaf36221703a5bddc41939861d49461284bb930e62a61dc071ce8a30c31f1929c`, finalized block `61463142`, anchors root `0x037df90812ea9ac3caba3cdbfb64549ba0f8a3c2a820a175be21eed06812782b` over sequences 1–19. Publisher and agent keys are separate. The prior M5/M6 evidence is preserved.
+
+The [complete timed software rehearsal](evidence/m7-rehearsal.json) passed in **22.153 seconds**. Separate failure and 30-day synthetic replay fixtures preserve losses, delayed transfer, unresolved closure, later settlement and correlated scenarios without adding forward history. A physical Docker PostgreSQL/API/worker restart retained the exact export, incidents and publication in **3.334 seconds** ([recovery evidence](evidence/m7-service-recovery.json)). The populated read-only dashboard and downloadable canonical export passed localhost smoke checks. No remote hosting, production S3 retention or fresh Ethereum forward session is claimed.
+
+See [M7 validation](evidence/m7-validation.md), [operations](runbooks/m7-demo-operations.md), [deployment](deployment.md), and the [final demo runbook](demo-runbook.md). Operational controls, immutable incidents and frozen profile snapshots are described by ADR-0017; provenance, synthetic timing and immutable session revisions by ADR-0018.
+
+## Preserved M6 milestone
 
 M6 evaluates operational compliance, economics and statistical evidence independently. Excluded provenance returns `NOT_ELIGIBLE_FOR_REAL_CAPITAL` before policy criteria, while a valid forward profile with disabled inference returns `INSUFFICIENT_EVIDENCE`. Every result keeps automatic funding false. Corrections append a superseding receipt and event without mutating the old report.
 
@@ -101,23 +111,23 @@ The M5 testnet networks, USDC cash contracts, finite-yield vaults, CCTP routes a
 
 ## Decisions
 
-- Accepted ADRs: [0001 architecture](adr/0001-architecture.md), [0002 profiles/provenance](adr/0002-profiles-and-provenance.md), [0003 scope](adr/0003-scope-and-integrations.md), [0004 proposed economics](adr/0004-proposed-economic-policy.md), [0005 canonical schemas](adr/0005-canonical-schemas.md), [0006 deterministic accounting](adr/0006-deterministic-accounting.md), [0007 archived economic inputs](adr/0007-content-addressed-economic-inputs.md), [0008 Ethereum adapter boundaries](adr/0008-m2-ethereum-adapter-boundaries.md), [0009 signed experiment boundary](adr/0009-m3-signed-experiment-boundary.md), [0010 journal/job transactions](adr/0010-m3-journal-and-job-transactions.md), [0011 scenarios/references](adr/0011-m4-scenarios-and-fixed-references.md), [0012 checkpoints/evaluation](adr/0012-m4-checkpoints-and-descriptive-evaluation.md), [0013 finite test-vault yield](adr/0013-m5-finite-test-vault.md), [0014 durable CCTP lifecycle](adr/0014-m5-durable-cctp-lifecycle.md), [0015 live evidence/resume](adr/0015-m5-live-evidence-and-resume.md), [0016 commitments/exports/corrections](adr/0016-m6-commitments-exports-and-corrections.md).
+- Accepted ADRs: [0001 architecture](adr/0001-architecture.md), [0002 profiles/provenance](adr/0002-profiles-and-provenance.md), [0003 scope](adr/0003-scope-and-integrations.md), [0004 proposed economics](adr/0004-proposed-economic-policy.md), [0005 canonical schemas](adr/0005-canonical-schemas.md), [0006 deterministic accounting](adr/0006-deterministic-accounting.md), [0007 archived economic inputs](adr/0007-content-addressed-economic-inputs.md), [0008 Ethereum adapter boundaries](adr/0008-m2-ethereum-adapter-boundaries.md), [0009 signed experiment boundary](adr/0009-m3-signed-experiment-boundary.md), [0010 journal/job transactions](adr/0010-m3-journal-and-job-transactions.md), [0011 scenarios/references](adr/0011-m4-scenarios-and-fixed-references.md), [0012 checkpoints/evaluation](adr/0012-m4-checkpoints-and-descriptive-evaluation.md), [0013 finite test-vault yield](adr/0013-m5-finite-test-vault.md), [0014 durable CCTP lifecycle](adr/0014-m5-durable-cctp-lifecycle.md), [0015 live evidence/resume](adr/0015-m5-live-evidence-and-resume.md), [0016 commitments/exports/corrections](adr/0016-m6-commitments-exports-and-corrections.md), [0017 operations/recovery](adr/0017-m7-operations-and-recovery.md), [0018 rehearsal/evidence boundaries](adr/0018-m7-rehearsal-and-evidence-boundaries.md).
 - Proposed parameters: numerical risk/timing/cadence/quota defaults, passive reference target, exact market selection and calibrations remain profile proposals. ADR acceptance does not enable a profile.
 - Superseded ADRs: none.
 - LOCKED product requirements are preserved; extra vaults, advanced inference, custom profiles, optional sponsor integrations and live capital controls are cut/deferred as documented.
 
 ## Test health
 
-- Unit/property/UI: 120 tests passed in sixteen files. M6 adds provenance precedence, disabled inference, canonical encoding, tamper/gap/overlap/predecessor/reorg checks, complete export binding and dashboard rendering.
-- Database/integration: PostgreSQL foundation and M3–M6 checks passed, including correction retention, concurrent idempotency, ordered batches, proof persistence, duplicate publication, API reads, dashboard projection, restart and append-only mutation rejection.
+- Unit/property/UI: 126 tests passed in eighteen files. M6 adds provenance precedence, disabled inference, canonical encoding, tamper/gap/overlap/predecessor/reorg checks, complete export binding and dashboard rendering.
+- Database/integration: PostgreSQL foundation and M3–M7 checks passed, including correction retention, concurrent idempotency, ordered batches, proof persistence, duplicate publication, API reads, dashboard projection, restart and append-only mutation rejection.
 - Fork/adapter: gated Solidity suite implemented. It was explicitly skipped because `POA_RUN_ETHEREUM_FORK` and required verified inputs were absent; no RPC or bytecode pass is claimed.
 - Replay: cross-process M2, M4 and M5 hashes remain stable. The current M6 export independently verifies root `0xb2e9eb40475883cf844b1eb11999719e613b71d6592b5dd30f07cc831aa7d8b7` and publication `0xea2936138e4d8ced9e6408ec0585d9201c07a6156bff1d44db1e4cf18d2475f4`.
 - End to end: the M3 external-agent/restart and M4 three-scenario paths still pass. M6 starts a fresh process, reloads the complete export, recomputes the selected corrected eligibility receipt and verifies every object, leaf, proof, batch predecessor and registry receipt.
 - Live testnet: PASS with finalized Sepolia and Arc vault round trips, bidirectional CCTP Standard receipts, message-bound attestations, expected duplicate reverts, exact 2 USDC/1 USDC reconciliation and zero relayer bankroll credit. `pnpm test:evidence:m5` independently validates all 97 retained objects.
 - Solidity: Solidity 0.8.30 finite-vault and registry suites passed 6/6. The separate M2 fixed-block fork gate remained `SKIPPED_TO_VERIFY`; no Ethereum mainnet fork pass is claimed.
 - GitHub CI: workflow configured; remote execution not run or claimed.
-- Full validation: `pnpm check`, all five migrations, `pnpm test:db`, prior end-to-end flows, `pnpm test:replay`, `pnpm test:e2e:export-proof`, `pnpm test:evidence:m5`, `pnpm test:evidence:m6`, Foundry and Docker smoke passed. Genuine chain receipts are limited to the retained M5 lifecycle and M6 registry evidence.
+- Full validation: `pnpm check`, all six migrations, `pnpm test:db`, prior end-to-end flows, `pnpm test:replay`, `pnpm test:e2e:export-proof`, `pnpm test:evidence:m5`, `pnpm test:evidence:m6`, Foundry and Docker smoke passed. The M7 selected-session publication also passed actual finalized receipt/calldata/code/head verification and a second read-only RPC verification. Genuine chain evidence remains limited to the retained M5 testnet lifecycle and M6/M7 Arc registry publications.
 
-## Next smallest credible milestone
+## Scope after M7
 
-M7 only: harden the demo, add accurately labeled failure/replay evidence, monitoring, quotas, incidents, operational recovery and a timed end-to-end rehearsal. The [exact M7 continuation prompt](continuation-m7.md) is ready.
+Stop after the focused verified M7 commit. No M8 is authorized. Any subsequent Ethereum activation must satisfy the existing exact-deployment, fixed-block archive, gas/feed/amount-specific quote and retention gates under a new immutable experiment. Thirteen dependency entries remain `TO_VERIFY`; see the complete inventory in [M7 validation](evidence/m7-validation.md). The historical M7 continuation prompt is retained as workflow history, not unfinished work.

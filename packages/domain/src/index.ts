@@ -55,6 +55,8 @@ export const ERROR_CODES = [
   'EXPORT_INCOMPLETE',
   'VERSION_DRIFT',
   'PROVENANCE_SPLICE',
+  'AUTH_REQUIRED',
+  'RATE_LIMITED',
 ] as const;
 export type ErrorCode = (typeof ERROR_CODES)[number];
 export class PoaError extends Error {

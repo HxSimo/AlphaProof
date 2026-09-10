@@ -1,6 +1,6 @@
 {
   "schemaVersion": "proof-of-alpha/milestone-plan/v1",
-  "authorizedMilestone": "M6",
+  "authorizedMilestone": "M7",
   "criticalPath": "M0 → M1 → M2 → M3 → M4 → M5 → M6 → M7",
   "milestones": [
     {
@@ -219,7 +219,7 @@
       "steps": [
         {
           "id": "M7.1",
-          "deliverable": "Synthetic failures, longer labeled replay and separate fresh Ethereum forward session",
+          "deliverable": "Synthetic failures, longer labeled replay and independently gated fresh Ethereum forward session",
           "exit": "Recorded evidence cannot be spliced across provenance classes or claim a longer forward history"
         },
         {

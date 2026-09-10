@@ -306,4 +306,10 @@ export const ProfileManifest = z.strictObject({
   manifestVersion: Version,
   profiles: z.array(Profile).min(1),
 });
+
+export const SyntheticProfile = Profile.extend({
+  profileId: z.literal('synthetic-m3-local'),
+  resultProvenance: z.literal('SYNTHETIC_TEST'),
+  requiredDependencyIds: z.tuple([]),
+});
 export type ProfileData = z.infer<typeof Profile>;

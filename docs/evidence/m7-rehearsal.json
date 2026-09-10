@@ -1,0 +1,101 @@
+{
+  "schemaVersion": "proof-of-alpha/demo-rehearsal/v1",
+  "startedAt": "2026-09-10T21:55:24.573Z",
+  "completedAt": "2026-09-10T21:55:46.726Z",
+  "elapsedMilliseconds": 22153,
+  "selectedExport": "docs/evidence/m7-session-published.json",
+  "sessionCreatedAt": "2026-09-10T21:51:40.082Z",
+  "sessionHash": "0x63069c3ccb07193f7ce1341eeb819f3e893c68c541c39e3a7b09927dde8252f8",
+  "publication": {
+    "schemaVersion": "proof-of-alpha/registry-publication-receipt/v1",
+    "batchId": "m7-demo-1789077091857-batch",
+    "batchHash": "0xd9b80629f9abad83699aaa4dba64e6db48fbba43f75a4ef58e66fb21546ef8e6",
+    "experimentIdHash": "0x77463a0cedc84b71171bae8aafc774c170ea5aa6c2695e4e32c569209883fdb9",
+    "registryNetworkId": "arc-testnet",
+    "chainId": "5042002",
+    "registryAddress": "0xc391ad7e4826a2c1ecc56e845098b8c1b580eebd",
+    "registryCodeHash": "0x673c72cbffbf8f0ea9b0e8bbbf806e2a881455e6abb5193f813cf1ded13d8b62",
+    "publisherAddress": "0xe21954315857a6fcfb23dfd455b117c7c607be2c",
+    "transactionHash": "0xaf36221703a5bddc41939861d49461284bb930e62a61dc071ce8a30c31f1929c",
+    "block": {
+      "networkId": "arc-testnet",
+      "environment": "testnet",
+      "chainId": "5042002",
+      "number": "61463142",
+      "hash": "0x1c038ffa9a7fb1b969d381d17fe2e3b5a3fb0f47291205a8e9b9b0afc6095736",
+      "timestamp": "2026-09-10T21:52:55.000Z",
+      "finality": "FINALIZED"
+    },
+    "observedAt": "2026-09-10T21:52:56.970Z",
+    "status": "CONFIRMED"
+  },
+  "mode": "LOCAL_REHEARSAL_WITH_RETAINED_TESTNET_ANCHOR",
+  "resultProvenance": "SYNTHETIC_TEST",
+  "freshEthereumSession": false,
+  "forwardObservationCount": "0",
+  "modifiedLeafRejected": true,
+  "steps": [
+    {
+      "name": "External SDK → durable receipt → crash/restart → references → export/proof",
+      "script": "scripts/demo-session.ts",
+      "args": ["--test"],
+      "status": "PASS",
+      "elapsedMilliseconds": 13552,
+      "output": "PASS: demo leaf/financial/source/receive-time/missing-object/reference/provenance tampering rejected\n{\"status\":\"PASS\",\"file\":\"/tmp/poa-m7-session-nwwhWL/session.json\",\"sessionHash\":\"0xd25e676f21458589ad287965440f806433e0481fee14d30e5702dd55494ad0b3\",\"experimentId\":\"m7-demo-1789077325059\",\"databaseSchema\":\"poa_m7_demo_211363_1789077325059_46852\",\"elapsedMilliseconds\":12953,\"publicationStatus\":\"UNPUBLISHED\",\"resultProvenance\":\"SYNTHETIC_TEST\",\"forwardObservationCount\":\"0\"}"
+    },
+    {
+      "name": "Delayed transfer, unresolved closure, withdrawal/failed swap, losses and longer labeled replay",
+      "script": "tests/replay/m7.ts",
+      "args": [],
+      "status": "PASS",
+      "elapsedMilliseconds": 1734,
+      "output": "M7 failure_stress independent replay verified: 0xf926ae59e2563179366028dbb6cbc31d7b893a45b58a6307d196d70d6e24aacd\nM7 longer_replay independent replay verified: 0xd87b0a0a36117ed34eedcd3c9acf5a1228c8164285f06810356d95c47b29985b"
+    },
+    {
+      "name": "Retained M5 transfer lifecycle replay (original provenance)",
+      "script": "tests/replay/m5.ts",
+      "args": [],
+      "status": "PASS",
+      "elapsedMilliseconds": 866,
+      "output": "M5 cross-process transfer replay verified: 0xc86f5ca463cafe8661a846d117809df7f914da140aaa2a42cb8768b0850f5c9e"
+    },
+    {
+      "name": "Retained M6 proof/correction replay (original provenance)",
+      "script": "tests/replay/m6.ts",
+      "args": [],
+      "status": "PASS",
+      "elapsedMilliseconds": 625,
+      "output": "M6 retained export replay verified: root 0xb2e9eb40475883cf844b1eb11999719e613b71d6592b5dd30f07cc831aa7d8b7, publication 0xea2936138e4d8ced9e6408ec0585d9201c07a6156bff1d44db1e4cf18d2475f4"
+    },
+    {
+      "name": "Independent selected M7 session replay",
+      "script": "scripts/replay-demo-session.ts",
+      "args": ["docs/evidence/m7-session-published.json"],
+      "status": "PASS",
+      "elapsedMilliseconds": 1132,
+      "output": "{\"sessionHash\":\"0x63069c3ccb07193f7ce1341eeb819f3e893c68c541c39e3a7b09927dde8252f8\",\"root\":\"0x037df90812ea9ac3caba3cdbfb64549ba0f8a3c2a820a175be21eed06812782b\",\"batchHash\":\"0xd9b80629f9abad83699aaa4dba64e6db48fbba43f75a4ef58e66fb21546ef8e6\",\"publication\":\"0xaf36221703a5bddc41939861d49461284bb930e62a61dc071ce8a30c31f1929c\",\"publicationStatus\":\"RETAINED_VERIFIED_TESTNET_RECEIPT\",\"resultProvenance\":\"SYNTHETIC_TEST\",\"finalHashes\":[\"0x8172255e362a9bfa69fda8f09b2a5eec58d0a8870e5daad334ddf73e40735b63\",\"0xa242d8973c96c72ca63ac462e8482714ec3032bb178eefa5140001716b2dfa24\",\"0x47e0e897ee5cc7a36baeccc5900edb0abb5c32b6f9b0303cc14cccefae97fd9a\"],\"evaluationHashes\":[\"0x194ad37fb71a3b44ae82f38fed909469beccfdfb0abf805ada2c84ac8e4281b5\",\"0x3ce440694abb9b9c82984df583451f4b86fa88414c8e9905c4f03926859b8b45\",\"0x7fed481dfd923ca4f7b538eabf34dbb07c0c33cdfb8845f0a2f865ffe7ff23dd\"],\"automaticFundingEnabled\":false}"
+    },
+    {
+      "name": "Ethereum forward activation boundary",
+      "script": "scripts/demo-forward-gate.ts",
+      "args": [],
+      "status": "SKIPPED_TO_VERIFY",
+      "elapsedMilliseconds": 557,
+      "output": "{\"status\":\"SKIPPED_TO_VERIFY\",\"profileId\":\"ethereum-forward\",\"blockers\":[\"PROFILE_DISABLED\",\"network:ethereum-mainnet\",\"instrument:eth-cash-usdc\",\"instrument:eth-cash-usdt\",\"instrument:eth-aave-usdc\",\"instrument:eth-aave-usdt\",\"instrument:eth-vault-usdc\",\"dependency:rpc-ethereum-mainnet\",\"dependency:cash-ethereum-mainnet\",\"dependency:aave-v3-ethereum\",\"dependency:erc4626-ethereum\",\"dependency:uniswap-v3-ethereum\",\"dependency:eth-usdc-conversion\",\"dependency:archive-storage\"],\"freshEthereumSession\":false,\"forwardObservationCount\":\"0\",\"automaticFundingEnabled\":false}"
+    },
+    {
+      "name": "Local deployment dashboard, incidents, controls and export",
+      "script": "tests/smoke.ts",
+      "args": [],
+      "status": "PASS",
+      "elapsedMilliseconds": 935,
+      "output": "PASS: API database readiness, validated disabled catalog, web renders canonical hash/provenance, operational state, authenticated controls and configured dashboard/export or explicit unavailable state"
+    }
+  ],
+  "limitations": [
+    "Timing measures software rehearsal, not the economic observation period.",
+    "Retained testnet receipts retain their original block/date; no new transaction is claimed by replay.",
+    "Longer August replay inputs are synthetic; they add no forward observations."
+  ],
+  "automaticFundingEnabled": false
+}

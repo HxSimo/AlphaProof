@@ -1,6 +1,10 @@
 import assert from 'node:assert/strict';
 import { setTimeout } from 'node:timers/promises';
-import { CatalogResponse } from '@poa/schemas';
+import {
+  CatalogResponse,
+  DashboardResponse,
+  OperationsSnapshot,
+} from '@poa/schemas';
 
 const api = process.env.SMOKE_API_URL ?? 'http://localhost:3001';
 const web = process.env.SMOKE_WEB_URL ?? 'http://localhost:3000';
@@ -29,7 +33,42 @@ assert.ok(
 for (const profile of data.profiles)
   assert.ok(html.includes(profile.resultProvenance));
 assert.ok(html.includes('CANONICAL READ-ONLY DASHBOARD'));
-assert.ok(html.includes('No canonical demo experiment is configured'));
+const operations = OperationsSnapshot.parse(
+  await (await ready(`${api}/health/operations`)).json(),
+);
+assert.equal(operations.automaticFundingEnabled, false);
+assert.ok(html.includes('Operations'));
+const experimentId = process.env.POA_DEMO_EXPERIMENT_ID;
+if (experimentId) {
+  const dashboard = DashboardResponse.parse(
+    await (
+      await ready(`${api}/v1/experiments/${experimentId}/dashboard`)
+    ).json(),
+  );
+  assert.equal(dashboard.scenarios.length, 3);
+  assert.ok(dashboard.incidents.length > 0);
+  assert.ok(html.includes('REFERENCE_UNAVAILABLE'));
+  assert.ok(html.includes('WORKER_INTERRUPTED'));
+  assert.ok(html.includes('Correlated policy views'));
+  assert.ok(html.includes('NOT_ELIGIBLE_FOR_REAL_CAPITAL'));
+  if (dashboard.commitment)
+    assert.ok(html.includes(dashboard.commitment.batch.root));
+  const download = await ready(`${web}/exports/${experimentId}`);
+  assert.ok(
+    download.headers.get('content-disposition')?.includes('attachment'),
+  );
+  assert.equal((await download.json()).policy.experimentId, experimentId);
+  assert.equal(
+    (
+      await fetch(`${api}/v1/agents`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: '{}',
+      })
+    ).status,
+    401,
+  );
+} else assert.ok(html.includes('No canonical demo experiment is configured'));
 console.log(
-  'PASS: API database readiness, validated disabled catalog, web renders canonical hash/provenance and explicit missing-dashboard state',
+  'PASS: API database readiness, validated disabled catalog, web renders canonical hash/provenance, operational state, authenticated controls and configured dashboard/export or explicit unavailable state',
 );

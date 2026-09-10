@@ -156,7 +156,7 @@ try {
     ),
   );
   assert.equal(dashboard.effectiveIndependentSampleCount, '1');
-  assert.equal(dashboard.commitment.verified, true);
+  assert.equal(dashboard.commitment!.verified, true);
   await test.pool.query(
     `INSERT INTO experiments(experiment_id,agent_id,version_id,profile_id,state,created_at)
      SELECT 'm6-export-fixture',agent_id,version_id,profile_id,'DRAFT',clock_timestamp()

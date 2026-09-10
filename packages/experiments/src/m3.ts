@@ -43,6 +43,14 @@ export async function prepareSyntheticM3Execution(input: M3ExecutionInput) {
       assetAddresses: { 'ethereum-mainnet/usdc': input.usdcAddress },
     },
   );
+  const observedAt = new Date(
+    Math.max(
+      Date.parse(input.receivedAt) +
+        input.profile.execution.firstEthereumStepBlockOffset * 1000,
+      Date.parse(input.portfolio.lastAppliedAt ?? input.receivedAt) +
+        input.profile.execution.nextEthereumStepBlockOffset * 1000,
+    ),
+  ).toISOString();
   const amount = plan.steps.at(-1)!.input.minor;
   const amountSize = BigInt(amount);
   const archive = new MemoryObjectArchive();
@@ -53,7 +61,7 @@ export async function prepareSyntheticM3Execution(input: M3ExecutionInput) {
     id: string,
     payload: unknown,
   ): Promise<ArchivedObservationData> {
-    const rawObject = await archiveJson(archive, payload, input.receivedAt);
+    const rawObject = await archiveJson(archive, payload, observedAt);
     return createObservation({
       observationId: `${input.actionId}-${id}`,
       sourceId: `synthetic-m3-${id}`,
@@ -61,7 +69,7 @@ export async function prepareSyntheticM3Execution(input: M3ExecutionInput) {
       parserVersion: '1.0.0',
       adapterVersion: '1.0.0',
       requestedAt: input.receivedAt,
-      observedAt: input.receivedAt,
+      observedAt,
       expiresAt,
       block: null,
       rawObject,
@@ -114,7 +122,7 @@ export async function prepareSyntheticM3Execution(input: M3ExecutionInput) {
       usdcMinorNumerator: '3000000000',
       weiDenominator: '1000000000000000000',
       roundId: `${input.actionId}-synthetic`,
-      answerUpdatedAt: input.receivedAt,
+      answerUpdatedAt: observedAt,
       heartbeatSeconds: '3600',
     }),
   );
@@ -124,8 +132,8 @@ export async function prepareSyntheticM3Execution(input: M3ExecutionInput) {
       experimentId: input.policy.experimentId,
       scenarioId: input.portfolio.scenarioId,
       expectedPortfolioVersion: input.portfolio.version,
-      observedAt: input.receivedAt,
-      evaluationTime: input.receivedAt,
+      observedAt,
+      evaluationTime: observedAt,
       resultProvenance: 'SYNTHETIC_TEST',
       cashViewId: 'eth-usdc-view',
       cashBalanceFamilyId: 'eth-usdc-family',
@@ -143,6 +151,15 @@ export async function prepareSyntheticM3Execution(input: M3ExecutionInput) {
       operationPrefix: input.actionId,
     },
   );
+  const receiptTimes = result.receipts.map((_, index) =>
+    new Date(
+      Date.parse(observedAt) +
+        index * input.profile.execution.nextEthereumStepBlockOffset * 1000,
+    ).toISOString(),
+  );
+  result.receipts.forEach((receipt, index) => {
+    receipt.observedAt = receiptTimes[index]!;
+  });
   const totalCost = result.receipts
     .flatMap((receipt) => ('costs' in receipt ? receipt.costs : []))
     .reduce((sum, cost) => sum + BigInt(cost.amountUsdcMinor), 0n);
@@ -163,6 +180,11 @@ export async function prepareSyntheticM3Execution(input: M3ExecutionInput) {
     syntheticInputBundle: {
       schemaVersion: 'proof-of-alpha/m3-synthetic-input-bundle/v1',
       resultProvenance: 'SYNTHETIC_TEST',
+      timing: {
+        rule: 'SYNTHETIC_ONE_SECOND_PER_BLOCK_OFFSET',
+        receivedAt: input.receivedAt,
+        receiptTimes,
+      },
       observations: [reserve, approvalGas, supplyGas, conversion],
       rawObjects,
       adapterResultHash: result.sourceHash,
@@ -172,7 +194,7 @@ export async function prepareSyntheticM3Execution(input: M3ExecutionInput) {
         experimentId: input.policy.experimentId,
         scenarioId: input.portfolio.scenarioId,
         expectedPortfolioVersion: input.portfolio.version,
-        observedAt: input.receivedAt,
+        observedAt,
         amountMinor: amount,
         instrumentId: 'eth-aave-usdc',
         positionId: `${input.actionId}-position`,
@@ -232,6 +254,19 @@ export async function replaySyntheticM3Bundle(bundle: any) {
       operationPrefix: replay.operationPrefix,
     },
   );
+  if (bundle.timing)
+    result.receipts.forEach((receipt, index) => {
+      const at = bundle.timing.receiptTimes[index];
+      if (
+        typeof at !== 'string' ||
+        Date.parse(at) <= Date.parse(bundle.timing.receivedAt)
+      )
+        throw new PoaError(
+          'REPLAY_MISMATCH',
+          'Invalid synthetic prospective timing',
+        );
+      receipt.observedAt = at;
+    });
   const receiptsHash = contentHash(result.receipts);
   if (receiptsHash !== bundle.expectedReceiptsHash)
     throw new PoaError(

@@ -3,6 +3,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { contentHash, PoaError } from '@poa/domain';
 import {
+  OperationsPolicy,
   DependencyManifest,
   InstrumentManifest,
   NetworkManifest,
@@ -380,4 +381,12 @@ export function catalog() {
     bundleHash: seal.bundleHash,
     profiles: bundle.profiles.profiles.map((p) => profileReadiness(p, bundle)),
   };
+}
+
+export function loadOperationsPolicy() {
+  return OperationsPolicy.parse(
+    JSON.parse(
+      readFileSync(join(defaultConfigDir, '../operations-v1.json'), 'utf8'),
+    ),
+  );
 }

@@ -42,6 +42,10 @@ export async function isolatedRepository(
     repository,
     config,
     schema,
+    closeRetained: async () => {
+      await pool.end();
+      await admin.end();
+    },
     cleanup: async () => {
       await pool.end();
       await admin.query(`DROP SCHEMA ${schema} CASCADE`);

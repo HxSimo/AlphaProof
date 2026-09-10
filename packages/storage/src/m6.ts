@@ -47,7 +47,7 @@ export class M6Repository {
     }
   }
 
-  private async appendAuditObjectWith(
+  async appendAuditObjectWith(
     client: PoolClient,
     input: {
       experimentId: string;
@@ -409,21 +409,29 @@ export class M6Repository {
         [experimentId],
       )
     ).rows[0];
-    if (!commitment)
-      throw new PoaError('EXPORT_INCOMPLETE', 'Dashboard commitment is absent');
-    const pendingBatch = CommitmentBatch.parse(commitment.batch);
-    const receipt = RegistryPublicationReceipt.parse(commitment.receipt);
-    const batch = CommitmentBatch.parse({
-      ...pendingBatch,
-      status: 'CONFIRMED',
-      transactionHash: receipt.transactionHash,
-      block: receipt.block,
-    });
-    const proof = MerkleProof.parse(commitment.proof);
-    verifyProof(proof);
-    verifyPublication(pendingBatch, receipt);
+    let verifiedCommitment = null;
+    if (commitment) {
+      const pendingBatch = CommitmentBatch.parse(commitment.batch);
+      const receipt = RegistryPublicationReceipt.parse(commitment.receipt);
+      const batch = CommitmentBatch.parse({
+        ...pendingBatch,
+        status: 'CONFIRMED',
+        transactionHash: receipt.transactionHash,
+        block: receipt.block,
+      });
+      const proof = MerkleProof.parse(commitment.proof);
+      verifyProof(proof);
+      verifyPublication(pendingBatch, receipt);
+      verifiedCommitment = {
+        batch,
+        proof,
+        registryReceipt: receipt,
+        verified: true,
+        timingClaim: 'POST_EXECUTION_INTEGRITY_ONLY',
+      };
+    }
     return DashboardResponse.parse({
-      schemaVersion: 'proof-of-alpha/dashboard/v1',
+      schemaVersion: 'proof-of-alpha/dashboard/v2',
       experimentId,
       policyHash: policyRow.policy_hash,
       networkProfile: policyRow.policy.networkProfile,
@@ -437,14 +445,21 @@ export class M6Repository {
         descriptiveEvaluation: ScenarioEvaluation.parse(row.evaluation),
         eligibility: EvaluationReceipt.parse(row.eligibility),
       })),
-      incidents: [],
-      commitment: {
-        batch,
-        proof,
-        registryReceipt: receipt,
-        verified: true,
-        timingClaim: 'POST_EXECUTION_INTEGRITY_ONLY',
-      },
+      incidents: (
+        await this.pool.query(
+          'SELECT payload,content_hash FROM operation_incidents WHERE experiment_id=$1 ORDER BY occurred_at,incident_id',
+          [experimentId],
+        )
+      ).rows.map((row) => ({
+        objectType: 'INCIDENT',
+        schemaVersion: row.payload.schemaVersion,
+        experimentId,
+        scenarioId: row.payload.scenarioId,
+        resultProvenance: row.payload.resultProvenance,
+        contentHash: row.content_hash,
+        payload: row.payload,
+      })),
+      commitment: verifiedCommitment,
       limitations: [
         'Three capital sizes are correlated views of one policy and one independent statistical sample.',
         'Periodic Arc anchoring proves integrity after publication, not public receipt before execution.',

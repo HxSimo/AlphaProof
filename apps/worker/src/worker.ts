@@ -4,11 +4,12 @@ import {
   databaseReady,
   ExperimentRepository,
   TransferRepository,
+  OperationsRepository,
   type Pool,
 } from '@poa/storage';
 import { PoaError } from '@poa/domain';
 import { prepareSyntheticM3Execution } from '@poa/experiments';
-import type { AccountingReceiptData, ProfileData } from '@poa/schemas';
+import type { AccountingReceiptData } from '@poa/schemas';
 import type {
   AccountingCostData,
   CctpTransferData,
@@ -50,11 +51,32 @@ export async function runActionWorkerOnce(
 ) {
   const job = await repository.claimJob(workerId, 1);
   if (!job) return { status: 'IDLE' as const };
+  if (job.exhausted) {
+    await repository.retryJob(job.actionId, 'LEASE_EXPIRED');
+    return {
+      status: 'FAILED' as const,
+      actionId: job.actionId,
+      code: 'RETRY_EXHAUSTED',
+    };
+  }
   try {
     const action = await repository.loadExecution(job.actionId);
+    if (job.recoveredLease)
+      await new OperationsRepository(repository.pool).recordIncident({
+        incidentId: job.actionId + '-lease-' + job.attempt,
+        experimentId: action.experimentId,
+        scenarioId: action.scenarioId,
+        code: 'WORKER_INTERRUPTED',
+        severity: 'WARNING',
+        message:
+          'Expired worker lease reclaimed; durable plan and successful receipts preserved.',
+        evidenceHashes: [],
+        resolvesIncidentId: null,
+      });
     if (
+      (await repository.receiptCount(job.actionId)) === 0 &&
       BigInt(action.envelope.request.intent.validUntil) <=
-      BigInt(Math.floor((hooks.now?.() ?? Date.now()) / 1000))
+        BigInt(Math.floor((hooks.now?.() ?? Date.now()) / 1000))
     ) {
       await repository.completeAction(job.actionId, 'EXPIRED', ['EXPIRED']);
       return { status: 'EXPIRED' as const, actionId: job.actionId };
@@ -62,19 +84,12 @@ export async function runActionWorkerOnce(
     let stored = await repository.loadPlan(job.actionId);
     if (!stored) {
       const bundle = loadBundle();
-      const sourceProfile = bundle.bundle.profiles.profiles.find(
-        (profile) => profile.profileId === 'ethereum-forward',
-      )!;
-      const profile: ProfileData =
-        action.policy.resultProvenance === 'SYNTHETIC_TEST'
-          ? {
-              ...structuredClone(sourceProfile),
-              profileId: 'synthetic-m3-local',
-              enabled: true,
-              resultProvenance: 'SYNTHETIC_TEST',
-              requiredDependencyIds: [],
-            }
-          : sourceProfile;
+      const profile = action.profile;
+      if (action.policy.resultProvenance !== 'SYNTHETIC_TEST')
+        throw new PoaError(
+          'DEPENDENCY_UNVERIFIED',
+          'External action execution remains disabled',
+        );
       const usdcAddress = bundle.bundle.networks.networks
         .find((network) => network.networkId === 'ethereum-mainnet')!
         .assets.find((asset) => asset.assetId === 'usdc')!.address!;

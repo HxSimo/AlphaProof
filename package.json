@@ -12,8 +12,8 @@
     "build": "pnpm -r build",
     "typecheck": "tsc --noEmit && pnpm -r typecheck",
     "test": "vitest run",
-    "test:db": "node --env-file-if-exists=.env --import tsx tests/database/foundation.ts && node --env-file-if-exists=.env --import tsx tests/database/m3.ts && node --env-file-if-exists=.env --import tsx tests/database/m4.ts && node --env-file-if-exists=.env --import tsx tests/database/m5.ts && node --env-file-if-exists=.env --import tsx tests/database/m6.ts",
-    "test:replay": "node --import tsx tests/replay/m2.ts && node --import tsx tests/replay/m4.ts && node --import tsx tests/replay/m5.ts && node --import tsx tests/replay/m6.ts",
+    "test:db": "node --env-file-if-exists=.env --import tsx tests/database/foundation.ts && node --env-file-if-exists=.env --import tsx tests/database/m3.ts && node --env-file-if-exists=.env --import tsx tests/database/m4.ts && node --env-file-if-exists=.env --import tsx tests/database/m5.ts && node --env-file-if-exists=.env --import tsx tests/database/m6.ts && node --env-file-if-exists=.env --import tsx tests/database/m7.ts",
+    "test:replay": "node --import tsx tests/replay/m2.ts && node --import tsx tests/replay/m4.ts && node --import tsx tests/replay/m5.ts && node --import tsx tests/replay/m6.ts && node --import tsx tests/replay/m7.ts",
     "test:e2e:signed-intent": "node --env-file-if-exists=.env --import tsx tests/end-to-end/signed-intent.ts",
     "test:e2e:scenarios": "node --env-file-if-exists=.env --import tsx tests/end-to-end/scenarios.ts",
     "test:e2e:export-proof": "node --env-file-if-exists=.env --import tsx tests/end-to-end/export-proof.ts",
@@ -38,7 +38,16 @@
     "plan": "node --env-file-if-exists=.env --import tsx scripts/plan.ts",
     "check": "pnpm format:check && pnpm typecheck && pnpm config:validate && pnpm schemas:check && pnpm plan:check && pnpm test && pnpm build",
     "smoke": "node --env-file-if-exists=.env --import tsx tests/smoke.ts",
-    "plan:check": "node --import tsx scripts/plan.ts --check"
+    "plan:check": "node --import tsx scripts/plan.ts --check",
+    "test:e2e:demo": "node --env-file-if-exists=.env --import tsx scripts/demo-session.ts --test",
+    "demo:prepare": "node --env-file-if-exists=.env --import tsx scripts/demo-session.ts",
+    "demo:diagnostics": "node --import tsx scripts/demo-diagnostics.ts",
+    "demo:replay": "node --import tsx scripts/replay-demo-session.ts",
+    "demo:publish": "node --env-file-if-exists=.env --import tsx scripts/publish-demo-session.ts",
+    "test:evidence:m7": "node --env-file-if-exists=.env --import tsx scripts/publish-demo-session.ts --verify",
+    "demo:forward-gate": "node --import tsx scripts/demo-forward-gate.ts",
+    "demo:rehearse": "node --env-file-if-exists=.env --import tsx scripts/demo-rehearse.ts",
+    "demo:configure": "node --env-file-if-exists=.env --import tsx scripts/demo-configure.ts"
   },
   "devDependencies": {
     "typescript": "5.9.3",

@@ -1,13 +1,19 @@
 import Fastify from 'fastify';
+import { timingSafeEqual } from 'node:crypto';
 import { catalog } from '@poa/config';
-import { PoaError } from '@poa/domain';
+import { PoaError, contentHash } from '@poa/domain';
 import {
+  IncidentInput,
   ActionEnvelope,
   AgentRegistration,
   AgentVersionRegistration,
   ExperimentCreateRequest,
 } from '@poa/schemas';
-import type { ExperimentRepository, M6Repository } from '@poa/storage';
+import type {
+  ExperimentRepository,
+  M6Repository,
+  OperationsRepository,
+} from '@poa/storage';
 
 export function createServer(
   checkDatabase: () => Promise<void> = async () => {
@@ -15,26 +21,102 @@ export function createServer(
   },
   repository?: ExperimentRepository,
   m6Repository?: M6Repository,
+  options: {
+    operations?: OperationsRepository;
+    controlToken?: string;
+    requireControlAuth?: boolean;
+  } = {},
 ) {
   const config = catalog();
-  const app = Fastify({ bodyLimit: 65536, logger: false });
+  const app = Fastify({ bodyLimit: 65536, logger: false, trustProxy: false });
+  app.addHook('onRequest', async (request, reply) => {
+    if (options.operations && !request.url.startsWith('/health/')) {
+      const allowed = await options.operations.consumeRequest(
+        contentHash({ ip: request.ip }),
+      );
+      if (!allowed)
+        return reply
+          .code(429)
+          .header(
+            'retry-after',
+            String(options.operations.policy.requestWindowSeconds),
+          )
+          .send({
+            code: 'RATE_LIMITED',
+            message: 'Request quota reached; retry after the current window',
+          });
+    }
+    const control =
+      request.method !== 'GET' &&
+      request.method !== 'HEAD' &&
+      !/^\/v1\/experiments\/[^/]+\/actions$/.test(request.url);
+    if (control && options.requireControlAuth) {
+      const expected = options.controlToken;
+      const supplied = request.headers.authorization?.startsWith('Bearer ')
+        ? request.headers.authorization.slice(7)
+        : '';
+      if (
+        !expected ||
+        expected.length < 32 ||
+        Buffer.byteLength(supplied) !== Buffer.byteLength(expected) ||
+        !timingSafeEqual(Buffer.from(supplied), Buffer.from(expected))
+      )
+        throw new PoaError(
+          'AUTH_REQUIRED',
+          'Operator authorization is required for registry and lifecycle changes',
+        );
+    }
+  });
+  if (options.operations) {
+    app.get('/health/operations', async () => options.operations!.snapshot());
+    app.get<{ Params: { experimentId: string } }>(
+      '/v1/experiments/:experimentId/demo-export',
+      async (request) =>
+        options.operations!.demoSession(request.params.experimentId),
+    );
+    app.get<{ Params: { experimentId: string } }>(
+      '/v1/experiments/:experimentId/incidents',
+      async (request) =>
+        options.operations!.incidents(request.params.experimentId),
+    );
+    app.post('/v1/incidents', async (request) =>
+      options.operations!.recordIncident(IncidentInput.parse(request.body)),
+    );
+    app.post<{ Params: { experimentId: string } }>(
+      '/v1/experiments/:experimentId/stop',
+      async (request) => {
+        const body = request.body as { reason?: unknown };
+        if (typeof body?.reason !== 'string')
+          throw new PoaError('INVALID_SCHEMA', 'Stop reason is required');
+        return options.operations!.stopExperiment(
+          request.params.experimentId,
+          body.reason,
+        );
+      },
+    );
+  }
   app.setErrorHandler((error, _request, reply) => {
     if (error instanceof PoaError) {
-      const status = [
-        'AGENT_NOT_FOUND',
-        'AGENT_VERSION_NOT_FOUND',
-        'EXPERIMENT_NOT_FOUND',
-      ].includes(error.code)
-        ? 404
-        : [
-              'SCENARIO_BUSY',
-              'STALE_PORTFOLIO',
-              'NONCE_USED',
-              'IDEMPOTENCY_CONFLICT',
-              'EXPERIMENT_LOCKED',
-            ].includes(error.code)
-          ? 409
-          : 422;
+      const status =
+        error.code === 'AUTH_REQUIRED'
+          ? 401
+          : error.code === 'QUOTA_EXCEEDED'
+            ? 429
+            : [
+                  'AGENT_NOT_FOUND',
+                  'AGENT_VERSION_NOT_FOUND',
+                  'EXPERIMENT_NOT_FOUND',
+                ].includes(error.code)
+              ? 404
+              : [
+                    'SCENARIO_BUSY',
+                    'STALE_PORTFOLIO',
+                    'NONCE_USED',
+                    'IDEMPOTENCY_CONFLICT',
+                    'EXPERIMENT_LOCKED',
+                  ].includes(error.code)
+                ? 409
+                : 422;
       return reply
         .code(status)
         .send({ code: error.code, message: error.message });
@@ -44,6 +126,10 @@ export function createServer(
         code: 'INVALID_SCHEMA',
         message: 'Request does not match the canonical schema',
       });
+    if ((error as { statusCode?: number }).statusCode === 400)
+      return reply
+        .code(400)
+        .send({ code: 'INVALID_SCHEMA', message: 'Malformed request body' });
     if ((error as { statusCode?: number }).statusCode === 413)
       return reply.code(413).send({
         code: 'PAYLOAD_TOO_LARGE',
@@ -59,7 +145,7 @@ export function createServer(
       message: 'Request could not be completed',
     });
   });
-  app.get('/health/live', async () => ({ status: 'ok', milestone: 'M6' }));
+  app.get('/health/live', async () => ({ status: 'ok', milestone: 'M7' }));
   app.get('/health/ready', async (_, reply) => {
     try {
       await checkDatabase();

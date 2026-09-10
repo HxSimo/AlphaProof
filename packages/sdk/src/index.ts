@@ -248,13 +248,21 @@ export class ProofOfAlphaClient {
 }
 
 export class FetchTransport implements ApiTransport {
-  constructor(private readonly baseUrl: string) {}
+  constructor(
+    private readonly baseUrl: string,
+    private readonly controlToken?: string,
+  ) {}
   async request<T>(method: 'GET' | 'POST', path: string, body?: unknown) {
-    const init: RequestInit = { method };
+    const init: RequestInit = { method, signal: AbortSignal.timeout(15000) };
     if (body !== undefined) {
       init.headers = { 'content-type': 'application/json' };
       init.body = JSON.stringify(body);
     }
+    if (this.controlToken && method === 'POST' && !path.endsWith('/actions'))
+      init.headers = {
+        ...init.headers,
+        authorization: 'Bearer ' + this.controlToken,
+      };
     const response = await fetch(new URL(path, this.baseUrl), init);
     const result = (await response.json()) as T & {
       code?: string;

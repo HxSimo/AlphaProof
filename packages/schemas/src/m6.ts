@@ -162,7 +162,7 @@ export const DashboardScenario = z.strictObject({
   eligibility: EvaluationReceipt,
 });
 
-export const DashboardResponse = z
+export const DashboardResponseV1 = z
   .strictObject({
     schemaVersion: z.literal('proof-of-alpha/dashboard/v1'),
     experimentId: Id,
@@ -198,6 +198,28 @@ export const DashboardResponse = z
         code: 'custom',
         message:
           'Dashboard requires three distinct independently ordered scenarios',
+      });
+  });
+
+// Old reports retain the v1 schema; v2 can show canonical economics while an
+// integrity publication is unavailable, without inventing a confirmed root.
+export const DashboardResponse = z
+  .strictObject({
+    ...DashboardResponseV1.shape,
+    schemaVersion: z.literal('proof-of-alpha/dashboard/v2'),
+    commitment: DashboardResponseV1.shape.commitment.nullable(),
+  })
+  .superRefine((dashboard, ctx) => {
+    const amounts = dashboard.scenarios.map((s) =>
+      BigInt(s.initialAmountUsdcMinor),
+    );
+    if (
+      new Set(dashboard.scenarios.map((s) => s.scenarioId)).size !== 3 ||
+      amounts.some((n, i) => i > 0 && n <= amounts[i - 1]!)
+    )
+      ctx.addIssue({
+        code: 'custom',
+        message: 'Dashboard scenarios must be unique and independently ordered',
       });
   });
 

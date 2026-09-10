@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "proof-of-alpha/operations-policy/v1",
+  "version": "0.7.0",
+  "parameterStatus": "PROPOSED_NOT_PRODUCTION",
+  "requestWindowSeconds": 60,
+  "requestsPerWindowPerClient": 120,
+  "maxActiveAgents": 10,
+  "maxActiveExperimentsPerAgentProfile": 1,
+  "workerStaleSeconds": 90,
+  "queueAlertSeconds": 120,
+  "automaticFundingEnabled": false
+}

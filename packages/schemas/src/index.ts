@@ -8,3 +8,7 @@ export * from './experiment.js';
 export * from './evaluation.js';
 export * from './transfer.js';
 export * from './m6.js';
+
+export * from './operations.js';
+
+export * from './demo.js';

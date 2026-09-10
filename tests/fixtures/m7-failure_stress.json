@@ -1,0 +1,2369 @@
+{
+  "schemaVersion": "proof-of-alpha/demo-diagnostic/v1",
+  "diagnosticVersion": "0.7.0",
+  "kind": "FAILURE_STRESS",
+  "presentationProvenance": "SYNTHETIC_TEST",
+  "sourceProvenance": "SYNTHETIC_TEST",
+  "periodStartsAt": "2026-08-01T00:00:00.000Z",
+  "periodEndsAt": "2026-08-01T01:15:00.000Z",
+  "sourceDescription": "Deterministic authored synthetic amount-specific inputs; dates are illustrative. No historical market observation or transaction is claimed.",
+  "scenarios": [
+    {
+      "initial": {
+        "schemaVersion": "proof-of-alpha/shadow-portfolio/v1",
+        "accountingVersion": "1.0.0",
+        "experimentId": "m7-failure-stress",
+        "scenarioId": "capital-1k",
+        "portfolioId": "m7-failure-stress-capital-1k",
+        "resultProvenance": "SYNTHETIC_TEST",
+        "unitOfAccount": "USDC",
+        "unitDecimals": 6,
+        "initialValueUsdcMinor": "1000000000",
+        "maxDestinationAttempts": "3",
+        "version": "0",
+        "balanceViews": [
+          {
+            "viewId": "arc-usdc",
+            "networkId": "arc-testnet",
+            "assetId": "usdc",
+            "balanceFamilyId": "arc-usdc",
+            "decimals": 6,
+            "canonicalDecimals": 6
+          },
+          {
+            "viewId": "ethereum-usdc",
+            "networkId": "ethereum-mainnet",
+            "assetId": "usdc",
+            "balanceFamilyId": "ethereum-usdc",
+            "decimals": 6,
+            "canonicalDecimals": 6
+          }
+        ],
+        "cash": [
+          {
+            "balanceFamilyId": "arc-usdc",
+            "networkId": "arc-testnet",
+            "assetId": "usdc",
+            "amountUsdcMinor": "0"
+          },
+          {
+            "balanceFamilyId": "ethereum-usdc",
+            "networkId": "ethereum-mainnet",
+            "assetId": "usdc",
+            "amountUsdcMinor": "1000000000"
+          }
+        ],
+        "reservations": [],
+        "positions": [],
+        "receivables": [],
+        "payables": [],
+        "allowances": [],
+        "recognizedCosts": [],
+        "modeledPnlUsdcMinor": "0",
+        "appliedReceipts": [],
+        "lastAppliedAt": null,
+        "closedAt": null,
+        "deadlineStateHash": null
+      },
+      "receipts": [
+        {
+          "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+          "accountingVersion": "1.0.0",
+          "operationId": "m7-failure-stress-capital-1k-0",
+          "experimentId": "m7-failure-stress",
+          "scenarioId": "capital-1k",
+          "expectedPortfolioVersion": "0",
+          "observedAt": "2026-08-01T00:01:00.000Z",
+          "resultProvenance": "SYNTHETIC_TEST",
+          "sourceHashes": [
+            "0x5a9379e7de355e95622f5617f27fa42c361f0de37910c243650cbe25f4d2c319"
+          ],
+          "costs": [
+            {
+              "costId": "m7-failure-stress-capital-1k-0-gas",
+              "category": "APPROVAL_GAS",
+              "funding": "AVAILABLE_CASH",
+              "amountUsdcMinor": "3100000",
+              "networkId": "ethereum-mainnet",
+              "cashBalanceFamilyId": "ethereum-usdc",
+              "sourceHash": "0x5a9379e7de355e95622f5617f27fa42c361f0de37910c243650cbe25f4d2c319"
+            }
+          ],
+          "kind": "APPROVE",
+          "allowanceId": "capital-1k-allowance",
+          "networkId": "ethereum-mainnet",
+          "assetId": "usdc",
+          "spenderId": "synthetic-aave",
+          "amountMinor": "400000000"
+        },
+        {
+          "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+          "accountingVersion": "1.0.0",
+          "operationId": "m7-failure-stress-capital-1k-1",
+          "experimentId": "m7-failure-stress",
+          "scenarioId": "capital-1k",
+          "expectedPortfolioVersion": "1",
+          "observedAt": "2026-08-01T00:02:00.000Z",
+          "resultProvenance": "SYNTHETIC_TEST",
+          "sourceHashes": [
+            "0xfae3e4f3f0c46323d92e548e5831b8dbbce1905ffe15a2d8ac69b695e8381919"
+          ],
+          "costs": [
+            {
+              "costId": "m7-failure-stress-capital-1k-1-gas",
+              "category": "EXECUTION_GAS",
+              "funding": "AVAILABLE_CASH",
+              "amountUsdcMinor": "3100000",
+              "networkId": "ethereum-mainnet",
+              "cashBalanceFamilyId": "ethereum-usdc",
+              "sourceHash": "0xfae3e4f3f0c46323d92e548e5831b8dbbce1905ffe15a2d8ac69b695e8381919"
+            }
+          ],
+          "kind": "DEPOSIT",
+          "cashViewId": "ethereum-usdc",
+          "positionId": "capital-1k-position",
+          "instrumentId": "eth-aave-usdc",
+          "sharesCreditMinor": "400000000",
+          "indexNumerator": "1",
+          "indexDenominator": "1",
+          "inputUsdcMinor": "400000000"
+        },
+        {
+          "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+          "accountingVersion": "1.0.0",
+          "operationId": "m7-failure-stress-capital-1k-2",
+          "experimentId": "m7-failure-stress",
+          "scenarioId": "capital-1k",
+          "expectedPortfolioVersion": "2",
+          "observedAt": "2026-08-01T00:03:00.000Z",
+          "resultProvenance": "SYNTHETIC_TEST",
+          "sourceHashes": [
+            "0x00a12feb7d3879b9ff998650e6eed2de9dad55f6b1ab8cba8519d43d4f5cfc1f"
+          ],
+          "costs": [
+            {
+              "costId": "m7-failure-stress-capital-1k-2-gas",
+              "category": "EXECUTION_GAS",
+              "funding": "AVAILABLE_CASH",
+              "amountUsdcMinor": "3100000",
+              "networkId": "ethereum-mainnet",
+              "cashBalanceFamilyId": "ethereum-usdc",
+              "sourceHash": "0x00a12feb7d3879b9ff998650e6eed2de9dad55f6b1ab8cba8519d43d4f5cfc1f"
+            }
+          ],
+          "kind": "WITHDRAW",
+          "cashViewId": "ethereum-usdc",
+          "positionId": "capital-1k-position",
+          "sharesDebitMinor": "400000000",
+          "cashCreditUsdcMinor": "400000000"
+        },
+        {
+          "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+          "accountingVersion": "1.0.0",
+          "operationId": "m7-failure-stress-capital-1k-3",
+          "experimentId": "m7-failure-stress",
+          "scenarioId": "capital-1k",
+          "expectedPortfolioVersion": "3",
+          "observedAt": "2026-08-01T00:04:00.000Z",
+          "resultProvenance": "SYNTHETIC_TEST",
+          "sourceHashes": [
+            "0xe67781fa5d844056c14394944a320d89a91c7a14cde7a1c802a80d339a54ad65"
+          ],
+          "costs": [
+            {
+              "costId": "m7-failure-stress-capital-1k-3-gas",
+              "category": "EXECUTION_GAS",
+              "funding": "AVAILABLE_CASH",
+              "amountUsdcMinor": "1400000",
+              "networkId": "ethereum-mainnet",
+              "cashBalanceFamilyId": "ethereum-usdc",
+              "sourceHash": "0xe67781fa5d844056c14394944a320d89a91c7a14cde7a1c802a80d339a54ad65"
+            }
+          ],
+          "kind": "COST",
+          "status": "FAILED_AFTER_ATTEMPT",
+          "reasonCode": "SWAP_FAILED_SYNTHETIC"
+        },
+        {
+          "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+          "accountingVersion": "1.0.0",
+          "operationId": "m7-failure-stress-capital-1k-4",
+          "experimentId": "m7-failure-stress",
+          "scenarioId": "capital-1k",
+          "expectedPortfolioVersion": "4",
+          "observedAt": "2026-08-01T00:05:00.000Z",
+          "resultProvenance": "SYNTHETIC_TEST",
+          "sourceHashes": [
+            "0x3fb9b89dbfb85d92f2c15b3bad990fe54d3a9fa844b20fe60522a8e99c86bd2f"
+          ],
+          "costs": [],
+          "kind": "RESERVE",
+          "reservationId": "capital-1k-reservation",
+          "cashViewId": "ethereum-usdc",
+          "amountUsdcMinor": "200000000"
+        },
+        {
+          "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+          "accountingVersion": "1.0.0",
+          "operationId": "m7-failure-stress-capital-1k-5",
+          "experimentId": "m7-failure-stress",
+          "scenarioId": "capital-1k",
+          "expectedPortfolioVersion": "5",
+          "observedAt": "2026-08-01T00:06:00.000Z",
+          "resultProvenance": "SYNTHETIC_TEST",
+          "sourceHashes": [
+            "0xd29543fa6774fa6a71ed92c7b8bced0724fffeac5c99721fa07899a49eb9e06e"
+          ],
+          "costs": [
+            {
+              "costId": "m7-failure-stress-capital-1k-5-gas",
+              "category": "SOURCE_GAS",
+              "funding": "AVAILABLE_CASH",
+              "amountUsdcMinor": "3100000",
+              "networkId": "ethereum-mainnet",
+              "cashBalanceFamilyId": "ethereum-usdc",
+              "sourceHash": "0xd29543fa6774fa6a71ed92c7b8bced0724fffeac5c99721fa07899a49eb9e06e"
+            }
+          ],
+          "kind": "TRANSFER_BURNED",
+          "reservationId": "capital-1k-reservation",
+          "transferId": "capital-1k-transfer",
+          "messageIdentity": "capital-1k-same-message",
+          "destinationNetworkId": "arc-testnet",
+          "destinationCashViewId": "arc-usdc",
+          "netReceivableUsdcMinor": "200000000"
+        },
+        {
+          "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+          "accountingVersion": "1.0.0",
+          "operationId": "m7-failure-stress-capital-1k-6",
+          "experimentId": "m7-failure-stress",
+          "scenarioId": "capital-1k",
+          "expectedPortfolioVersion": "6",
+          "observedAt": "2026-08-01T01:10:00.000Z",
+          "resultProvenance": "SYNTHETIC_TEST",
+          "sourceHashes": [
+            "0xca27c6f0cf95c2e23085a6bc5c8a328d15a18e6b682545e316b8e129031116e3"
+          ],
+          "costs": [],
+          "kind": "TRANSFER_DELAYED",
+          "transferId": "capital-1k-transfer"
+        },
+        {
+          "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+          "accountingVersion": "1.0.0",
+          "operationId": "m7-failure-stress-capital-1k-7",
+          "experimentId": "m7-failure-stress",
+          "scenarioId": "capital-1k",
+          "expectedPortfolioVersion": "7",
+          "observedAt": "2026-08-01T01:11:00.000Z",
+          "resultProvenance": "SYNTHETIC_TEST",
+          "sourceHashes": [
+            "0xe2ec6163991cf92e508d0fad9393ea8aa011d11984348406ad59b5284bdceafc"
+          ],
+          "kind": "CLOSE",
+          "closedAt": "2026-08-01T01:11:00.000Z",
+          "costs": []
+        },
+        {
+          "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+          "accountingVersion": "1.0.0",
+          "operationId": "m7-failure-stress-capital-1k-8",
+          "experimentId": "m7-failure-stress",
+          "scenarioId": "capital-1k",
+          "expectedPortfolioVersion": "8",
+          "observedAt": "2026-08-01T01:12:00.000Z",
+          "resultProvenance": "SYNTHETIC_TEST",
+          "sourceHashes": [
+            "0xebf7d160df453d91213f51f06cc4e619b1fda35b65fa46b2c7d0859995d9fc9b"
+          ],
+          "costs": [],
+          "kind": "TRANSFER_READY",
+          "transferId": "capital-1k-transfer"
+        },
+        {
+          "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+          "accountingVersion": "1.0.0",
+          "operationId": "m7-failure-stress-capital-1k-9",
+          "experimentId": "m7-failure-stress",
+          "scenarioId": "capital-1k",
+          "expectedPortfolioVersion": "9",
+          "observedAt": "2026-08-01T01:13:00.000Z",
+          "resultProvenance": "SYNTHETIC_TEST",
+          "sourceHashes": [
+            "0xb6ca798aa106165e81d9f9e37e15131613f455d1cd8b9d321da90a601b0a67d9"
+          ],
+          "costs": [
+            {
+              "costId": "m7-failure-stress-capital-1k-9-gas",
+              "category": "RETRY_GAS",
+              "funding": "PAYABLE",
+              "amountUsdcMinor": "1400000",
+              "networkId": "arc-testnet",
+              "cashBalanceFamilyId": null,
+              "sourceHash": "0xb6ca798aa106165e81d9f9e37e15131613f455d1cd8b9d321da90a601b0a67d9"
+            }
+          ],
+          "kind": "TRANSFER_DESTINATION_RETRY",
+          "transferId": "capital-1k-transfer"
+        },
+        {
+          "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+          "accountingVersion": "1.0.0",
+          "operationId": "m7-failure-stress-capital-1k-10",
+          "experimentId": "m7-failure-stress",
+          "scenarioId": "capital-1k",
+          "expectedPortfolioVersion": "10",
+          "observedAt": "2026-08-01T01:14:00.000Z",
+          "resultProvenance": "SYNTHETIC_TEST",
+          "sourceHashes": [
+            "0x8b07e311f3078b5a0b3559cc185505903c1121caf572c4e6268358c967a8f77e"
+          ],
+          "costs": [],
+          "kind": "TRANSFER_READY",
+          "transferId": "capital-1k-transfer"
+        },
+        {
+          "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+          "accountingVersion": "1.0.0",
+          "operationId": "m7-failure-stress-capital-1k-11",
+          "experimentId": "m7-failure-stress",
+          "scenarioId": "capital-1k",
+          "expectedPortfolioVersion": "11",
+          "observedAt": "2026-08-01T01:15:00.000Z",
+          "resultProvenance": "SYNTHETIC_TEST",
+          "sourceHashes": [
+            "0xa9b43538d414afa4939af05df7b9964b7cbd048f2581842cbfc3ac80c90758c0"
+          ],
+          "costs": [],
+          "kind": "TRANSFER_SETTLED",
+          "transferId": "capital-1k-transfer",
+          "destinationCreditUsdcMinor": "200000000"
+        }
+      ],
+      "expectedFinalHash": "0x6459a717291c74e45463189c8fac9ed5e0d79397ff5c88c08f2be278f1d99845",
+      "references": [
+        {
+          "kind": "CASH",
+          "initial": {
+            "schemaVersion": "proof-of-alpha/shadow-portfolio/v1",
+            "accountingVersion": "1.0.0",
+            "experimentId": "m7-failure-stress",
+            "scenarioId": "capital-1k",
+            "portfolioId": "m7-failure-stress-capital-1k-cash",
+            "resultProvenance": "SYNTHETIC_TEST",
+            "unitOfAccount": "USDC",
+            "unitDecimals": 6,
+            "initialValueUsdcMinor": "1000000000",
+            "maxDestinationAttempts": "3",
+            "version": "0",
+            "balanceViews": [
+              {
+                "viewId": "arc-usdc",
+                "networkId": "arc-testnet",
+                "assetId": "usdc",
+                "balanceFamilyId": "arc-usdc",
+                "decimals": 6,
+                "canonicalDecimals": 6
+              },
+              {
+                "viewId": "ethereum-usdc",
+                "networkId": "ethereum-mainnet",
+                "assetId": "usdc",
+                "balanceFamilyId": "ethereum-usdc",
+                "decimals": 6,
+                "canonicalDecimals": 6
+              }
+            ],
+            "cash": [
+              {
+                "balanceFamilyId": "arc-usdc",
+                "networkId": "arc-testnet",
+                "assetId": "usdc",
+                "amountUsdcMinor": "0"
+              },
+              {
+                "balanceFamilyId": "ethereum-usdc",
+                "networkId": "ethereum-mainnet",
+                "assetId": "usdc",
+                "amountUsdcMinor": "1000000000"
+              }
+            ],
+            "reservations": [],
+            "positions": [],
+            "receivables": [],
+            "payables": [],
+            "allowances": [],
+            "recognizedCosts": [],
+            "modeledPnlUsdcMinor": "0",
+            "appliedReceipts": [],
+            "lastAppliedAt": null,
+            "closedAt": null,
+            "deadlineStateHash": null
+          },
+          "receipts": [],
+          "expectedFinalHash": "0xb70ed90879705afcac82945c03c059ce04aabb3840d82ffe15bf4066bb93e6d4"
+        },
+        {
+          "kind": "CONSERVATIVE_YIELD",
+          "initial": {
+            "schemaVersion": "proof-of-alpha/shadow-portfolio/v1",
+            "accountingVersion": "1.0.0",
+            "experimentId": "m7-failure-stress",
+            "scenarioId": "capital-1k",
+            "portfolioId": "m7-failure-stress-capital-1k-conservative-yield",
+            "resultProvenance": "SYNTHETIC_TEST",
+            "unitOfAccount": "USDC",
+            "unitDecimals": 6,
+            "initialValueUsdcMinor": "1000000000",
+            "maxDestinationAttempts": "3",
+            "version": "0",
+            "balanceViews": [
+              {
+                "viewId": "arc-usdc",
+                "networkId": "arc-testnet",
+                "assetId": "usdc",
+                "balanceFamilyId": "arc-usdc",
+                "decimals": 6,
+                "canonicalDecimals": 6
+              },
+              {
+                "viewId": "ethereum-usdc",
+                "networkId": "ethereum-mainnet",
+                "assetId": "usdc",
+                "balanceFamilyId": "ethereum-usdc",
+                "decimals": 6,
+                "canonicalDecimals": 6
+              }
+            ],
+            "cash": [
+              {
+                "balanceFamilyId": "arc-usdc",
+                "networkId": "arc-testnet",
+                "assetId": "usdc",
+                "amountUsdcMinor": "0"
+              },
+              {
+                "balanceFamilyId": "ethereum-usdc",
+                "networkId": "ethereum-mainnet",
+                "assetId": "usdc",
+                "amountUsdcMinor": "1000000000"
+              }
+            ],
+            "reservations": [],
+            "positions": [],
+            "receivables": [],
+            "payables": [],
+            "allowances": [],
+            "recognizedCosts": [],
+            "modeledPnlUsdcMinor": "0",
+            "appliedReceipts": [],
+            "lastAppliedAt": null,
+            "closedAt": null,
+            "deadlineStateHash": null
+          },
+          "receipts": [
+            {
+              "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+              "accountingVersion": "1.0.0",
+              "operationId": "m7-failure-stress-capital-1k-conservative-yield-0",
+              "experimentId": "m7-failure-stress",
+              "scenarioId": "capital-1k",
+              "expectedPortfolioVersion": "0",
+              "observedAt": "2026-08-01T00:02:00.000Z",
+              "resultProvenance": "SYNTHETIC_TEST",
+              "sourceHashes": [
+                "0x5fd1826568c6bc3964ed00cfd2d08073def4e8233a404940269841bc44270621",
+                "0xace383a2d234c7fffae59dccb159d1d242429d40fa545c1b8b0e3a8a8a6d110f"
+              ],
+              "costs": [
+                {
+                  "costId": "m7-failure-stress-capital-1k-conservative-yield-entry-gas",
+                  "category": "EXECUTION_GAS",
+                  "funding": "PAYABLE",
+                  "amountUsdcMinor": "3100000",
+                  "networkId": "ethereum-mainnet",
+                  "cashBalanceFamilyId": null,
+                  "sourceHash": "0xace383a2d234c7fffae59dccb159d1d242429d40fa545c1b8b0e3a8a8a6d110f"
+                }
+              ],
+              "kind": "DEPOSIT",
+              "cashViewId": "ethereum-usdc",
+              "positionId": "m7-failure-stress-capital-1k-conservative-yield-position",
+              "instrumentId": "eth-aave-usdc",
+              "sharesCreditMinor": "1000000000",
+              "indexNumerator": "1",
+              "indexDenominator": "1",
+              "inputUsdcMinor": "1000000000"
+            }
+          ],
+          "expectedFinalHash": "0xcaf37a66634016b523b5957e38b1b0286cecff9974d9090edc484ace3e8f9e6c"
+        }
+      ]
+    },
+    {
+      "initial": {
+        "schemaVersion": "proof-of-alpha/shadow-portfolio/v1",
+        "accountingVersion": "1.0.0",
+        "experimentId": "m7-failure-stress",
+        "scenarioId": "capital-10k",
+        "portfolioId": "m7-failure-stress-capital-10k",
+        "resultProvenance": "SYNTHETIC_TEST",
+        "unitOfAccount": "USDC",
+        "unitDecimals": 6,
+        "initialValueUsdcMinor": "10000000000",
+        "maxDestinationAttempts": "3",
+        "version": "0",
+        "balanceViews": [
+          {
+            "viewId": "arc-usdc",
+            "networkId": "arc-testnet",
+            "assetId": "usdc",
+            "balanceFamilyId": "arc-usdc",
+            "decimals": 6,
+            "canonicalDecimals": 6
+          },
+          {
+            "viewId": "ethereum-usdc",
+            "networkId": "ethereum-mainnet",
+            "assetId": "usdc",
+            "balanceFamilyId": "ethereum-usdc",
+            "decimals": 6,
+            "canonicalDecimals": 6
+          }
+        ],
+        "cash": [
+          {
+            "balanceFamilyId": "arc-usdc",
+            "networkId": "arc-testnet",
+            "assetId": "usdc",
+            "amountUsdcMinor": "0"
+          },
+          {
+            "balanceFamilyId": "ethereum-usdc",
+            "networkId": "ethereum-mainnet",
+            "assetId": "usdc",
+            "amountUsdcMinor": "10000000000"
+          }
+        ],
+        "reservations": [],
+        "positions": [],
+        "receivables": [],
+        "payables": [],
+        "allowances": [],
+        "recognizedCosts": [],
+        "modeledPnlUsdcMinor": "0",
+        "appliedReceipts": [],
+        "lastAppliedAt": null,
+        "closedAt": null,
+        "deadlineStateHash": null
+      },
+      "receipts": [
+        {
+          "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+          "accountingVersion": "1.0.0",
+          "operationId": "m7-failure-stress-capital-10k-0",
+          "experimentId": "m7-failure-stress",
+          "scenarioId": "capital-10k",
+          "expectedPortfolioVersion": "0",
+          "observedAt": "2026-08-01T00:01:00.000Z",
+          "resultProvenance": "SYNTHETIC_TEST",
+          "sourceHashes": [
+            "0x8cde233d3a7f480677114ee55dd2258115f24e2333ed7956e7c70f451c569dff"
+          ],
+          "costs": [
+            {
+              "costId": "m7-failure-stress-capital-10k-0-gas",
+              "category": "APPROVAL_GAS",
+              "funding": "AVAILABLE_CASH",
+              "amountUsdcMinor": "3400000",
+              "networkId": "ethereum-mainnet",
+              "cashBalanceFamilyId": "ethereum-usdc",
+              "sourceHash": "0x8cde233d3a7f480677114ee55dd2258115f24e2333ed7956e7c70f451c569dff"
+            }
+          ],
+          "kind": "APPROVE",
+          "allowanceId": "capital-10k-allowance",
+          "networkId": "ethereum-mainnet",
+          "assetId": "usdc",
+          "spenderId": "synthetic-aave",
+          "amountMinor": "3900000000"
+        },
+        {
+          "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+          "accountingVersion": "1.0.0",
+          "operationId": "m7-failure-stress-capital-10k-1",
+          "experimentId": "m7-failure-stress",
+          "scenarioId": "capital-10k",
+          "expectedPortfolioVersion": "1",
+          "observedAt": "2026-08-01T00:02:00.000Z",
+          "resultProvenance": "SYNTHETIC_TEST",
+          "sourceHashes": [
+            "0xb53dac10a8520e81e99136da36a1b242110484a6bd8cbb2a1eb68ff9d81e21c1"
+          ],
+          "costs": [
+            {
+              "costId": "m7-failure-stress-capital-10k-1-gas",
+              "category": "EXECUTION_GAS",
+              "funding": "AVAILABLE_CASH",
+              "amountUsdcMinor": "3400000",
+              "networkId": "ethereum-mainnet",
+              "cashBalanceFamilyId": "ethereum-usdc",
+              "sourceHash": "0xb53dac10a8520e81e99136da36a1b242110484a6bd8cbb2a1eb68ff9d81e21c1"
+            }
+          ],
+          "kind": "DEPOSIT",
+          "cashViewId": "ethereum-usdc",
+          "positionId": "capital-10k-position",
+          "instrumentId": "eth-aave-usdc",
+          "sharesCreditMinor": "3900000000",
+          "indexNumerator": "1",
+          "indexDenominator": "1",
+          "inputUsdcMinor": "3900000000"
+        },
+        {
+          "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+          "accountingVersion": "1.0.0",
+          "operationId": "m7-failure-stress-capital-10k-2",
+          "experimentId": "m7-failure-stress",
+          "scenarioId": "capital-10k",
+          "expectedPortfolioVersion": "2",
+          "observedAt": "2026-08-01T00:03:00.000Z",
+          "resultProvenance": "SYNTHETIC_TEST",
+          "sourceHashes": [
+            "0x097eda5f7ad020ffdc9141ff3369c60f476a659ede960a3ae9956038e65c7a87"
+          ],
+          "costs": [
+            {
+              "costId": "m7-failure-stress-capital-10k-2-gas",
+              "category": "EXECUTION_GAS",
+              "funding": "AVAILABLE_CASH",
+              "amountUsdcMinor": "3400000",
+              "networkId": "ethereum-mainnet",
+              "cashBalanceFamilyId": "ethereum-usdc",
+              "sourceHash": "0x097eda5f7ad020ffdc9141ff3369c60f476a659ede960a3ae9956038e65c7a87"
+            }
+          ],
+          "kind": "WITHDRAW",
+          "cashViewId": "ethereum-usdc",
+          "positionId": "capital-10k-position",
+          "sharesDebitMinor": "3900000000",
+          "cashCreditUsdcMinor": "3900000000"
+        },
+        {
+          "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+          "accountingVersion": "1.0.0",
+          "operationId": "m7-failure-stress-capital-10k-3",
+          "experimentId": "m7-failure-stress",
+          "scenarioId": "capital-10k",
+          "expectedPortfolioVersion": "3",
+          "observedAt": "2026-08-01T00:04:00.000Z",
+          "resultProvenance": "SYNTHETIC_TEST",
+          "sourceHashes": [
+            "0x8671bac173916512d9273b0107c15ea960db50b5c8a751cdc37ffc1e31b2838f"
+          ],
+          "costs": [
+            {
+              "costId": "m7-failure-stress-capital-10k-3-gas",
+              "category": "EXECUTION_GAS",
+              "funding": "AVAILABLE_CASH",
+              "amountUsdcMinor": "1700000",
+              "networkId": "ethereum-mainnet",
+              "cashBalanceFamilyId": "ethereum-usdc",
+              "sourceHash": "0x8671bac173916512d9273b0107c15ea960db50b5c8a751cdc37ffc1e31b2838f"
+            }
+          ],
+          "kind": "COST",
+          "status": "FAILED_AFTER_ATTEMPT",
+          "reasonCode": "SWAP_FAILED_SYNTHETIC"
+        },
+        {
+          "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+          "accountingVersion": "1.0.0",
+          "operationId": "m7-failure-stress-capital-10k-4",
+          "experimentId": "m7-failure-stress",
+          "scenarioId": "capital-10k",
+          "expectedPortfolioVersion": "4",
+          "observedAt": "2026-08-01T00:05:00.000Z",
+          "resultProvenance": "SYNTHETIC_TEST",
+          "sourceHashes": [
+            "0xc185503445ba7839605f92e92cf164b96b947b8a2a6fda8d2d49c07a3e346fd4"
+          ],
+          "costs": [],
+          "kind": "RESERVE",
+          "reservationId": "capital-10k-reservation",
+          "cashViewId": "ethereum-usdc",
+          "amountUsdcMinor": "2100000000"
+        },
+        {
+          "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+          "accountingVersion": "1.0.0",
+          "operationId": "m7-failure-stress-capital-10k-5",
+          "experimentId": "m7-failure-stress",
+          "scenarioId": "capital-10k",
+          "expectedPortfolioVersion": "5",
+          "observedAt": "2026-08-01T00:06:00.000Z",
+          "resultProvenance": "SYNTHETIC_TEST",
+          "sourceHashes": [
+            "0xeab89e3f3428248dcff20e92f9415414a02260448ce384bba8faa7dda9e67d04"
+          ],
+          "costs": [
+            {
+              "costId": "m7-failure-stress-capital-10k-5-gas",
+              "category": "SOURCE_GAS",
+              "funding": "AVAILABLE_CASH",
+              "amountUsdcMinor": "3400000",
+              "networkId": "ethereum-mainnet",
+              "cashBalanceFamilyId": "ethereum-usdc",
+              "sourceHash": "0xeab89e3f3428248dcff20e92f9415414a02260448ce384bba8faa7dda9e67d04"
+            }
+          ],
+          "kind": "TRANSFER_BURNED",
+          "reservationId": "capital-10k-reservation",
+          "transferId": "capital-10k-transfer",
+          "messageIdentity": "capital-10k-same-message",
+          "destinationNetworkId": "arc-testnet",
+          "destinationCashViewId": "arc-usdc",
+          "netReceivableUsdcMinor": "2100000000"
+        },
+        {
+          "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+          "accountingVersion": "1.0.0",
+          "operationId": "m7-failure-stress-capital-10k-6",
+          "experimentId": "m7-failure-stress",
+          "scenarioId": "capital-10k",
+          "expectedPortfolioVersion": "6",
+          "observedAt": "2026-08-01T01:10:00.000Z",
+          "resultProvenance": "SYNTHETIC_TEST",
+          "sourceHashes": [
+            "0x690057c932b8bff6430a8d2aab9fd1103bfb0880c811c05ee238c13dbc8ff45b"
+          ],
+          "costs": [],
+          "kind": "TRANSFER_DELAYED",
+          "transferId": "capital-10k-transfer"
+        },
+        {
+          "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+          "accountingVersion": "1.0.0",
+          "operationId": "m7-failure-stress-capital-10k-7",
+          "experimentId": "m7-failure-stress",
+          "scenarioId": "capital-10k",
+          "expectedPortfolioVersion": "7",
+          "observedAt": "2026-08-01T01:11:00.000Z",
+          "resultProvenance": "SYNTHETIC_TEST",
+          "sourceHashes": [
+            "0x54901d3b1ffaeec5f2778d19d4d1108735b351da4b1a0f6f0266b67ceeae6c99"
+          ],
+          "kind": "CLOSE",
+          "closedAt": "2026-08-01T01:11:00.000Z",
+          "costs": []
+        },
+        {
+          "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+          "accountingVersion": "1.0.0",
+          "operationId": "m7-failure-stress-capital-10k-8",
+          "experimentId": "m7-failure-stress",
+          "scenarioId": "capital-10k",
+          "expectedPortfolioVersion": "8",
+          "observedAt": "2026-08-01T01:12:00.000Z",
+          "resultProvenance": "SYNTHETIC_TEST",
+          "sourceHashes": [
+            "0x99ead219ca3fde0c844651375b69743abecb5edb913e908e27f1a24cb32b69a3"
+          ],
+          "costs": [],
+          "kind": "TRANSFER_READY",
+          "transferId": "capital-10k-transfer"
+        },
+        {
+          "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+          "accountingVersion": "1.0.0",
+          "operationId": "m7-failure-stress-capital-10k-9",
+          "experimentId": "m7-failure-stress",
+          "scenarioId": "capital-10k",
+          "expectedPortfolioVersion": "9",
+          "observedAt": "2026-08-01T01:13:00.000Z",
+          "resultProvenance": "SYNTHETIC_TEST",
+          "sourceHashes": [
+            "0x2fcfdf8d54e7f40d6ecedc8248a6a13f114a338247e06d6d0220d0378de8762a"
+          ],
+          "costs": [
+            {
+              "costId": "m7-failure-stress-capital-10k-9-gas",
+              "category": "RETRY_GAS",
+              "funding": "PAYABLE",
+              "amountUsdcMinor": "1700000",
+              "networkId": "arc-testnet",
+              "cashBalanceFamilyId": null,
+              "sourceHash": "0x2fcfdf8d54e7f40d6ecedc8248a6a13f114a338247e06d6d0220d0378de8762a"
+            }
+          ],
+          "kind": "TRANSFER_DESTINATION_RETRY",
+          "transferId": "capital-10k-transfer"
+        },
+        {
+          "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+          "accountingVersion": "1.0.0",
+          "operationId": "m7-failure-stress-capital-10k-10",
+          "experimentId": "m7-failure-stress",
+          "scenarioId": "capital-10k",
+          "expectedPortfolioVersion": "10",
+          "observedAt": "2026-08-01T01:14:00.000Z",
+          "resultProvenance": "SYNTHETIC_TEST",
+          "sourceHashes": [
+            "0x7af7ad3ab25fa98aaf2b4c1b01e8dc2aec26581c63c3ae52a0e05080dbe340ee"
+          ],
+          "costs": [],
+          "kind": "TRANSFER_READY",
+          "transferId": "capital-10k-transfer"
+        },
+        {
+          "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+          "accountingVersion": "1.0.0",
+          "operationId": "m7-failure-stress-capital-10k-11",
+          "experimentId": "m7-failure-stress",
+          "scenarioId": "capital-10k",
+          "expectedPortfolioVersion": "11",
+          "observedAt": "2026-08-01T01:15:00.000Z",
+          "resultProvenance": "SYNTHETIC_TEST",
+          "sourceHashes": [
+            "0x6428df983f21b682ff16fc5ea0e385c9e54ed7a27f0b6c2b75306d0c806a8480"
+          ],
+          "costs": [],
+          "kind": "TRANSFER_SETTLED",
+          "transferId": "capital-10k-transfer",
+          "destinationCreditUsdcMinor": "2100000000"
+        }
+      ],
+      "expectedFinalHash": "0xc036caeeae34138471227a0dc8d0a50e25bfb36f40b3d802669f333b2906cc7e",
+      "references": [
+        {
+          "kind": "CASH",
+          "initial": {
+            "schemaVersion": "proof-of-alpha/shadow-portfolio/v1",
+            "accountingVersion": "1.0.0",
+            "experimentId": "m7-failure-stress",
+            "scenarioId": "capital-10k",
+            "portfolioId": "m7-failure-stress-capital-10k-cash",
+            "resultProvenance": "SYNTHETIC_TEST",
+            "unitOfAccount": "USDC",
+            "unitDecimals": 6,
+            "initialValueUsdcMinor": "10000000000",
+            "maxDestinationAttempts": "3",
+            "version": "0",
+            "balanceViews": [
+              {
+                "viewId": "arc-usdc",
+                "networkId": "arc-testnet",
+                "assetId": "usdc",
+                "balanceFamilyId": "arc-usdc",
+                "decimals": 6,
+                "canonicalDecimals": 6
+              },
+              {
+                "viewId": "ethereum-usdc",
+                "networkId": "ethereum-mainnet",
+                "assetId": "usdc",
+                "balanceFamilyId": "ethereum-usdc",
+                "decimals": 6,
+                "canonicalDecimals": 6
+              }
+            ],
+            "cash": [
+              {
+                "balanceFamilyId": "arc-usdc",
+                "networkId": "arc-testnet",
+                "assetId": "usdc",
+                "amountUsdcMinor": "0"
+              },
+              {
+                "balanceFamilyId": "ethereum-usdc",
+                "networkId": "ethereum-mainnet",
+                "assetId": "usdc",
+                "amountUsdcMinor": "10000000000"
+              }
+            ],
+            "reservations": [],
+            "positions": [],
+            "receivables": [],
+            "payables": [],
+            "allowances": [],
+            "recognizedCosts": [],
+            "modeledPnlUsdcMinor": "0",
+            "appliedReceipts": [],
+            "lastAppliedAt": null,
+            "closedAt": null,
+            "deadlineStateHash": null
+          },
+          "receipts": [],
+          "expectedFinalHash": "0xab018d40d1d15be670c13f7080fdee500a3e6bdf6871ccb5a72e064e3342a5cd"
+        },
+        {
+          "kind": "CONSERVATIVE_YIELD",
+          "initial": {
+            "schemaVersion": "proof-of-alpha/shadow-portfolio/v1",
+            "accountingVersion": "1.0.0",
+            "experimentId": "m7-failure-stress",
+            "scenarioId": "capital-10k",
+            "portfolioId": "m7-failure-stress-capital-10k-conservative-yield",
+            "resultProvenance": "SYNTHETIC_TEST",
+            "unitOfAccount": "USDC",
+            "unitDecimals": 6,
+            "initialValueUsdcMinor": "10000000000",
+            "maxDestinationAttempts": "3",
+            "version": "0",
+            "balanceViews": [
+              {
+                "viewId": "arc-usdc",
+                "networkId": "arc-testnet",
+                "assetId": "usdc",
+                "balanceFamilyId": "arc-usdc",
+                "decimals": 6,
+                "canonicalDecimals": 6
+              },
+              {
+                "viewId": "ethereum-usdc",
+                "networkId": "ethereum-mainnet",
+                "assetId": "usdc",
+                "balanceFamilyId": "ethereum-usdc",
+                "decimals": 6,
+                "canonicalDecimals": 6
+              }
+            ],
+            "cash": [
+              {
+                "balanceFamilyId": "arc-usdc",
+                "networkId": "arc-testnet",
+                "assetId": "usdc",
+                "amountUsdcMinor": "0"
+              },
+              {
+                "balanceFamilyId": "ethereum-usdc",
+                "networkId": "ethereum-mainnet",
+                "assetId": "usdc",
+                "amountUsdcMinor": "10000000000"
+              }
+            ],
+            "reservations": [],
+            "positions": [],
+            "receivables": [],
+            "payables": [],
+            "allowances": [],
+            "recognizedCosts": [],
+            "modeledPnlUsdcMinor": "0",
+            "appliedReceipts": [],
+            "lastAppliedAt": null,
+            "closedAt": null,
+            "deadlineStateHash": null
+          },
+          "receipts": [
+            {
+              "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+              "accountingVersion": "1.0.0",
+              "operationId": "m7-failure-stress-capital-10k-conservative-yield-0",
+              "experimentId": "m7-failure-stress",
+              "scenarioId": "capital-10k",
+              "expectedPortfolioVersion": "0",
+              "observedAt": "2026-08-01T00:02:00.000Z",
+              "resultProvenance": "SYNTHETIC_TEST",
+              "sourceHashes": [
+                "0xd47986cb1146f5cb5acb04f5d8610499d6debbc698449a2573d116e643564067",
+                "0x42dabfef20c6871201cecb2d0bcef02b62faeee2527f6d552299d99698c77136"
+              ],
+              "costs": [
+                {
+                  "costId": "m7-failure-stress-capital-10k-conservative-yield-entry-gas",
+                  "category": "EXECUTION_GAS",
+                  "funding": "PAYABLE",
+                  "amountUsdcMinor": "3400000",
+                  "networkId": "ethereum-mainnet",
+                  "cashBalanceFamilyId": null,
+                  "sourceHash": "0x42dabfef20c6871201cecb2d0bcef02b62faeee2527f6d552299d99698c77136"
+                }
+              ],
+              "kind": "DEPOSIT",
+              "cashViewId": "ethereum-usdc",
+              "positionId": "m7-failure-stress-capital-10k-conservative-yield-position",
+              "instrumentId": "eth-aave-usdc",
+              "sharesCreditMinor": "10000000000",
+              "indexNumerator": "1",
+              "indexDenominator": "1",
+              "inputUsdcMinor": "10000000000"
+            }
+          ],
+          "expectedFinalHash": "0x8e03071b90259c441abe295cee8a8fb1e9622e831a63cecc424fa63a0e547a89"
+        }
+      ]
+    },
+    {
+      "initial": {
+        "schemaVersion": "proof-of-alpha/shadow-portfolio/v1",
+        "accountingVersion": "1.0.0",
+        "experimentId": "m7-failure-stress",
+        "scenarioId": "capital-100k",
+        "portfolioId": "m7-failure-stress-capital-100k",
+        "resultProvenance": "SYNTHETIC_TEST",
+        "unitOfAccount": "USDC",
+        "unitDecimals": 6,
+        "initialValueUsdcMinor": "100000000000",
+        "maxDestinationAttempts": "3",
+        "version": "0",
+        "balanceViews": [
+          {
+            "viewId": "arc-usdc",
+            "networkId": "arc-testnet",
+            "assetId": "usdc",
+            "balanceFamilyId": "arc-usdc",
+            "decimals": 6,
+            "canonicalDecimals": 6
+          },
+          {
+            "viewId": "ethereum-usdc",
+            "networkId": "ethereum-mainnet",
+            "assetId": "usdc",
+            "balanceFamilyId": "ethereum-usdc",
+            "decimals": 6,
+            "canonicalDecimals": 6
+          }
+        ],
+        "cash": [
+          {
+            "balanceFamilyId": "arc-usdc",
+            "networkId": "arc-testnet",
+            "assetId": "usdc",
+            "amountUsdcMinor": "0"
+          },
+          {
+            "balanceFamilyId": "ethereum-usdc",
+            "networkId": "ethereum-mainnet",
+            "assetId": "usdc",
+            "amountUsdcMinor": "100000000000"
+          }
+        ],
+        "reservations": [],
+        "positions": [],
+        "receivables": [],
+        "payables": [],
+        "allowances": [],
+        "recognizedCosts": [],
+        "modeledPnlUsdcMinor": "0",
+        "appliedReceipts": [],
+        "lastAppliedAt": null,
+        "closedAt": null,
+        "deadlineStateHash": null
+      },
+      "receipts": [
+        {
+          "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+          "accountingVersion": "1.0.0",
+          "operationId": "m7-failure-stress-capital-100k-0",
+          "experimentId": "m7-failure-stress",
+          "scenarioId": "capital-100k",
+          "expectedPortfolioVersion": "0",
+          "observedAt": "2026-08-01T00:01:00.000Z",
+          "resultProvenance": "SYNTHETIC_TEST",
+          "sourceHashes": [
+            "0x731d05614991a87d245472b038ec4e5fc32eab4356fa671a49911ebcbdab0544"
+          ],
+          "costs": [
+            {
+              "costId": "m7-failure-stress-capital-100k-0-gas",
+              "category": "APPROVAL_GAS",
+              "funding": "AVAILABLE_CASH",
+              "amountUsdcMinor": "4300000",
+              "networkId": "ethereum-mainnet",
+              "cashBalanceFamilyId": "ethereum-usdc",
+              "sourceHash": "0x731d05614991a87d245472b038ec4e5fc32eab4356fa671a49911ebcbdab0544"
+            }
+          ],
+          "kind": "APPROVE",
+          "allowanceId": "capital-100k-allowance",
+          "networkId": "ethereum-mainnet",
+          "assetId": "usdc",
+          "spenderId": "synthetic-aave",
+          "amountMinor": "30000000000"
+        },
+        {
+          "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+          "accountingVersion": "1.0.0",
+          "operationId": "m7-failure-stress-capital-100k-1",
+          "experimentId": "m7-failure-stress",
+          "scenarioId": "capital-100k",
+          "expectedPortfolioVersion": "1",
+          "observedAt": "2026-08-01T00:02:00.000Z",
+          "resultProvenance": "SYNTHETIC_TEST",
+          "sourceHashes": [
+            "0x6783a12130bc9c3d0eb529cf2ea2fbb5630ba0a7d43fb456a7d3d13b1d3569ee"
+          ],
+          "costs": [
+            {
+              "costId": "m7-failure-stress-capital-100k-1-gas",
+              "category": "EXECUTION_GAS",
+              "funding": "AVAILABLE_CASH",
+              "amountUsdcMinor": "4300000",
+              "networkId": "ethereum-mainnet",
+              "cashBalanceFamilyId": "ethereum-usdc",
+              "sourceHash": "0x6783a12130bc9c3d0eb529cf2ea2fbb5630ba0a7d43fb456a7d3d13b1d3569ee"
+            }
+          ],
+          "kind": "DEPOSIT",
+          "cashViewId": "ethereum-usdc",
+          "positionId": "capital-100k-position",
+          "instrumentId": "eth-aave-usdc",
+          "sharesCreditMinor": "30000000000",
+          "indexNumerator": "1",
+          "indexDenominator": "1",
+          "inputUsdcMinor": "30000000000"
+        },
+        {
+          "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+          "accountingVersion": "1.0.0",
+          "operationId": "m7-failure-stress-capital-100k-2",
+          "experimentId": "m7-failure-stress",
+          "scenarioId": "capital-100k",
+          "expectedPortfolioVersion": "2",
+          "observedAt": "2026-08-01T00:03:00.000Z",
+          "resultProvenance": "SYNTHETIC_TEST",
+          "sourceHashes": [
+            "0x1785fcf7148f35d80d29359035c9227209b69d97eb6920e99e7fbddca437cc3e"
+          ],
+          "costs": [
+            {
+              "costId": "m7-failure-stress-capital-100k-2-gas",
+              "category": "EXECUTION_GAS",
+              "funding": "AVAILABLE_CASH",
+              "amountUsdcMinor": "4300000",
+              "networkId": "ethereum-mainnet",
+              "cashBalanceFamilyId": "ethereum-usdc",
+              "sourceHash": "0x1785fcf7148f35d80d29359035c9227209b69d97eb6920e99e7fbddca437cc3e"
+            }
+          ],
+          "kind": "WITHDRAW",
+          "cashViewId": "ethereum-usdc",
+          "positionId": "capital-100k-position",
+          "sharesDebitMinor": "30000000000",
+          "cashCreditUsdcMinor": "30000000000"
+        },
+        {
+          "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+          "accountingVersion": "1.0.0",
+          "operationId": "m7-failure-stress-capital-100k-3",
+          "experimentId": "m7-failure-stress",
+          "scenarioId": "capital-100k",
+          "expectedPortfolioVersion": "3",
+          "observedAt": "2026-08-01T00:04:00.000Z",
+          "resultProvenance": "SYNTHETIC_TEST",
+          "sourceHashes": [
+            "0xf74ab093d7a709e3d1f8724ce177fc7c881b9eaa8eb14fa970ea9c057a86444f"
+          ],
+          "costs": [
+            {
+              "costId": "m7-failure-stress-capital-100k-3-gas",
+              "category": "EXECUTION_GAS",
+              "funding": "AVAILABLE_CASH",
+              "amountUsdcMinor": "2300000",
+              "networkId": "ethereum-mainnet",
+              "cashBalanceFamilyId": "ethereum-usdc",
+              "sourceHash": "0xf74ab093d7a709e3d1f8724ce177fc7c881b9eaa8eb14fa970ea9c057a86444f"
+            }
+          ],
+          "kind": "COST",
+          "status": "FAILED_AFTER_ATTEMPT",
+          "reasonCode": "SWAP_FAILED_SYNTHETIC"
+        },
+        {
+          "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+          "accountingVersion": "1.0.0",
+          "operationId": "m7-failure-stress-capital-100k-4",
+          "experimentId": "m7-failure-stress",
+          "scenarioId": "capital-100k",
+          "expectedPortfolioVersion": "4",
+          "observedAt": "2026-08-01T00:05:00.000Z",
+          "resultProvenance": "SYNTHETIC_TEST",
+          "sourceHashes": [
+            "0x4268ce56f2b2ead5d9f803efc601a92b2d61acf221a33beebcbf00b021c83793"
+          ],
+          "costs": [],
+          "kind": "RESERVE",
+          "reservationId": "capital-100k-reservation",
+          "cashViewId": "ethereum-usdc",
+          "amountUsdcMinor": "22000000000"
+        },
+        {
+          "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+          "accountingVersion": "1.0.0",
+          "operationId": "m7-failure-stress-capital-100k-5",
+          "experimentId": "m7-failure-stress",
+          "scenarioId": "capital-100k",
+          "expectedPortfolioVersion": "5",
+          "observedAt": "2026-08-01T00:06:00.000Z",
+          "resultProvenance": "SYNTHETIC_TEST",
+          "sourceHashes": [
+            "0x556399e064f2d802cbb492800615729ae4780f14efe8deaa721821cabaebf16f"
+          ],
+          "costs": [
+            {
+              "costId": "m7-failure-stress-capital-100k-5-gas",
+              "category": "SOURCE_GAS",
+              "funding": "AVAILABLE_CASH",
+              "amountUsdcMinor": "4300000",
+              "networkId": "ethereum-mainnet",
+              "cashBalanceFamilyId": "ethereum-usdc",
+              "sourceHash": "0x556399e064f2d802cbb492800615729ae4780f14efe8deaa721821cabaebf16f"
+            }
+          ],
+          "kind": "TRANSFER_BURNED",
+          "reservationId": "capital-100k-reservation",
+          "transferId": "capital-100k-transfer",
+          "messageIdentity": "capital-100k-same-message",
+          "destinationNetworkId": "arc-testnet",
+          "destinationCashViewId": "arc-usdc",
+          "netReceivableUsdcMinor": "22000000000"
+        },
+        {
+          "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+          "accountingVersion": "1.0.0",
+          "operationId": "m7-failure-stress-capital-100k-6",
+          "experimentId": "m7-failure-stress",
+          "scenarioId": "capital-100k",
+          "expectedPortfolioVersion": "6",
+          "observedAt": "2026-08-01T01:10:00.000Z",
+          "resultProvenance": "SYNTHETIC_TEST",
+          "sourceHashes": [
+            "0x509a99d5faddb611f52cf65a587c04fb6aa95451ffeb3d52966322fdee4790db"
+          ],
+          "costs": [],
+          "kind": "TRANSFER_DELAYED",
+          "transferId": "capital-100k-transfer"
+        },
+        {
+          "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+          "accountingVersion": "1.0.0",
+          "operationId": "m7-failure-stress-capital-100k-7",
+          "experimentId": "m7-failure-stress",
+          "scenarioId": "capital-100k",
+          "expectedPortfolioVersion": "7",
+          "observedAt": "2026-08-01T01:11:00.000Z",
+          "resultProvenance": "SYNTHETIC_TEST",
+          "sourceHashes": [
+            "0x35b421e78c797003cfc6ed1a8a9e04ae39fc4dc749a899f19591db659055054f"
+          ],
+          "kind": "CLOSE",
+          "closedAt": "2026-08-01T01:11:00.000Z",
+          "costs": []
+        },
+        {
+          "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+          "accountingVersion": "1.0.0",
+          "operationId": "m7-failure-stress-capital-100k-8",
+          "experimentId": "m7-failure-stress",
+          "scenarioId": "capital-100k",
+          "expectedPortfolioVersion": "8",
+          "observedAt": "2026-08-01T01:12:00.000Z",
+          "resultProvenance": "SYNTHETIC_TEST",
+          "sourceHashes": [
+            "0x711bb1edd5bd2fdcb094f24eab8e7b23d40bf398b3c63b855bb9266b97df9752"
+          ],
+          "costs": [],
+          "kind": "TRANSFER_READY",
+          "transferId": "capital-100k-transfer"
+        },
+        {
+          "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+          "accountingVersion": "1.0.0",
+          "operationId": "m7-failure-stress-capital-100k-9",
+          "experimentId": "m7-failure-stress",
+          "scenarioId": "capital-100k",
+          "expectedPortfolioVersion": "9",
+          "observedAt": "2026-08-01T01:13:00.000Z",
+          "resultProvenance": "SYNTHETIC_TEST",
+          "sourceHashes": [
+            "0xff2e149eadfdcd2b78294e7c5864195d124cfbda17ed1c126d95f6b6db0aba14"
+          ],
+          "costs": [
+            {
+              "costId": "m7-failure-stress-capital-100k-9-gas",
+              "category": "RETRY_GAS",
+              "funding": "PAYABLE",
+              "amountUsdcMinor": "2300000",
+              "networkId": "arc-testnet",
+              "cashBalanceFamilyId": null,
+              "sourceHash": "0xff2e149eadfdcd2b78294e7c5864195d124cfbda17ed1c126d95f6b6db0aba14"
+            }
+          ],
+          "kind": "TRANSFER_DESTINATION_RETRY",
+          "transferId": "capital-100k-transfer"
+        },
+        {
+          "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+          "accountingVersion": "1.0.0",
+          "operationId": "m7-failure-stress-capital-100k-10",
+          "experimentId": "m7-failure-stress",
+          "scenarioId": "capital-100k",
+          "expectedPortfolioVersion": "10",
+          "observedAt": "2026-08-01T01:14:00.000Z",
+          "resultProvenance": "SYNTHETIC_TEST",
+          "sourceHashes": [
+            "0x1e9008a1f1680be06a7a79449d2178f4835a2dd59bd4ed5eff55f036e356d05f"
+          ],
+          "costs": [],
+          "kind": "TRANSFER_READY",
+          "transferId": "capital-100k-transfer"
+        },
+        {
+          "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+          "accountingVersion": "1.0.0",
+          "operationId": "m7-failure-stress-capital-100k-11",
+          "experimentId": "m7-failure-stress",
+          "scenarioId": "capital-100k",
+          "expectedPortfolioVersion": "11",
+          "observedAt": "2026-08-01T01:15:00.000Z",
+          "resultProvenance": "SYNTHETIC_TEST",
+          "sourceHashes": [
+            "0x617b3e6cd21cb51f8d86b50b5b4fbbfffd1449cd85e28a8572d4570ba89bcf23"
+          ],
+          "costs": [],
+          "kind": "TRANSFER_SETTLED",
+          "transferId": "capital-100k-transfer",
+          "destinationCreditUsdcMinor": "22000000000"
+        }
+      ],
+      "expectedFinalHash": "0x21e1c03252bbf85693bd410f49e88cbe5fb33111de23aea1c96f4a8e1501c7d8",
+      "references": [
+        {
+          "kind": "CASH",
+          "initial": {
+            "schemaVersion": "proof-of-alpha/shadow-portfolio/v1",
+            "accountingVersion": "1.0.0",
+            "experimentId": "m7-failure-stress",
+            "scenarioId": "capital-100k",
+            "portfolioId": "m7-failure-stress-capital-100k-cash",
+            "resultProvenance": "SYNTHETIC_TEST",
+            "unitOfAccount": "USDC",
+            "unitDecimals": 6,
+            "initialValueUsdcMinor": "100000000000",
+            "maxDestinationAttempts": "3",
+            "version": "0",
+            "balanceViews": [
+              {
+                "viewId": "arc-usdc",
+                "networkId": "arc-testnet",
+                "assetId": "usdc",
+                "balanceFamilyId": "arc-usdc",
+                "decimals": 6,
+                "canonicalDecimals": 6
+              },
+              {
+                "viewId": "ethereum-usdc",
+                "networkId": "ethereum-mainnet",
+                "assetId": "usdc",
+                "balanceFamilyId": "ethereum-usdc",
+                "decimals": 6,
+                "canonicalDecimals": 6
+              }
+            ],
+            "cash": [
+              {
+                "balanceFamilyId": "arc-usdc",
+                "networkId": "arc-testnet",
+                "assetId": "usdc",
+                "amountUsdcMinor": "0"
+              },
+              {
+                "balanceFamilyId": "ethereum-usdc",
+                "networkId": "ethereum-mainnet",
+                "assetId": "usdc",
+                "amountUsdcMinor": "100000000000"
+              }
+            ],
+            "reservations": [],
+            "positions": [],
+            "receivables": [],
+            "payables": [],
+            "allowances": [],
+            "recognizedCosts": [],
+            "modeledPnlUsdcMinor": "0",
+            "appliedReceipts": [],
+            "lastAppliedAt": null,
+            "closedAt": null,
+            "deadlineStateHash": null
+          },
+          "receipts": [],
+          "expectedFinalHash": "0x7434313b5aacee6d7024c2bd087cd6515eab7ff0478339a04e2f6171ce19d103"
+        },
+        {
+          "kind": "CONSERVATIVE_YIELD",
+          "initial": {
+            "schemaVersion": "proof-of-alpha/shadow-portfolio/v1",
+            "accountingVersion": "1.0.0",
+            "experimentId": "m7-failure-stress",
+            "scenarioId": "capital-100k",
+            "portfolioId": "m7-failure-stress-capital-100k-conservative-yield",
+            "resultProvenance": "SYNTHETIC_TEST",
+            "unitOfAccount": "USDC",
+            "unitDecimals": 6,
+            "initialValueUsdcMinor": "100000000000",
+            "maxDestinationAttempts": "3",
+            "version": "0",
+            "balanceViews": [
+              {
+                "viewId": "arc-usdc",
+                "networkId": "arc-testnet",
+                "assetId": "usdc",
+                "balanceFamilyId": "arc-usdc",
+                "decimals": 6,
+                "canonicalDecimals": 6
+              },
+              {
+                "viewId": "ethereum-usdc",
+                "networkId": "ethereum-mainnet",
+                "assetId": "usdc",
+                "balanceFamilyId": "ethereum-usdc",
+                "decimals": 6,
+                "canonicalDecimals": 6
+              }
+            ],
+            "cash": [
+              {
+                "balanceFamilyId": "arc-usdc",
+                "networkId": "arc-testnet",
+                "assetId": "usdc",
+                "amountUsdcMinor": "0"
+              },
+              {
+                "balanceFamilyId": "ethereum-usdc",
+                "networkId": "ethereum-mainnet",
+                "assetId": "usdc",
+                "amountUsdcMinor": "100000000000"
+              }
+            ],
+            "reservations": [],
+            "positions": [],
+            "receivables": [],
+            "payables": [],
+            "allowances": [],
+            "recognizedCosts": [],
+            "modeledPnlUsdcMinor": "0",
+            "appliedReceipts": [],
+            "lastAppliedAt": null,
+            "closedAt": null,
+            "deadlineStateHash": null
+          },
+          "receipts": [
+            {
+              "schemaVersion": "proof-of-alpha/accounting-receipt/v1",
+              "accountingVersion": "1.0.0",
+              "operationId": "m7-failure-stress-capital-100k-conservative-yield-0",
+              "experimentId": "m7-failure-stress",
+              "scenarioId": "capital-100k",
+              "expectedPortfolioVersion": "0",
+              "observedAt": "2026-08-01T00:02:00.000Z",
+              "resultProvenance": "SYNTHETIC_TEST",
+              "sourceHashes": [
+                "0xb49aa522ce17461b69a3eeba669fe30d435ace1a6e7f92c85d1420e799c6cc26",
+                "0x7c6e03a1a1d1db81f35deaded6a468dbefb297217b25c9177b74529640138350"
+              ],
+              "costs": [
+                {
+                  "costId": "m7-failure-stress-capital-100k-conservative-yield-entry-gas",
+                  "category": "EXECUTION_GAS",
+                  "funding": "PAYABLE",
+                  "amountUsdcMinor": "4300000",
+                  "networkId": "ethereum-mainnet",
+                  "cashBalanceFamilyId": null,
+                  "sourceHash": "0x7c6e03a1a1d1db81f35deaded6a468dbefb297217b25c9177b74529640138350"
+                }
+              ],
+              "kind": "DEPOSIT",
+              "cashViewId": "ethereum-usdc",
+              "positionId": "m7-failure-stress-capital-100k-conservative-yield-position",
+              "instrumentId": "eth-aave-usdc",
+              "sharesCreditMinor": "100000000000",
+              "indexNumerator": "1",
+              "indexDenominator": "1",
+              "inputUsdcMinor": "100000000000"
+            }
+          ],
+          "expectedFinalHash": "0x31348bdf1aa7daaf24434fe0939870dc99cdbbdbf2269e9265a05161b9bc3733"
+        }
+      ]
+    }
+  ],
+  "rawInputs": [
+    {
+      "contentHash": "0x5a9379e7de355e95622f5617f27fa42c361f0de37910c243650cbe25f4d2c319",
+      "payload": {
+        "schemaVersion": "proof-of-alpha/synthetic-demo-input/v1",
+        "sourceProvenance": "SYNTHETIC_TEST",
+        "scenarioId": "capital-1k",
+        "amountUsdcMinor": "1000000000",
+        "observedAt": "2026-08-01T00:01:00.000Z",
+        "adapterVersion": "1.0.0",
+        "parserVersion": "1.0.0",
+        "operationId": "m7-failure-stress-capital-1k-0",
+        "fields": {
+          "kind": "APPROVE",
+          "allowanceId": "capital-1k-allowance",
+          "networkId": "ethereum-mainnet",
+          "assetId": "usdc",
+          "spenderId": "synthetic-aave",
+          "amountMinor": "400000000"
+        },
+        "gasUsdcMinor": "3100000"
+      }
+    },
+    {
+      "contentHash": "0xfae3e4f3f0c46323d92e548e5831b8dbbce1905ffe15a2d8ac69b695e8381919",
+      "payload": {
+        "schemaVersion": "proof-of-alpha/synthetic-demo-input/v1",
+        "sourceProvenance": "SYNTHETIC_TEST",
+        "scenarioId": "capital-1k",
+        "amountUsdcMinor": "1000000000",
+        "observedAt": "2026-08-01T00:02:00.000Z",
+        "adapterVersion": "1.0.0",
+        "parserVersion": "1.0.0",
+        "operationId": "m7-failure-stress-capital-1k-1",
+        "fields": {
+          "kind": "DEPOSIT",
+          "cashViewId": "ethereum-usdc",
+          "positionId": "capital-1k-position",
+          "instrumentId": "eth-aave-usdc",
+          "sharesCreditMinor": "400000000",
+          "indexNumerator": "1",
+          "indexDenominator": "1",
+          "inputUsdcMinor": "400000000"
+        },
+        "gasUsdcMinor": "3100000"
+      }
+    },
+    {
+      "contentHash": "0x00a12feb7d3879b9ff998650e6eed2de9dad55f6b1ab8cba8519d43d4f5cfc1f",
+      "payload": {
+        "schemaVersion": "proof-of-alpha/synthetic-demo-input/v1",
+        "sourceProvenance": "SYNTHETIC_TEST",
+        "scenarioId": "capital-1k",
+        "amountUsdcMinor": "1000000000",
+        "observedAt": "2026-08-01T00:03:00.000Z",
+        "adapterVersion": "1.0.0",
+        "parserVersion": "1.0.0",
+        "operationId": "m7-failure-stress-capital-1k-2",
+        "fields": {
+          "kind": "WITHDRAW",
+          "cashViewId": "ethereum-usdc",
+          "positionId": "capital-1k-position",
+          "sharesDebitMinor": "400000000",
+          "cashCreditUsdcMinor": "400000000"
+        },
+        "gasUsdcMinor": "3100000"
+      }
+    },
+    {
+      "contentHash": "0xe67781fa5d844056c14394944a320d89a91c7a14cde7a1c802a80d339a54ad65",
+      "payload": {
+        "schemaVersion": "proof-of-alpha/synthetic-demo-input/v1",
+        "sourceProvenance": "SYNTHETIC_TEST",
+        "scenarioId": "capital-1k",
+        "amountUsdcMinor": "1000000000",
+        "observedAt": "2026-08-01T00:04:00.000Z",
+        "adapterVersion": "1.0.0",
+        "parserVersion": "1.0.0",
+        "operationId": "m7-failure-stress-capital-1k-3",
+        "fields": {
+          "kind": "COST",
+          "status": "FAILED_AFTER_ATTEMPT",
+          "reasonCode": "SWAP_FAILED_SYNTHETIC"
+        },
+        "gasUsdcMinor": "1400000"
+      }
+    },
+    {
+      "contentHash": "0x3fb9b89dbfb85d92f2c15b3bad990fe54d3a9fa844b20fe60522a8e99c86bd2f",
+      "payload": {
+        "schemaVersion": "proof-of-alpha/synthetic-demo-input/v1",
+        "sourceProvenance": "SYNTHETIC_TEST",
+        "scenarioId": "capital-1k",
+        "amountUsdcMinor": "1000000000",
+        "observedAt": "2026-08-01T00:05:00.000Z",
+        "adapterVersion": "1.0.0",
+        "parserVersion": "1.0.0",
+        "operationId": "m7-failure-stress-capital-1k-4",
+        "fields": {
+          "kind": "RESERVE",
+          "reservationId": "capital-1k-reservation",
+          "cashViewId": "ethereum-usdc",
+          "amountUsdcMinor": "200000000"
+        },
+        "gasUsdcMinor": null
+      }
+    },
+    {
+      "contentHash": "0xd29543fa6774fa6a71ed92c7b8bced0724fffeac5c99721fa07899a49eb9e06e",
+      "payload": {
+        "schemaVersion": "proof-of-alpha/synthetic-demo-input/v1",
+        "sourceProvenance": "SYNTHETIC_TEST",
+        "scenarioId": "capital-1k",
+        "amountUsdcMinor": "1000000000",
+        "observedAt": "2026-08-01T00:06:00.000Z",
+        "adapterVersion": "1.0.0",
+        "parserVersion": "1.0.0",
+        "operationId": "m7-failure-stress-capital-1k-5",
+        "fields": {
+          "kind": "TRANSFER_BURNED",
+          "reservationId": "capital-1k-reservation",
+          "transferId": "capital-1k-transfer",
+          "messageIdentity": "capital-1k-same-message",
+          "destinationNetworkId": "arc-testnet",
+          "destinationCashViewId": "arc-usdc",
+          "netReceivableUsdcMinor": "200000000"
+        },
+        "gasUsdcMinor": "3100000"
+      }
+    },
+    {
+      "contentHash": "0xca27c6f0cf95c2e23085a6bc5c8a328d15a18e6b682545e316b8e129031116e3",
+      "payload": {
+        "schemaVersion": "proof-of-alpha/synthetic-demo-input/v1",
+        "sourceProvenance": "SYNTHETIC_TEST",
+        "scenarioId": "capital-1k",
+        "amountUsdcMinor": "1000000000",
+        "observedAt": "2026-08-01T01:10:00.000Z",
+        "adapterVersion": "1.0.0",
+        "parserVersion": "1.0.0",
+        "operationId": "m7-failure-stress-capital-1k-6",
+        "fields": {
+          "kind": "TRANSFER_DELAYED",
+          "transferId": "capital-1k-transfer"
+        },
+        "gasUsdcMinor": null
+      }
+    },
+    {
+      "contentHash": "0xe2ec6163991cf92e508d0fad9393ea8aa011d11984348406ad59b5284bdceafc",
+      "payload": {
+        "schemaVersion": "proof-of-alpha/synthetic-demo-input/v1",
+        "sourceProvenance": "SYNTHETIC_TEST",
+        "scenarioId": "capital-1k",
+        "amountUsdcMinor": "1000000000",
+        "observedAt": "2026-08-01T01:11:00.000Z",
+        "adapterVersion": "1.0.0",
+        "parserVersion": "1.0.0",
+        "operationId": "m7-failure-stress-capital-1k-7",
+        "fields": {
+          "kind": "CLOSE",
+          "closedAt": "2026-08-01T01:11:00.000Z"
+        },
+        "gasUsdcMinor": null
+      }
+    },
+    {
+      "contentHash": "0xebf7d160df453d91213f51f06cc4e619b1fda35b65fa46b2c7d0859995d9fc9b",
+      "payload": {
+        "schemaVersion": "proof-of-alpha/synthetic-demo-input/v1",
+        "sourceProvenance": "SYNTHETIC_TEST",
+        "scenarioId": "capital-1k",
+        "amountUsdcMinor": "1000000000",
+        "observedAt": "2026-08-01T01:12:00.000Z",
+        "adapterVersion": "1.0.0",
+        "parserVersion": "1.0.0",
+        "operationId": "m7-failure-stress-capital-1k-8",
+        "fields": {
+          "kind": "TRANSFER_READY",
+          "transferId": "capital-1k-transfer"
+        },
+        "gasUsdcMinor": null
+      }
+    },
+    {
+      "contentHash": "0xb6ca798aa106165e81d9f9e37e15131613f455d1cd8b9d321da90a601b0a67d9",
+      "payload": {
+        "schemaVersion": "proof-of-alpha/synthetic-demo-input/v1",
+        "sourceProvenance": "SYNTHETIC_TEST",
+        "scenarioId": "capital-1k",
+        "amountUsdcMinor": "1000000000",
+        "observedAt": "2026-08-01T01:13:00.000Z",
+        "adapterVersion": "1.0.0",
+        "parserVersion": "1.0.0",
+        "operationId": "m7-failure-stress-capital-1k-9",
+        "fields": {
+          "kind": "TRANSFER_DESTINATION_RETRY",
+          "transferId": "capital-1k-transfer"
+        },
+        "gasUsdcMinor": "1400000"
+      }
+    },
+    {
+      "contentHash": "0x8b07e311f3078b5a0b3559cc185505903c1121caf572c4e6268358c967a8f77e",
+      "payload": {
+        "schemaVersion": "proof-of-alpha/synthetic-demo-input/v1",
+        "sourceProvenance": "SYNTHETIC_TEST",
+        "scenarioId": "capital-1k",
+        "amountUsdcMinor": "1000000000",
+        "observedAt": "2026-08-01T01:14:00.000Z",
+        "adapterVersion": "1.0.0",
+        "parserVersion": "1.0.0",
+        "operationId": "m7-failure-stress-capital-1k-10",
+        "fields": {
+          "kind": "TRANSFER_READY",
+          "transferId": "capital-1k-transfer"
+        },
+        "gasUsdcMinor": null
+      }
+    },
+    {
+      "contentHash": "0xa9b43538d414afa4939af05df7b9964b7cbd048f2581842cbfc3ac80c90758c0",
+      "payload": {
+        "schemaVersion": "proof-of-alpha/synthetic-demo-input/v1",
+        "sourceProvenance": "SYNTHETIC_TEST",
+        "scenarioId": "capital-1k",
+        "amountUsdcMinor": "1000000000",
+        "observedAt": "2026-08-01T01:15:00.000Z",
+        "adapterVersion": "1.0.0",
+        "parserVersion": "1.0.0",
+        "operationId": "m7-failure-stress-capital-1k-11",
+        "fields": {
+          "kind": "TRANSFER_SETTLED",
+          "transferId": "capital-1k-transfer",
+          "destinationCreditUsdcMinor": "200000000"
+        },
+        "gasUsdcMinor": null
+      }
+    },
+    {
+      "contentHash": "0xace383a2d234c7fffae59dccb159d1d242429d40fa545c1b8b0e3a8a8a6d110f",
+      "payload": {
+        "schemaVersion": "proof-of-alpha/synthetic-gas/v1",
+        "role": "CONSERVATIVE_YIELD",
+        "size": {
+          "id": "capital-1k",
+          "capital": "1000000000",
+          "invested": "400000000",
+          "transfer": "200000000",
+          "gas": "3100000",
+          "failedGas": "1400000"
+        },
+        "sourceProvenance": "SYNTHETIC_TEST"
+      }
+    },
+    {
+      "contentHash": "0x5fd1826568c6bc3964ed00cfd2d08073def4e8233a404940269841bc44270621",
+      "payload": {
+        "schemaVersion": "proof-of-alpha/synthetic-demo-input/v1",
+        "sourceProvenance": "SYNTHETIC_TEST",
+        "scenarioId": "capital-1k",
+        "amountUsdcMinor": "1000000000",
+        "observedAt": "2026-08-01T00:02:00.000Z",
+        "adapterVersion": "1.0.0",
+        "parserVersion": "1.0.0",
+        "operationId": "m7-failure-stress-capital-1k-conservative-yield-0",
+        "fields": {
+          "kind": "DEPOSIT",
+          "cashViewId": "ethereum-usdc",
+          "positionId": "m7-failure-stress-capital-1k-conservative-yield-position",
+          "instrumentId": "eth-aave-usdc",
+          "sharesCreditMinor": "1000000000",
+          "indexNumerator": "1",
+          "indexDenominator": "1",
+          "inputUsdcMinor": "1000000000",
+          "costs": [
+            {
+              "costId": "m7-failure-stress-capital-1k-conservative-yield-entry-gas",
+              "category": "EXECUTION_GAS",
+              "funding": "PAYABLE",
+              "amountUsdcMinor": "3100000",
+              "networkId": "ethereum-mainnet",
+              "cashBalanceFamilyId": null,
+              "sourceHash": "0xace383a2d234c7fffae59dccb159d1d242429d40fa545c1b8b0e3a8a8a6d110f"
+            }
+          ]
+        },
+        "gasUsdcMinor": null
+      }
+    },
+    {
+      "contentHash": "0x8cde233d3a7f480677114ee55dd2258115f24e2333ed7956e7c70f451c569dff",
+      "payload": {
+        "schemaVersion": "proof-of-alpha/synthetic-demo-input/v1",
+        "sourceProvenance": "SYNTHETIC_TEST",
+        "scenarioId": "capital-10k",
+        "amountUsdcMinor": "10000000000",
+        "observedAt": "2026-08-01T00:01:00.000Z",
+        "adapterVersion": "1.0.0",
+        "parserVersion": "1.0.0",
+        "operationId": "m7-failure-stress-capital-10k-0",
+        "fields": {
+          "kind": "APPROVE",
+          "allowanceId": "capital-10k-allowance",
+          "networkId": "ethereum-mainnet",
+          "assetId": "usdc",
+          "spenderId": "synthetic-aave",
+          "amountMinor": "3900000000"
+        },
+        "gasUsdcMinor": "3400000"
+      }
+    },
+    {
+      "contentHash": "0xb53dac10a8520e81e99136da36a1b242110484a6bd8cbb2a1eb68ff9d81e21c1",
+      "payload": {
+        "schemaVersion": "proof-of-alpha/synthetic-demo-input/v1",
+        "sourceProvenance": "SYNTHETIC_TEST",
+        "scenarioId": "capital-10k",
+        "amountUsdcMinor": "10000000000",
+        "observedAt": "2026-08-01T00:02:00.000Z",
+        "adapterVersion": "1.0.0",
+        "parserVersion": "1.0.0",
+        "operationId": "m7-failure-stress-capital-10k-1",
+        "fields": {
+          "kind": "DEPOSIT",
+          "cashViewId": "ethereum-usdc",
+          "positionId": "capital-10k-position",
+          "instrumentId": "eth-aave-usdc",
+          "sharesCreditMinor": "3900000000",
+          "indexNumerator": "1",
+          "indexDenominator": "1",
+          "inputUsdcMinor": "3900000000"
+        },
+        "gasUsdcMinor": "3400000"
+      }
+    },
+    {
+      "contentHash": "0x097eda5f7ad020ffdc9141ff3369c60f476a659ede960a3ae9956038e65c7a87",
+      "payload": {
+        "schemaVersion": "proof-of-alpha/synthetic-demo-input/v1",
+        "sourceProvenance": "SYNTHETIC_TEST",
+        "scenarioId": "capital-10k",
+        "amountUsdcMinor": "10000000000",
+        "observedAt": "2026-08-01T00:03:00.000Z",
+        "adapterVersion": "1.0.0",
+        "parserVersion": "1.0.0",
+        "operationId": "m7-failure-stress-capital-10k-2",
+        "fields": {
+          "kind": "WITHDRAW",
+          "cashViewId": "ethereum-usdc",
+          "positionId": "capital-10k-position",
+          "sharesDebitMinor": "3900000000",
+          "cashCreditUsdcMinor": "3900000000"
+        },
+        "gasUsdcMinor": "3400000"
+      }
+    },
+    {
+      "contentHash": "0x8671bac173916512d9273b0107c15ea960db50b5c8a751cdc37ffc1e31b2838f",
+      "payload": {
+        "schemaVersion": "proof-of-alpha/synthetic-demo-input/v1",
+        "sourceProvenance": "SYNTHETIC_TEST",
+        "scenarioId": "capital-10k",
+        "amountUsdcMinor": "10000000000",
+        "observedAt": "2026-08-01T00:04:00.000Z",
+        "adapterVersion": "1.0.0",
+        "parserVersion": "1.0.0",
+        "operationId": "m7-failure-stress-capital-10k-3",
+        "fields": {
+          "kind": "COST",
+          "status": "FAILED_AFTER_ATTEMPT",
+          "reasonCode": "SWAP_FAILED_SYNTHETIC"
+        },
+        "gasUsdcMinor": "1700000"
+      }
+    },
+    {
+      "contentHash": "0xc185503445ba7839605f92e92cf164b96b947b8a2a6fda8d2d49c07a3e346fd4",
+      "payload": {
+        "schemaVersion": "proof-of-alpha/synthetic-demo-input/v1",
+        "sourceProvenance": "SYNTHETIC_TEST",
+        "scenarioId": "capital-10k",
+        "amountUsdcMinor": "10000000000",
+        "observedAt": "2026-08-01T00:05:00.000Z",
+        "adapterVersion": "1.0.0",
+        "parserVersion": "1.0.0",
+        "operationId": "m7-failure-stress-capital-10k-4",
+        "fields": {
+          "kind": "RESERVE",
+          "reservationId": "capital-10k-reservation",
+          "cashViewId": "ethereum-usdc",
+          "amountUsdcMinor": "2100000000"
+        },
+        "gasUsdcMinor": null
+      }
+    },
+    {
+      "contentHash": "0xeab89e3f3428248dcff20e92f9415414a02260448ce384bba8faa7dda9e67d04",
+      "payload": {
+        "schemaVersion": "proof-of-alpha/synthetic-demo-input/v1",
+        "sourceProvenance": "SYNTHETIC_TEST",
+        "scenarioId": "capital-10k",
+        "amountUsdcMinor": "10000000000",
+        "observedAt": "2026-08-01T00:06:00.000Z",
+        "adapterVersion": "1.0.0",
+        "parserVersion": "1.0.0",
+        "operationId": "m7-failure-stress-capital-10k-5",
+        "fields": {
+          "kind": "TRANSFER_BURNED",
+          "reservationId": "capital-10k-reservation",
+          "transferId": "capital-10k-transfer",
+          "messageIdentity": "capital-10k-same-message",
+          "destinationNetworkId": "arc-testnet",
+          "destinationCashViewId": "arc-usdc",
+          "netReceivableUsdcMinor": "2100000000"
+        },
+        "gasUsdcMinor": "3400000"
+      }
+    },
+    {
+      "contentHash": "0x690057c932b8bff6430a8d2aab9fd1103bfb0880c811c05ee238c13dbc8ff45b",
+      "payload": {
+        "schemaVersion": "proof-of-alpha/synthetic-demo-input/v1",
+        "sourceProvenance": "SYNTHETIC_TEST",
+        "scenarioId": "capital-10k",
+        "amountUsdcMinor": "10000000000",
+        "observedAt": "2026-08-01T01:10:00.000Z",
+        "adapterVersion": "1.0.0",
+        "parserVersion": "1.0.0",
+        "operationId": "m7-failure-stress-capital-10k-6",
+        "fields": {
+          "kind": "TRANSFER_DELAYED",
+          "transferId": "capital-10k-transfer"
+        },
+        "gasUsdcMinor": null
+      }
+    },
+    {
+      "contentHash": "0x54901d3b1ffaeec5f2778d19d4d1108735b351da4b1a0f6f0266b67ceeae6c99",
+      "payload": {
+        "schemaVersion": "proof-of-alpha/synthetic-demo-input/v1",
+        "sourceProvenance": "SYNTHETIC_TEST",
+        "scenarioId": "capital-10k",
+        "amountUsdcMinor": "10000000000",
+        "observedAt": "2026-08-01T01:11:00.000Z",
+        "adapterVersion": "1.0.0",
+        "parserVersion": "1.0.0",
+        "operationId": "m7-failure-stress-capital-10k-7",
+        "fields": {
+          "kind": "CLOSE",
+          "closedAt": "2026-08-01T01:11:00.000Z"
+        },
+        "gasUsdcMinor": null
+      }
+    },
+    {
+      "contentHash": "0x99ead219ca3fde0c844651375b69743abecb5edb913e908e27f1a24cb32b69a3",
+      "payload": {
+        "schemaVersion": "proof-of-alpha/synthetic-demo-input/v1",
+        "sourceProvenance": "SYNTHETIC_TEST",
+        "scenarioId": "capital-10k",
+        "amountUsdcMinor": "10000000000",
+        "observedAt": "2026-08-01T01:12:00.000Z",
+        "adapterVersion": "1.0.0",
+        "parserVersion": "1.0.0",
+        "operationId": "m7-failure-stress-capital-10k-8",
+        "fields": {
+          "kind": "TRANSFER_READY",
+          "transferId": "capital-10k-transfer"
+        },
+        "gasUsdcMinor": null
+      }
+    },
+    {
+      "contentHash": "0x2fcfdf8d54e7f40d6ecedc8248a6a13f114a338247e06d6d0220d0378de8762a",
+      "payload": {
+        "schemaVersion": "proof-of-alpha/synthetic-demo-input/v1",
+        "sourceProvenance": "SYNTHETIC_TEST",
+        "scenarioId": "capital-10k",
+        "amountUsdcMinor": "10000000000",
+        "observedAt": "2026-08-01T01:13:00.000Z",
+        "adapterVersion": "1.0.0",
+        "parserVersion": "1.0.0",
+        "operationId": "m7-failure-stress-capital-10k-9",
+        "fields": {
+          "kind": "TRANSFER_DESTINATION_RETRY",
+          "transferId": "capital-10k-transfer"
+        },
+        "gasUsdcMinor": "1700000"
+      }
+    },
+    {
+      "contentHash": "0x7af7ad3ab25fa98aaf2b4c1b01e8dc2aec26581c63c3ae52a0e05080dbe340ee",
+      "payload": {
+        "schemaVersion": "proof-of-alpha/synthetic-demo-input/v1",
+        "sourceProvenance": "SYNTHETIC_TEST",
+        "scenarioId": "capital-10k",
+        "amountUsdcMinor": "10000000000",
+        "observedAt": "2026-08-01T01:14:00.000Z",
+        "adapterVersion": "1.0.0",
+        "parserVersion": "1.0.0",
+        "operationId": "m7-failure-stress-capital-10k-10",
+        "fields": {
+          "kind": "TRANSFER_READY",
+          "transferId": "capital-10k-transfer"
+        },
+        "gasUsdcMinor": null
+      }
+    },
+    {
+      "contentHash": "0x6428df983f21b682ff16fc5ea0e385c9e54ed7a27f0b6c2b75306d0c806a8480",
+      "payload": {
+        "schemaVersion": "proof-of-alpha/synthetic-demo-input/v1",
+        "sourceProvenance": "SYNTHETIC_TEST",
+        "scenarioId": "capital-10k",
+        "amountUsdcMinor": "10000000000",
+        "observedAt": "2026-08-01T01:15:00.000Z",
+        "adapterVersion": "1.0.0",
+        "parserVersion": "1.0.0",
+        "operationId": "m7-failure-stress-capital-10k-11",
+        "fields": {
+          "kind": "TRANSFER_SETTLED",
+          "transferId": "capital-10k-transfer",
+          "destinationCreditUsdcMinor": "2100000000"
+        },
+        "gasUsdcMinor": null
+      }
+    },
+    {
+      "contentHash": "0x42dabfef20c6871201cecb2d0bcef02b62faeee2527f6d552299d99698c77136",
+      "payload": {
+        "schemaVersion": "proof-of-alpha/synthetic-gas/v1",
+        "role": "CONSERVATIVE_YIELD",
+        "size": {
+          "id": "capital-10k",
+          "capital": "10000000000",
+          "invested": "3900000000",
+          "transfer": "2100000000",
+          "gas": "3400000",
+          "failedGas": "1700000"
+        },
+        "sourceProvenance": "SYNTHETIC_TEST"
+      }
+    },
+    {
+      "contentHash": "0xd47986cb1146f5cb5acb04f5d8610499d6debbc698449a2573d116e643564067",
+      "payload": {
+        "schemaVersion": "proof-of-alpha/synthetic-demo-input/v1",
+        "sourceProvenance": "SYNTHETIC_TEST",
+        "scenarioId": "capital-10k",
+        "amountUsdcMinor": "10000000000",
+        "observedAt": "2026-08-01T00:02:00.000Z",
+        "adapterVersion": "1.0.0",
+        "parserVersion": "1.0.0",
+        "operationId": "m7-failure-stress-capital-10k-conservative-yield-0",
+        "fields": {
+          "kind": "DEPOSIT",
+          "cashViewId": "ethereum-usdc",
+          "positionId": "m7-failure-stress-capital-10k-conservative-yield-position",
+          "instrumentId": "eth-aave-usdc",
+          "sharesCreditMinor": "10000000000",
+          "indexNumerator": "1",
+          "indexDenominator": "1",
+          "inputUsdcMinor": "10000000000",
+          "costs": [
+            {
+              "costId": "m7-failure-stress-capital-10k-conservative-yield-entry-gas",
+              "category": "EXECUTION_GAS",
+              "funding": "PAYABLE",
+              "amountUsdcMinor": "3400000",
+              "networkId": "ethereum-mainnet",
+              "cashBalanceFamilyId": null,
+              "sourceHash": "0x42dabfef20c6871201cecb2d0bcef02b62faeee2527f6d552299d99698c77136"
+            }
+          ]
+        },
+        "gasUsdcMinor": null
+      }
+    },
+    {
+      "contentHash": "0x731d05614991a87d245472b038ec4e5fc32eab4356fa671a49911ebcbdab0544",
+      "payload": {
+        "schemaVersion": "proof-of-alpha/synthetic-demo-input/v1",
+        "sourceProvenance": "SYNTHETIC_TEST",
+        "scenarioId": "capital-100k",
+        "amountUsdcMinor": "100000000000",
+        "observedAt": "2026-08-01T00:01:00.000Z",
+        "adapterVersion": "1.0.0",
+        "parserVersion": "1.0.0",
+        "operationId": "m7-failure-stress-capital-100k-0",
+        "fields": {
+          "kind": "APPROVE",
+          "allowanceId": "capital-100k-allowance",
+          "networkId": "ethereum-mainnet",
+          "assetId": "usdc",
+          "spenderId": "synthetic-aave",
+          "amountMinor": "30000000000"
+        },
+        "gasUsdcMinor": "4300000"
+      }
+    },
+    {
+      "contentHash": "0x6783a12130bc9c3d0eb529cf2ea2fbb5630ba0a7d43fb456a7d3d13b1d3569ee",
+      "payload": {
+        "schemaVersion": "proof-of-alpha/synthetic-demo-input/v1",
+        "sourceProvenance": "SYNTHETIC_TEST",
+        "scenarioId": "capital-100k",
+        "amountUsdcMinor": "100000000000",
+        "observedAt": "2026-08-01T00:02:00.000Z",
+        "adapterVersion": "1.0.0",
+        "parserVersion": "1.0.0",
+        "operationId": "m7-failure-stress-capital-100k-1",
+        "fields": {
+          "kind": "DEPOSIT",
+          "cashViewId": "ethereum-usdc",
+          "positionId": "capital-100k-position",
+          "instrumentId": "eth-aave-usdc",
+          "sharesCreditMinor": "30000000000",
+          "indexNumerator": "1",
+          "indexDenominator": "1",
+          "inputUsdcMinor": "30000000000"
+        },
+        "gasUsdcMinor": "4300000"
+      }
+    },
+    {
+      "contentHash": "0x1785fcf7148f35d80d29359035c9227209b69d97eb6920e99e7fbddca437cc3e",
+      "payload": {
+        "schemaVersion": "proof-of-alpha/synthetic-demo-input/v1",
+        "sourceProvenance": "SYNTHETIC_TEST",
+        "scenarioId": "capital-100k",
+        "amountUsdcMinor": "100000000000",
+        "observedAt": "2026-08-01T00:03:00.000Z",
+        "adapterVersion": "1.0.0",
+        "parserVersion": "1.0.0",
+        "operationId": "m7-failure-stress-capital-100k-2",
+        "fields": {
+          "kind": "WITHDRAW",
+          "cashViewId": "ethereum-usdc",
+          "positionId": "capital-100k-position",
+          "sharesDebitMinor": "30000000000",
+          "cashCreditUsdcMinor": "30000000000"
+        },
+        "gasUsdcMinor": "4300000"
+      }
+    },
+    {
+      "contentHash": "0xf74ab093d7a709e3d1f8724ce177fc7c881b9eaa8eb14fa970ea9c057a86444f",
+      "payload": {
+        "schemaVersion": "proof-of-alpha/synthetic-demo-input/v1",
+        "sourceProvenance": "SYNTHETIC_TEST",
+        "scenarioId": "capital-100k",
+        "amountUsdcMinor": "100000000000",
+        "observedAt": "2026-08-01T00:04:00.000Z",
+        "adapterVersion": "1.0.0",
+        "parserVersion": "1.0.0",
+        "operationId": "m7-failure-stress-capital-100k-3",
+        "fields": {
+          "kind": "COST",
+          "status": "FAILED_AFTER_ATTEMPT",
+          "reasonCode": "SWAP_FAILED_SYNTHETIC"
+        },
+        "gasUsdcMinor": "2300000"
+      }
+    },
+    {
+      "contentHash": "0x4268ce56f2b2ead5d9f803efc601a92b2d61acf221a33beebcbf00b021c83793",
+      "payload": {
+        "schemaVersion": "proof-of-alpha/synthetic-demo-input/v1",
+        "sourceProvenance": "SYNTHETIC_TEST",
+        "scenarioId": "capital-100k",
+        "amountUsdcMinor": "100000000000",
+        "observedAt": "2026-08-01T00:05:00.000Z",
+        "adapterVersion": "1.0.0",
+        "parserVersion": "1.0.0",
+        "operationId": "m7-failure-stress-capital-100k-4",
+        "fields": {
+          "kind": "RESERVE",
+          "reservationId": "capital-100k-reservation",
+          "cashViewId": "ethereum-usdc",
+          "amountUsdcMinor": "22000000000"
+        },
+        "gasUsdcMinor": null
+      }
+    },
+    {
+      "contentHash": "0x556399e064f2d802cbb492800615729ae4780f14efe8deaa721821cabaebf16f",
+      "payload": {
+        "schemaVersion": "proof-of-alpha/synthetic-demo-input/v1",
+        "sourceProvenance": "SYNTHETIC_TEST",
+        "scenarioId": "capital-100k",
+        "amountUsdcMinor": "100000000000",
+        "observedAt": "2026-08-01T00:06:00.000Z",
+        "adapterVersion": "1.0.0",
+        "parserVersion": "1.0.0",
+        "operationId": "m7-failure-stress-capital-100k-5",
+        "fields": {
+          "kind": "TRANSFER_BURNED",
+          "reservationId": "capital-100k-reservation",
+          "transferId": "capital-100k-transfer",
+          "messageIdentity": "capital-100k-same-message",
+          "destinationNetworkId": "arc-testnet",
+          "destinationCashViewId": "arc-usdc",
+          "netReceivableUsdcMinor": "22000000000"
+        },
+        "gasUsdcMinor": "4300000"
+      }
+    },
+    {
+      "contentHash": "0x509a99d5faddb611f52cf65a587c04fb6aa95451ffeb3d52966322fdee4790db",
+      "payload": {
+        "schemaVersion": "proof-of-alpha/synthetic-demo-input/v1",
+        "sourceProvenance": "SYNTHETIC_TEST",
+        "scenarioId": "capital-100k",
+        "amountUsdcMinor": "100000000000",
+        "observedAt": "2026-08-01T01:10:00.000Z",
+        "adapterVersion": "1.0.0",
+        "parserVersion": "1.0.0",
+        "operationId": "m7-failure-stress-capital-100k-6",
+        "fields": {
+          "kind": "TRANSFER_DELAYED",
+          "transferId": "capital-100k-transfer"
+        },
+        "gasUsdcMinor": null
+      }
+    },
+    {
+      "contentHash": "0x35b421e78c797003cfc6ed1a8a9e04ae39fc4dc749a899f19591db659055054f",
+      "payload": {
+        "schemaVersion": "proof-of-alpha/synthetic-demo-input/v1",
+        "sourceProvenance": "SYNTHETIC_TEST",
+        "scenarioId": "capital-100k",
+        "amountUsdcMinor": "100000000000",
+        "observedAt": "2026-08-01T01:11:00.000Z",
+        "adapterVersion": "1.0.0",
+        "parserVersion": "1.0.0",
+        "operationId": "m7-failure-stress-capital-100k-7",
+        "fields": {
+          "kind": "CLOSE",
+          "closedAt": "2026-08-01T01:11:00.000Z"
+        },
+        "gasUsdcMinor": null
+      }
+    },
+    {
+      "contentHash": "0x711bb1edd5bd2fdcb094f24eab8e7b23d40bf398b3c63b855bb9266b97df9752",
+      "payload": {
+        "schemaVersion": "proof-of-alpha/synthetic-demo-input/v1",
+        "sourceProvenance": "SYNTHETIC_TEST",
+        "scenarioId": "capital-100k",
+        "amountUsdcMinor": "100000000000",
+        "observedAt": "2026-08-01T01:12:00.000Z",
+        "adapterVersion": "1.0.0",
+        "parserVersion": "1.0.0",
+        "operationId": "m7-failure-stress-capital-100k-8",
+        "fields": {
+          "kind": "TRANSFER_READY",
+          "transferId": "capital-100k-transfer"
+        },
+        "gasUsdcMinor": null
+      }
+    },
+    {
+      "contentHash": "0xff2e149eadfdcd2b78294e7c5864195d124cfbda17ed1c126d95f6b6db0aba14",
+      "payload": {
+        "schemaVersion": "proof-of-alpha/synthetic-demo-input/v1",
+        "sourceProvenance": "SYNTHETIC_TEST",
+        "scenarioId": "capital-100k",
+        "amountUsdcMinor": "100000000000",
+        "observedAt": "2026-08-01T01:13:00.000Z",
+        "adapterVersion": "1.0.0",
+        "parserVersion": "1.0.0",
+        "operationId": "m7-failure-stress-capital-100k-9",
+        "fields": {
+          "kind": "TRANSFER_DESTINATION_RETRY",
+          "transferId": "capital-100k-transfer"
+        },
+        "gasUsdcMinor": "2300000"
+      }
+    },
+    {
+      "contentHash": "0x1e9008a1f1680be06a7a79449d2178f4835a2dd59bd4ed5eff55f036e356d05f",
+      "payload": {
+        "schemaVersion": "proof-of-alpha/synthetic-demo-input/v1",
+        "sourceProvenance": "SYNTHETIC_TEST",
+        "scenarioId": "capital-100k",
+        "amountUsdcMinor": "100000000000",
+        "observedAt": "2026-08-01T01:14:00.000Z",
+        "adapterVersion": "1.0.0",
+        "parserVersion": "1.0.0",
+        "operationId": "m7-failure-stress-capital-100k-10",
+        "fields": {
+          "kind": "TRANSFER_READY",
+          "transferId": "capital-100k-transfer"
+        },
+        "gasUsdcMinor": null
+      }
+    },
+    {
+      "contentHash": "0x617b3e6cd21cb51f8d86b50b5b4fbbfffd1449cd85e28a8572d4570ba89bcf23",
+      "payload": {
+        "schemaVersion": "proof-of-alpha/synthetic-demo-input/v1",
+        "sourceProvenance": "SYNTHETIC_TEST",
+        "scenarioId": "capital-100k",
+        "amountUsdcMinor": "100000000000",
+        "observedAt": "2026-08-01T01:15:00.000Z",
+        "adapterVersion": "1.0.0",
+        "parserVersion": "1.0.0",
+        "operationId": "m7-failure-stress-capital-100k-11",
+        "fields": {
+          "kind": "TRANSFER_SETTLED",
+          "transferId": "capital-100k-transfer",
+          "destinationCreditUsdcMinor": "22000000000"
+        },
+        "gasUsdcMinor": null
+      }
+    },
+    {
+      "contentHash": "0x7c6e03a1a1d1db81f35deaded6a468dbefb297217b25c9177b74529640138350",
+      "payload": {
+        "schemaVersion": "proof-of-alpha/synthetic-gas/v1",
+        "role": "CONSERVATIVE_YIELD",
+        "size": {
+          "id": "capital-100k",
+          "capital": "100000000000",
+          "invested": "30000000000",
+          "transfer": "22000000000",
+          "gas": "4300000",
+          "failedGas": "2300000"
+        },
+        "sourceProvenance": "SYNTHETIC_TEST"
+      }
+    },
+    {
+      "contentHash": "0xb49aa522ce17461b69a3eeba669fe30d435ace1a6e7f92c85d1420e799c6cc26",
+      "payload": {
+        "schemaVersion": "proof-of-alpha/synthetic-demo-input/v1",
+        "sourceProvenance": "SYNTHETIC_TEST",
+        "scenarioId": "capital-100k",
+        "amountUsdcMinor": "100000000000",
+        "observedAt": "2026-08-01T00:02:00.000Z",
+        "adapterVersion": "1.0.0",
+        "parserVersion": "1.0.0",
+        "operationId": "m7-failure-stress-capital-100k-conservative-yield-0",
+        "fields": {
+          "kind": "DEPOSIT",
+          "cashViewId": "ethereum-usdc",
+          "positionId": "m7-failure-stress-capital-100k-conservative-yield-position",
+          "instrumentId": "eth-aave-usdc",
+          "sharesCreditMinor": "100000000000",
+          "indexNumerator": "1",
+          "indexDenominator": "1",
+          "inputUsdcMinor": "100000000000",
+          "costs": [
+            {
+              "costId": "m7-failure-stress-capital-100k-conservative-yield-entry-gas",
+              "category": "EXECUTION_GAS",
+              "funding": "PAYABLE",
+              "amountUsdcMinor": "4300000",
+              "networkId": "ethereum-mainnet",
+              "cashBalanceFamilyId": null,
+              "sourceHash": "0x7c6e03a1a1d1db81f35deaded6a468dbefb297217b25c9177b74529640138350"
+            }
+          ]
+        },
+        "gasUsdcMinor": null
+      }
+    }
+  ],
+  "capitalScenarioRelationship": "CORRELATED_POLICY_VIEWS",
+  "effectiveIndependentSampleCount": "1",
+  "forwardObservationCount": "0",
+  "automaticFundingEnabled": false,
+  "limitations": [
+    "Replay of synthetic dated inputs validates software only.",
+    "Every capital amount has its own receipts and cost inputs.",
+    "Automatic funding and real-capital eligibility are disabled."
+  ]
+}

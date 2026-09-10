@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "proof-of-alpha/service-recovery-evidence/v1",
+  "startedAt": "2026-09-10T21:57:04.997Z",
+  "completedAt": "2026-09-10T21:57:08.331Z",
+  "elapsedMilliseconds": 3334,
+  "servicesRestarted": ["postgres", "api", "worker"],
+  "experimentId": "m7-demo-1789077091857",
+  "beforeExportHash": "0x63069c3ccb07193f7ce1341eeb819f3e893c68c541c39e3a7b09927dde8252f8",
+  "afterExportHash": "0x63069c3ccb07193f7ce1341eeb819f3e893c68c541c39e3a7b09927dde8252f8",
+  "publication": "0xaf36221703a5bddc41939861d49461284bb930e62a61dc071ce8a30c31f1929c",
+  "status": "PASS",
+  "resultProvenance": "SYNTHETIC_TEST",
+  "automaticFundingEnabled": false
+}

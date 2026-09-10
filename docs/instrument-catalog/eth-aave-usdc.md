@@ -57,3 +57,7 @@ Adapted from the authoritative instrument-fact-sheet template. Version 0.3.0.
 ## M4 reference use
 
 The conservative reference freezes this instrument family before experiment start and uses one full-capital synthetic entry per scenario followed by archived index accrual. Each size has distinct observation and receipt identities. This path is labeled `SYNTHETIC_TEST`, does not select or validate a live deployment, and cannot enable the `aave-v3-ethereum` dependency or real-capital eligibility.
+
+## M7 rehearsal
+
+The full-path external SDK session and 30-day replay exercise this family using distinct synthetic per-scenario inputs. One conservative entry fails after approval and retains cash/costs with comparison unavailable. This adds software/replay evidence only; it does not verify current Aave contracts, capacity, rates or the Ethereum activation gate. See the [M7 demonstration](../demo-runbook.md).
