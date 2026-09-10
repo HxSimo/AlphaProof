@@ -42,6 +42,8 @@ POA_TESTNET_EXPERIMENT_START_EPOCH=<future Unix seconds>
 POA_RUN_LIVE_TESTNET=1
 ```
 
+If a run stops after a finalized outbound burn, resume that exact debit with `POA_LIVE_RESUME_OUTBOUND_BURN_HASH`. The runner fetches and decodes the transaction and rejects any sender, messenger, amount, domain, recipient, token, caller, fee or finality-threshold mismatch before using it. This avoids a second source debit.
+
 Then run:
 
 ```bash
@@ -52,7 +54,7 @@ The process may wait for Sepolia finality and Circle attestation. It must end wi
 
 ## Evidence review and activation
 
-Every payload is stored by keccak256 under `POA_LIVE_EVIDENCE_DIR`. Review the objects and confirm that all transaction hashes exist on the matching explorers, block hashes remain canonical, receipts are finalized, bytecode hashes match the recorded deployments, schedule transactions precede X, message identities match retries, and amounts reconcile in both directions. Preserve the directory in the configured retained object store and prove restore/replay from a fresh process.
+Every payload is stored by keccak256 under `POA_LIVE_EVIDENCE_DIR`. Transaction hashes are archived before receipt waits, included receipts are archived next, and PASS requires a final chain-level finalized-head sweep. Run `pnpm capture:evidence:m5` for pinned historical block/code/decimals reads, then `pnpm test:evidence:m5`; use `--write` with the verifier entry point to regenerate the reviewable index. Preserve the directory in source control or the configured retained object store and prove restore/replay from a fresh process.
 
 Only after that review, create a new manifest version containing the real vault addresses, code hashes, evidence URIs/hashes and observation times. Change the exact Sepolia, Arc cash, two vault and two route gates from `TO_VERIFY` only when every required evidence kind is present. Reseal the configuration, run the entire M5 validation set, and update project state. Never paste a transaction hash or address into the manifest from terminal output without checking its receipt and chain.
 

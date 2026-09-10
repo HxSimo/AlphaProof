@@ -1,0 +1,1 @@
+{"kind":"sepolia-vault-round-trip","payload":{"depositAssets":"1000000","depositorAfter":"368040500","depositorBefore":"368140500","fundedYieldRemainingInVault":"100000","mintedShares":"1000000","note":"depositor token delta excludes ETH gas","redeemedAssets":"1000000","remainingShares":"0","vault":"0xe5d75b3186f1cef2a9c7a44de5755c03540383ef"}}

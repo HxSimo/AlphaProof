@@ -114,7 +114,7 @@ describe('versioned manifests', () => {
       expect(() => parseBundle(r)).toThrow();
     }
   });
-  it('every external dependency fails closed with a deterministic unavailable fixture', () => {
+  it('unverified dependencies fail closed and evidence-complete testnet gates resolve', () => {
     const fixture = JSON.parse(
       readFileSync('tests/fixtures/dependency-unavailable.json', 'utf8'),
     );
@@ -122,10 +122,21 @@ describe('versioned manifests', () => {
     expect(fixture.resultProvenance).toBe('SYNTHETIC_TEST');
     expect(fixture.response.transactionHash).toBeNull();
     for (const d of bundle.dependencies.dependencies) {
-      expect(() => requireDependency(bundle, d.dependencyId)).toThrow(
-        expect.objectContaining({ code: fixture.response.code }),
-      );
-      expect(d.verification.blockers.length).toBeGreaterThan(0);
+      if (d.verification.enabled) {
+        expect(d.verification.status).toBe('VERIFIED_FOR_TESTNET');
+        expect(requireDependency(bundle, d.dependencyId)).toEqual(d);
+        expect(d.verification.blockers).toEqual([]);
+        expect(
+          d.verification.requiredEvidence.every((kind) =>
+            d.verification.evidence.some((item) => item.kind === kind),
+          ),
+        ).toBe(true);
+      } else {
+        expect(() => requireDependency(bundle, d.dependencyId)).toThrow(
+          expect.objectContaining({ code: fixture.response.code }),
+        );
+        expect(d.verification.blockers.length).toBeGreaterThan(0);
+      }
     }
   });
   it('detects manifest tampering and reloads unchanged configuration identically', () => {

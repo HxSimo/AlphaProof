@@ -1,0 +1,1 @@
+{"kind":"arc-to-sepolia-fee-response","payload":{"body":[{"finalityThreshold":1000,"minimumFee":0},{"finalityThreshold":2000,"minimumFee":0}],"status":200}}

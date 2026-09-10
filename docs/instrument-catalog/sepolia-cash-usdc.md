@@ -1,15 +1,15 @@
 # Instrument fact sheet — sepolia-cash-usdc
 
-Adapted from the authoritative instrument-fact-sheet template. Version 0.3.0.
+Adapted from the authoritative instrument-fact-sheet template. Version 0.5.1.
 
 ## Status
 
-- Verification: `TO_VERIFY`; disabled.
-- Environment and chain: ethereum-sepolia; see `config/v1/networks.json` for documented identity. RPC verification outstanding.
-- Contract address and code/version evidence: official candidate `0x1c7d4b196cb0c7b01d743fbc6116a902379c7238`; runtime code remains unverified.
+- Verification: `VERIFIED_FOR_TESTNET`; enabled only for testnet evidence.
+- Environment and chain: ethereum-sepolia, chain `11155111`; finalized RPC and pinned historical reads passed.
+- Contract address and code/version evidence: `0x1c7d4b196cb0c7b01d743fbc6116a902379c7238`; code hash `0xcd3f29e2ea9c61dadd48bfeaf8b2884b6de9dfee7bf45329452c4c33d0868ceb`.
 - Asset and decimals: USDC, 6 decimals.
-- Date checked and official sources: source review 2026-09-09; no on-chain check. https://developers.circle.com/stablecoins/usdc-contract-addresses
-- Adapter and manifest versions: cash-ethereum-sepolia 1.0.0; manifest 0.3.0.
+- Date checked and official sources: 2026-09-10; sources are listed in the live evidence index.
+- Adapter and manifest versions: cash-ethereum-sepolia 1.0.0; manifest 0.5.1.
 
 ## Economic mechanics
 
@@ -37,19 +37,19 @@ Adapted from the authoritative instrument-fact-sheet template. Version 0.3.0.
 - Execution reads/quotes: Resolve USDC token/interface and decimals, verify bytecode and balance reads. For Arc compare native and ERC-20 views at one block, normalize with retained dust and alias one economic balance. Verify USDT separately where listed.
 - Indexed sources: optional analytics only, with indexing block and lag.
 - Block/hash/freshness: chain-specific fixed block and raw inputs; no last-price fallback.
-- Raw responses archived: required before activation; none captured in M0.
-- Historical access: TO_VERIFY.
+- Raw responses archived: retained and indexed in `docs/evidence/m5-live-index.json`.
+- Historical access: pinned finalized-block bytecode and decimals read passed.
 - Valuation/liquidation: distinct mark and net recoverable USDC values; quotes do not mutate cash.
 
 ## Test evidence
 
-- Unit/fixture: M5 uses strict six-decimal transfer and vault accounting; live token reads remain gated.
-- Fixed-block fork, deposit/withdraw round trip, limits, gas and rounding: not run; assigned M2 for Ethereum and M5 for test vaults.
-- Latest evidence links/hashes: none; `verification.evidence` is empty.
+- Unit/fixture: M5 uses strict six-decimal transfer and vault accounting.
+- Live token, transfer, gas and pinned historical reads passed on Sepolia.
+- Latest evidence: `docs/evidence/m5-live-index.json`, keccak256 `0xd425cac12d0d28839cd245fb3f08d90a1993bec39bc22b6dc12fc83369a71527`.
 
 ## Activation decision
 
 - Enabled profiles: none.
 - Locked assumptions: no auto funding; prospective receipt; separated provenance; same global capital across chains.
-- Remaining blockers: matching-chain bytecode, balance and decimals evidence in the M5 credentialed gate.
+- Remaining blockers: none for this M5 instrument gate; testnet evidence remains ineligible for real capital.
 - Decision: ADR-0014. New manifest/profile version before X; never rewrite an experiment.

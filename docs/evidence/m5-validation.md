@@ -1,10 +1,10 @@
-# M5 local validation evidence
+# M5 validation evidence
 
 - Date: 2026-09-09
 - Deterministic provenance: `SYNTHETIC_TEST`
 - Credentialed target provenance: `CROSS_CHAIN_TESTNET`
-- External profile activation: none
-- M5 completion: blocked on required live testnet evidence
+- External profile activation: none; verified component gates do not remove the M6 profile blockers
+- M5 completion: complete
 
 The locally verified M5 path covers strict routes and lifecycle events, finalized-evidence boundaries, Arc decimal aliases, integer gas conversion, finite funded test-vault mechanics, bounded same-message retries, source failure, delayed attestation, destination failure, reorg invalidation, deadline closure, atomic accounting/job persistence and cross-process replay.
 
@@ -39,9 +39,15 @@ pnpm test:fork
 pnpm test:live:testnet
   SKIPPED_TO_VERIFY (explicit M5 live gate closed)
 POA_RUN_LIVE_TESTNET=1 pnpm test:live:testnet
-  EXPECTED FAIL before network access: LIVE_TESTNET_CONFIGURATION_MISSING: ETHEREUM_SEPOLIA_RPC_URL
+  PASS on 2026-09-10; finalized Sepolia/Arc vault round trips and both CCTP directions
+pnpm capture:evidence:m5
+  PASS; pinned finalized deployment blocks, headers, historical code and decimals captured
+pnpm test:evidence:m5
+  PASS; 97 objects, index hash 0xd425cac12d0d28839cd245fb3f08d90a1993bec39bc22b6dc12fc83369a71527
 git diff --check
   PASS
 ```
 
-No live M5 evidence exists. The runner has not observed or recorded a vault address, deployment receipt, code hash, schedule-funding receipt, deposit/withdraw receipt, fee API result, CCTP burn, attestation, message identity, destination receipt, rejected duplicate mint or gas calibration. Every affected network, instrument, route and feed remains disabled and `TO_VERIFY`. The exact completion procedure is [M5 Sepolia ↔ Arc Testnet lifecycle](../runbooks/m5-testnet-lifecycle.md).
+The live run used a schedule start frozen more than three hours ahead, CCTP V2 Standard threshold 2000 and the current captured zero Standard protocol fee in each direction. It reconciled 2,000,000 minor units Sepolia→Arc and 1,000,000 minor units Arc→Sepolia. Every success and expected duplicate-receive revert is finalized. The [live evidence index](m5-live-index.json) records the exact vaults, transaction hashes, message identities and every retained object hash. These are testnet technical results and remain `NOT_ELIGIBLE_FOR_REAL_CAPITAL`.
+
+Two expected fail-closed corrections occurred before the final pass and are retained: raw 64-character keys initially failed the strict parser, and Circle's current decoded response returned a 20-byte recipient where the first parser expected a padded word. The final parser normalizes the displayed address and independently decodes the raw signed CCTP message. A finalized outbound burn was resumed only after its exact transaction arguments were re-read and matched, preventing a second source debit.

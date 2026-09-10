@@ -1,6 +1,6 @@
 {
   "schemaVersion": "proof-of-alpha/network-manifest/v1",
-  "manifestVersion": "0.3.0",
+  "manifestVersion": "0.5.1",
   "networks": [
     {
       "networkId": "ethereum-mainnet",
@@ -95,7 +95,7 @@
         }
       ],
       "contracts": {
-        "demoVault": null,
+        "demoVault": "0x054e385a6e5e6e5f438f99ea139e8a06af0f4eb8",
         "commitmentRegistry": null
       },
       "cctp": {
@@ -105,21 +105,43 @@
         "attestationEnvironment": "testnet"
       },
       "verification": {
-        "status": "TO_VERIFY",
-        "enabled": false,
-        "checkedAt": null,
-        "checkedBy": null,
+        "status": "VERIFIED_FOR_TESTNET",
+        "enabled": true,
+        "checkedAt": "2026-09-10T04:04:20.287Z",
+        "checkedBy": "codex-m5-live-evidence-verifier",
         "requiredEvidence": [
           "OFFICIAL_SOURCE",
           "ARCHIVE_READ",
           "ONCHAIN_CODE",
           "FINALITY"
         ],
-        "evidence": [],
-        "blockers": [
-          "Official addresses and token scale are source-reviewed but require matching-chain bytecode evidence.",
-          "Archive block/hash, bytecode and finality policy evidence."
-        ]
+        "evidence": [
+          {
+            "kind": "OFFICIAL_SOURCE",
+            "uri": "docs/evidence/m5-live-index.json",
+            "contentHash": "0xd425cac12d0d28839cd245fb3f08d90a1993bec39bc22b6dc12fc83369a71527",
+            "observedAt": "2026-09-10T04:04:20.287Z"
+          },
+          {
+            "kind": "ARCHIVE_READ",
+            "uri": "docs/evidence/m5-live-index.json",
+            "contentHash": "0xd425cac12d0d28839cd245fb3f08d90a1993bec39bc22b6dc12fc83369a71527",
+            "observedAt": "2026-09-10T04:04:20.287Z"
+          },
+          {
+            "kind": "ONCHAIN_CODE",
+            "uri": "docs/evidence/m5-live-index.json",
+            "contentHash": "0xd425cac12d0d28839cd245fb3f08d90a1993bec39bc22b6dc12fc83369a71527",
+            "observedAt": "2026-09-10T04:04:20.287Z"
+          },
+          {
+            "kind": "FINALITY",
+            "uri": "docs/evidence/m5-live-index.json",
+            "contentHash": "0xd425cac12d0d28839cd245fb3f08d90a1993bec39bc22b6dc12fc83369a71527",
+            "observedAt": "2026-09-10T04:04:20.287Z"
+          }
+        ],
+        "blockers": []
       }
     },
     {
@@ -150,7 +172,7 @@
         }
       ],
       "contracts": {
-        "demoVault": null,
+        "demoVault": "0xc5febf4494adfdef2f3a10e46ea8845ec60c0f93",
         "commitmentRegistry": null
       },
       "cctp": {
@@ -160,21 +182,43 @@
         "attestationEnvironment": "testnet"
       },
       "verification": {
-        "status": "TO_VERIFY",
-        "enabled": false,
-        "checkedAt": null,
-        "checkedBy": null,
+        "status": "VERIFIED_FOR_TESTNET",
+        "enabled": true,
+        "checkedAt": "2026-09-10T04:04:20.287Z",
+        "checkedBy": "codex-m5-live-evidence-verifier",
         "requiredEvidence": [
           "OFFICIAL_SOURCE",
           "ARCHIVE_READ",
           "ONCHAIN_CODE",
           "FINALITY"
         ],
-        "evidence": [],
-        "blockers": [
-          "Official addresses, aliases and token scale are source-reviewed but require matching-chain bytecode evidence.",
-          "Archive block/hash, bytecode and finality policy evidence."
-        ]
+        "evidence": [
+          {
+            "kind": "OFFICIAL_SOURCE",
+            "uri": "docs/evidence/m5-live-index.json",
+            "contentHash": "0xd425cac12d0d28839cd245fb3f08d90a1993bec39bc22b6dc12fc83369a71527",
+            "observedAt": "2026-09-10T04:04:20.287Z"
+          },
+          {
+            "kind": "ARCHIVE_READ",
+            "uri": "docs/evidence/m5-live-index.json",
+            "contentHash": "0xd425cac12d0d28839cd245fb3f08d90a1993bec39bc22b6dc12fc83369a71527",
+            "observedAt": "2026-09-10T04:04:20.287Z"
+          },
+          {
+            "kind": "ONCHAIN_CODE",
+            "uri": "docs/evidence/m5-live-index.json",
+            "contentHash": "0xd425cac12d0d28839cd245fb3f08d90a1993bec39bc22b6dc12fc83369a71527",
+            "observedAt": "2026-09-10T04:04:20.287Z"
+          },
+          {
+            "kind": "FINALITY",
+            "uri": "docs/evidence/m5-live-index.json",
+            "contentHash": "0xd425cac12d0d28839cd245fb3f08d90a1993bec39bc22b6dc12fc83369a71527",
+            "observedAt": "2026-09-10T04:04:20.287Z"
+          }
+        ],
+        "blockers": []
       }
     },
     {

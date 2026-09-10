@@ -1,0 +1,1 @@
+{"kind":"sepolia-to-arc-amount-reconciliation","payload":{"destinationAfter":"22000000","destinationBefore":"20000000","expected":"2000000","protocolFeeMinor":"0","received":"2000000"}}

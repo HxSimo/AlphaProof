@@ -1,0 +1,547 @@
+{
+  "schemaVersion": "proof-of-alpha/m5-live-evidence-index/v1",
+  "provenance": "CROSS_CHAIN_TESTNET",
+  "eligibility": "NOT_ELIGIBLE_FOR_REAL_CAPITAL",
+  "sourceReview": {
+    "reviewedAt": "2026-09-10T00:00:00.000Z",
+    "sources": [
+      "https://ethereum.org/en/developers/docs/networks/",
+      "https://eips.ethereum.org/EIPS/eip-4626",
+      "https://docs.arc.io/integrate/connect-to-arc",
+      "https://docs.arc.io/integrate/infrastructure/bridges",
+      "https://developers.circle.com/stablecoins/usdc-contract-addresses",
+      "https://developers.circle.com/cctp/concepts/supported-chains-and-domains",
+      "https://developers.circle.com/cctp/references/contract-addresses",
+      "https://developers.circle.com/cctp/references/contract-interfaces",
+      "https://developers.circle.com/cctp/concepts/fees",
+      "https://developers.circle.com/cctp/references/technical-guide",
+      "https://developers.circle.com/cctp/quickstarts/transfer-usdc-ethereum-to-arc"
+    ]
+  },
+  "objectCount": 97,
+  "tokens": {
+    "sepolia": {
+      "address": "0x1c7d4b196cb0c7b01d743fbc6116a902379c7238",
+      "codeHash": "0xcd3f29e2ea9c61dadd48bfeaf8b2884b6de9dfee7bf45329452c4c33d0868ceb",
+      "decimals": 6
+    },
+    "arc": {
+      "address": "0x3600000000000000000000000000000000000000",
+      "codeHash": "0xc9987bd3af6b26a030951faa7eacc017b68343aeedf3ce5fe68f821c4b93939d",
+      "decimals": 6
+    }
+  },
+  "vaults": {
+    "sepolia": {
+      "address": "0x054e385a6e5e6e5f438f99ea139e8a06af0f4eb8",
+      "codeHash": "0x564bfa8ffe631dfb8a0b5049df6886cd4a4ed854c6400087952175189bbb916e"
+    },
+    "arc": {
+      "address": "0xc5febf4494adfdef2f3a10e46ea8845ec60c0f93",
+      "codeHash": "0x49b1f2d8aa7c8385387e497cc6fab909384a8ea2d5587e017329fdfd2c33b9b7"
+    }
+  },
+  "transfers": {
+    "sepolia-to-arc": {
+      "burnHash": "0x7138d4f112af73c2ec0b4ac1124f6c4982b1ea7e06fd9e30886c28adcde8c0f2",
+      "mintHash": "0x2015121e18e997508c6e424c2f5eecab6a48d69aec88b2d7266635d5b79ee0d0",
+      "duplicateMintHash": "0x64a59ac14a1a3984f84102699106f3c663a94a0f81f8d004b55c6f1c356c042f",
+      "messageIdentity": "0x1e7ec62a173abd0d70dde55e075595631424aad95b27de48190f8e5f3058fef6",
+      "amountMinor": "2000000"
+    },
+    "arc-to-sepolia": {
+      "burnHash": "0xa2e4a61b43111c7f35ab7d13068f6c91d6dac4eda986665f31f764eafc8c7bbf",
+      "mintHash": "0x68e46488cf0be9d33cc871834f7b5dc1c886841c2f20f94089ac27b88e17a10e",
+      "duplicateMintHash": "0x642ea62675dec86a3fc2229550e04b7fba4341bd3bf75eb6b4768bc7c4f0d0df",
+      "messageIdentity": "0x64f920b8cf0281d5154e3b9117ea5b3ef6c24f3167601922ac22d24e8908bda9",
+      "amountMinor": "1000000"
+    }
+  },
+  "objects": [
+    {
+      "hash": "0x0098073e0928ba2e5da0b4d7e2566665dfe26da70c1c47c02afdcf36927c5cfd",
+      "kind": "sepolia-deployment-submitted",
+      "bytes": 138
+    },
+    {
+      "hash": "0x0116dfe97e1c85e0d3415fecb41138695b9ab886aa31cf5bbc86de729be0d925",
+      "kind": "arc-to-sepolia-mint",
+      "bytes": 4452
+    },
+    {
+      "hash": "0x01b57b050b5d86daa3b22a82d3af5d570cb1a5c4727ad0e89671533e5dbdfe8a",
+      "kind": "arc-message-transmitter-bytecode",
+      "bytes": 4552
+    },
+    {
+      "hash": "0x02545d1af98959ab35303ec962683e3b89e817071e62cc84e7df8094d2904365",
+      "kind": "arc-deployment-included",
+      "bytes": 1056
+    },
+    {
+      "hash": "0x037b79889d8dc71d0b1928cd6ea11ca082b4360310fe51a8a795de3fb4a2e024",
+      "kind": "sepolia-deposit-submitted",
+      "bytes": 135
+    },
+    {
+      "hash": "0x03c9eb20ff0b27c80f04e26c336ba31a9665d9d839ead36fed472da88ca0e409",
+      "kind": "sepolia-deployment-included",
+      "bytes": 1062
+    },
+    {
+      "hash": "0x05b63b5810c2d24762bc04ca7ea3cf66a7f74740e834658854d350eb77e417bf",
+      "kind": "sepolia-vault-bytecode",
+      "bytes": 10536
+    },
+    {
+      "hash": "0x06c0f51fb33e6fd4880eb840f8e957a082356bb12a89267b09fffb2ab093d983",
+      "kind": "arc-vault-approval-included",
+      "bytes": 1681
+    },
+    {
+      "hash": "0x0a75e22b914e8186d8629747d552be2a7e205716b8618875054465693cd5cd3d",
+      "kind": "sepolia-withdraw-submitted",
+      "bytes": 136
+    },
+    {
+      "hash": "0x0a806af6a314ca82208385bf25b10ecd45c85a3315c949c7d8178667cc7314bc",
+      "kind": "sepolia-deposit-included",
+      "bytes": 3001
+    },
+    {
+      "hash": "0x0dfea4a166206218c8754d26e55616f9eab1c00bc9de73c1af9a646947bf7b49",
+      "kind": "sepolia-vault-bytecode",
+      "bytes": 10536
+    },
+    {
+      "hash": "0x114245dd7981b4b621efc29e8a5bfb04bc54c5c0e1c469a05b0b9913571acc50",
+      "kind": "sepolia-withdraw",
+      "bytes": 3116
+    },
+    {
+      "hash": "0x21c42c5add681d503f6cabd91531a030ad289bb2996b2821c0c3c9f8d4b344fb",
+      "kind": "arc-vault-round-trip",
+      "bytes": 395
+    },
+    {
+      "hash": "0x226e51a1ef6281afcab445b8a4d8a74c27313d712c7aa757e18e6cf6cefaa770",
+      "kind": "arc-to-sepolia-mint-included",
+      "bytes": 4410
+    },
+    {
+      "hash": "0x23c3e9442e110987f17d4fab14663a472d03ee969cc8a46acb053feaa1fb7524",
+      "kind": "arc-withdraw",
+      "bytes": 3731
+    },
+    {
+      "hash": "0x26c14d823a372402343055a41ebac5a4affcde1e25400c96dc2db99ef88ee40f",
+      "kind": "network-identities",
+      "bytes": 88
+    },
+    {
+      "hash": "0x29709c565d4a422905fc01af5b07ae879bb690534ac6396eaa82e8e578f34090",
+      "kind": "sepolia-vault-round-trip",
+      "bytes": 346
+    },
+    {
+      "hash": "0x2a1e5e56c8e90274a10423db4adcdd3ba9bbb2f532a95124041ae0ffa0c87b9c",
+      "kind": "arc-to-sepolia-approval-included",
+      "bytes": 1686
+    },
+    {
+      "hash": "0x2c05707b1e051fb399fadf96a3c3214a83b1cc43f3d1e63e5b0221ffdefc3024",
+      "kind": "arc-vault-approval",
+      "bytes": 1723
+    },
+    {
+      "hash": "0x2c3a06095b970264873f5005064eb016598df35f6cbc09fa0736f5cf674b2ea7",
+      "kind": "sepolia-to-arc-burn-submitted",
+      "bytes": 139
+    },
+    {
+      "hash": "0x2c8e8ea381308bb3caad2f459a47882ab97125e7456c0c034b4eb4e64afd47fb",
+      "kind": "cctp-attestation-http",
+      "bytes": 2649
+    },
+    {
+      "hash": "0x30f6ae5001c32e6544c861b629dafdf65489e5481d646110f4c4a5827870077f",
+      "kind": "sepolia-to-arc-duplicate-mint-rejected-submitted",
+      "bytes": 158
+    },
+    {
+      "hash": "0x360ebc8aad69ef55a0eced14d66cca017d86685d3c3d50915bb5d53fb3f12f51",
+      "kind": "arc-frozen-yield-schedule",
+      "bytes": 246
+    },
+    {
+      "hash": "0x387403cf684fe0f6956ea8843c11a2e5ee0daa4b4e60932d5da96e96eb92ad69",
+      "kind": "sepolia-vault-approval-submitted",
+      "bytes": 142
+    },
+    {
+      "hash": "0x38cc2e9ca611d2fd06ecf5737cb74fed1f4b4e151bbd4827dd77a47a0f85bb1d",
+      "kind": "sepolia-token-messenger-bytecode",
+      "bytes": 4552
+    },
+    {
+      "hash": "0x3f5cd041b1426043ac8a3ef4e763bc924f577cf38de167dfd6a825090614a093",
+      "kind": "arc-token-messenger-bytecode",
+      "bytes": 4548
+    },
+    {
+      "hash": "0x41e6634d3c223b345b543990c96880390212f09f328dbe83751bd9546db24ae8",
+      "kind": "arc-to-sepolia-duplicate-mint-rejected-submitted",
+      "bytes": 158
+    },
+    {
+      "hash": "0x450ec1170bf927d374f42686b10b32925d7329eb801878a60470350cfcd99561",
+      "kind": "sepolia-vault-approval-included",
+      "bytes": 1691
+    },
+    {
+      "hash": "0x4b06d21cdb91bd156158516005b8e603be5fd4aee66f2fd74eccc41e47f3d188",
+      "kind": "sepolia-message-transmitter-bytecode",
+      "bytes": 4556
+    },
+    {
+      "hash": "0x4ed26aee3334e2aff8de2e9285040d620b24ee170c8375901c04c265cbacbda1",
+      "kind": "sepolia-schedule-funding-submitted",
+      "bytes": 144
+    },
+    {
+      "hash": "0x50a9591e3ee1e0d06ac4bd76eb135839e20329cc38844a7e6af4e820f3d6a769",
+      "kind": "sepolia-to-arc-fee-response",
+      "bytes": 156
+    },
+    {
+      "hash": "0x50dac66071de0a8a21342c17bfdb8348ea2ae8808f191d0f8f1328ef82f4882c",
+      "kind": "arc-deposit-submitted",
+      "bytes": 131
+    },
+    {
+      "hash": "0x516f85d7aeca4c23d3e25327d5a3f2998202f11e07bff556ba7fb1f2bfa7f20d",
+      "kind": "sepolia-to-arc-duplicate-mint-rejected",
+      "bytes": 1150
+    },
+    {
+      "hash": "0x51e266c09de9f00c23caa27044b8c47d4479bfe6825fb187bb85d954bd18a6d3",
+      "kind": "sepolia-to-arc-approval-submitted",
+      "bytes": 143
+    },
+    {
+      "hash": "0x55ea515193984271bb4f7ee4f901064f396a72037616ccd71cdc6c32cdbd7c40",
+      "kind": "arc-to-sepolia-burn",
+      "bytes": 6617
+    },
+    {
+      "hash": "0x59cd3b22e2e3594e4420613e88ff9de6c834a8df622c9eac249e3271f546c851",
+      "kind": "arc-deposit-included",
+      "bytes": 3620
+    },
+    {
+      "hash": "0x59d173217cab3ccf68ede4cc25f52f8ff3422044254a3a7676d9a375ae4f3455",
+      "kind": "sepolia-deployment-submitted",
+      "bytes": 138
+    },
+    {
+      "hash": "0x5c82a24cdfb76f24e0ec18212c66fe7fbf771b47123b5502bc53693fc493b547",
+      "kind": "sepolia-to-arc-mint-submitted",
+      "bytes": 139
+    },
+    {
+      "hash": "0x607878c1557473f30eb54ccad5575262190f1d64997944421e54d73577090308",
+      "kind": "sepolia-vault-approval-included",
+      "bytes": 1691
+    },
+    {
+      "hash": "0x628a204f52269ec49431e99a6daf177a4197080fb16b64e1ae01fac0d4139c58",
+      "kind": "relayer-prefunding",
+      "bytes": 207
+    },
+    {
+      "hash": "0x62b1c2a4d69080e271474b81e7e62c513254b7b7de6b5c482101d9b3424b19eb",
+      "kind": "arc-to-sepolia-approval-submitted",
+      "bytes": 143
+    },
+    {
+      "hash": "0x64833931eeb72f48e3d2dda8c3a461a1d3317779d91a3250a418368760c0514c",
+      "kind": "sepolia-withdraw-included",
+      "bytes": 3070
+    },
+    {
+      "hash": "0x64cf642a6c9999138e45ccb9328c0de8bee3cae8a1af37abdd6e915159e4b397",
+      "kind": "sepolia-schedule-funding-submitted",
+      "bytes": 144
+    },
+    {
+      "hash": "0x652e49a0dd176a147b614dfb1c95b20422e91d9f939e9d58c7d29a28702e1861",
+      "kind": "usdc-decimals",
+      "bytes": 72
+    },
+    {
+      "hash": "0x67dcc9557f6adbd8aa1f4641555581a3e2cc38cb6fa78604159476d169c57848",
+      "kind": "arc-to-sepolia-burn-submitted",
+      "bytes": 139
+    },
+    {
+      "hash": "0x6a10d5b09c2efb6cc1ab2602641253d8782de1b5ff4f6107f339205bbfbf46e2",
+      "kind": "sepolia-to-arc-attestation",
+      "bytes": 2685
+    },
+    {
+      "hash": "0x6db15d14c9cb429a2e180fddd6cd7f35198b0bdaf3f7966c7fd59db39358f640",
+      "kind": "sepolia-frozen-yield-schedule",
+      "bytes": 250
+    },
+    {
+      "hash": "0x6e15d02996373f1650c9fe4eb635060004ca13597aa48ac5cf9d378c8f046a75",
+      "kind": "sepolia-vault-bytecode",
+      "bytes": 10536
+    },
+    {
+      "hash": "0x6f95c1989dc82f796ad02b92e2694a9661eb1013db81d1f25e6e3525e198294c",
+      "kind": "sepolia-withdraw-submitted",
+      "bytes": 136
+    },
+    {
+      "hash": "0x754155fa9cf456a4e784b7389ee87ceabc205b087b4cf55fa947d6ad7ba2187f",
+      "kind": "arc-deployment",
+      "bytes": 1098
+    },
+    {
+      "hash": "0x7afdb52bc6ad23876141074aabf3c9890cc16760021fcb56657c5e23ee951b78",
+      "kind": "sepolia-to-arc-burn-included",
+      "bytes": 5343
+    },
+    {
+      "hash": "0x7d6e66cd5f51fe92326773b6d486c4f0419fd3d1cf5cdfb900881e5f0594f76d",
+      "kind": "cctp-attestation-http",
+      "bytes": 404
+    },
+    {
+      "hash": "0x7e42f9737d8e8ba9fafac813aba4c5562d6fe6f58cb4993cbdc9a1d031deae76",
+      "kind": "sepolia-vault-round-trip",
+      "bytes": 346
+    },
+    {
+      "hash": "0x7f352fb0d6b5046649b82f8123d02bde4bd8ff67e636c2f8fecdbedc814f0caf",
+      "kind": "sepolia-deposit",
+      "bytes": 3047
+    },
+    {
+      "hash": "0x804792a62d6a2ca3a5275bddc646e60fcfc7341fe271a088f6e641bc99b8190b",
+      "kind": "arc-to-sepolia-duplicate-mint-rejected-included",
+      "bytes": 1109
+    },
+    {
+      "hash": "0x822ccae53c1328836214066b44a5d3c9d63e1c082031c592ab96fc60f861defc",
+      "kind": "arc-deployment-submitted",
+      "bytes": 134
+    },
+    {
+      "hash": "0x8264cbed5e233a6870da4dd3d86f922b5006b489901567861fe3b13feae380d0",
+      "kind": "sepolia-deployment",
+      "bytes": 1103
+    },
+    {
+      "hash": "0x897bbd85c5f26be420243672147cf300a4e722b1224ad7f84061199766870ab6",
+      "kind": "sepolia-deployment-included",
+      "bytes": 1061
+    },
+    {
+      "hash": "0x8dff365730950d9b04f4e316bddc57dbaef81231a0e3baa0a5b117f25d72e41b",
+      "kind": "sepolia-deposit-submitted",
+      "bytes": 135
+    },
+    {
+      "hash": "0x90b3c0b764d530d77dc6aae115c3d5f816838b1177c08e507883f88466686ae9",
+      "kind": "sepolia-archive-read",
+      "bytes": 20284
+    },
+    {
+      "hash": "0x90db26ac7067a0161f98b4c31dcab4dd934ea5ab13776725503d9da078979cbb",
+      "kind": "arc-usdc-alias",
+      "bytes": 219
+    },
+    {
+      "hash": "0x9260288ce3a036b96090f4e99f38d883973f3e738a645de3aeff142a3b897d03",
+      "kind": "arc-deposit",
+      "bytes": 3662
+    },
+    {
+      "hash": "0x97046bf84fd93ba016b3b699211e75646dfb2d2477f8b451fc69e32912bc555c",
+      "kind": "sepolia-to-arc-mint",
+      "bytes": 5062
+    },
+    {
+      "hash": "0x97b81eebcb153e6e5fe14a813585b5cd52d11a524dccd80842c17a1468950a50",
+      "kind": "arc-archive-read",
+      "bytes": 3132
+    },
+    {
+      "hash": "0x9b06347e4ed1db17bf8834187a6f46f2d458818644f4397b5b8461472b8879cc",
+      "kind": "sepolia-withdraw-included",
+      "bytes": 3074
+    },
+    {
+      "hash": "0x9bb4fb280c85be5309a14e39294840f9066fce460e813af6a2ea00144ca562cd",
+      "kind": "arc-to-sepolia-amount-reconciliation",
+      "bytes": 187
+    },
+    {
+      "hash": "0x9cb0acae156668773268ae9c6e554b5e5e9a00267ba996ae7e841914c3f2bee3",
+      "kind": "sepolia-schedule-funding",
+      "bytes": 2353
+    },
+    {
+      "hash": "0xa26b71941ae742846ffbb27e40af479d82f706bf960d623c59bdd9f7799eca24",
+      "kind": "cctp-attestation-http",
+      "bytes": 2649
+    },
+    {
+      "hash": "0xa494719e8853c3359e2b1e11100b3ceec6134af58ca9508b7271cff67205015b",
+      "kind": "arc-to-sepolia-mint-submitted",
+      "bytes": 139
+    },
+    {
+      "hash": "0xa6ef5bdeae450ea1691d94f06e4b2ef40ea7823cc12e2c27fd6effc06dc62f1f",
+      "kind": "arc-withdraw-included",
+      "bytes": 3689
+    },
+    {
+      "hash": "0xa7cd49da1ef4c750aaa11f711bd3b1d3553e79717957656f21631386e9f66b0c",
+      "kind": "sepolia-vault-approval",
+      "bytes": 1733
+    },
+    {
+      "hash": "0xb23f1f70119ec1ae17a21664a6e3af7cba447d64d8dbcde672409c754ba0f196",
+      "kind": "arc-vault-approval-submitted",
+      "bytes": 138
+    },
+    {
+      "hash": "0xb4dc48e78eec4f2ecc3bf542c1ae13cf3069fe0f7d76db2c7b3a50729b3294ac",
+      "kind": "sepolia-deposit-included",
+      "bytes": 3005
+    },
+    {
+      "hash": "0xb5c6f7dfa343fa78827d247a9f90af1ea9ef9d0906b42f145b759af90a100a59",
+      "kind": "sepolia-vault-approval-submitted",
+      "bytes": 142
+    },
+    {
+      "hash": "0xb795471d8e592120bf04e4787cb8be11cdb9c448fd9abeaad8e5503232a744f8",
+      "kind": "arc-usdc-bytecode",
+      "bytes": 3783
+    },
+    {
+      "hash": "0xba76d6f3355d84b02af28e561bd805cacc795ee6e64a16a60b42088457356fb4",
+      "kind": "sepolia-frozen-yield-schedule",
+      "bytes": 250
+    },
+    {
+      "hash": "0xbb1cc0b60c3dc476daa1d1206e038b3586197589b10d2ec1e8c510cee967b2fc",
+      "kind": "arc-schedule-funding",
+      "bytes": 2966
+    },
+    {
+      "hash": "0xbb21515667b25be9e9a01f4df83b73c6ede8985fdf12e65db840ab21e52f1383",
+      "kind": "sepolia-to-arc-burn",
+      "bytes": 5385
+    },
+    {
+      "hash": "0xbd1d3be8493daf396b717967a3cc7b303920962703c361f5f2257e74d780c98e",
+      "kind": "sepolia-to-arc-duplicate-mint-rejected-included",
+      "bytes": 1108
+    },
+    {
+      "hash": "0xbf4a4727da09b18aac9c6a9ff8f6ddb666a265745aad9ef3b7a48f3428b0ae4a",
+      "kind": "sepolia-to-arc-approval-included",
+      "bytes": 1692
+    },
+    {
+      "hash": "0xc8a9a35c0a639ab34c73e543b58182306d893e9384318cbbfaf0991f434a2779",
+      "kind": "sepolia-schedule-funding-included",
+      "bytes": 2311
+    },
+    {
+      "hash": "0xca679b12c2014e85263affdd85ecc005f8502851068e4f31cd076da62ff01c16",
+      "kind": "arc-vault-bytecode",
+      "bytes": 10532
+    },
+    {
+      "hash": "0xceddfec6bd8e478ec6ace9b7fe02f09fdfde549269d2476b09049123d7f65943",
+      "kind": "sepolia-usdc-bytecode",
+      "bytes": 3787
+    },
+    {
+      "hash": "0xd3d952ef8910f694afd03b489609e8799331bebd0161f337bd6689e05e0cf35f",
+      "kind": "sepolia-deployment-included",
+      "bytes": 1062
+    },
+    {
+      "hash": "0xd92ca9e5182aa303d007ae2d5da8b43466289bc77525546926c1849e79c94046",
+      "kind": "arc-withdraw-submitted",
+      "bytes": 132
+    },
+    {
+      "hash": "0xdb91508721bfaa9dad8bf96a7817ec11786b06ca9a16fec4a9388649057c36b2",
+      "kind": "sepolia-deployment-submitted",
+      "bytes": 138
+    },
+    {
+      "hash": "0xdef0df3f060a01ba7ba064a6c377c05430d47655c1bc861e92ddc6ce6d3a491e",
+      "kind": "arc-to-sepolia-approval",
+      "bytes": 1728
+    },
+    {
+      "hash": "0xe3c75a573f8772a0a0941f7313507283e4b1254473dc061f5e2e094cd7d8d8b5",
+      "kind": "sepolia-to-arc-amount-reconciliation",
+      "bytes": 185
+    },
+    {
+      "hash": "0xea9a3a69f7bb86fe1defded2d4b52a79fab85b9343f34bf8a26ea0c7175e9a14",
+      "kind": "sepolia-to-arc-mint-included",
+      "bytes": 5020
+    },
+    {
+      "hash": "0xec40a5a6036d399103ef1c13df52bb1e2217fed12a9d30868cfc3e59d3ff27e8",
+      "kind": "arc-schedule-funding-submitted",
+      "bytes": 140
+    },
+    {
+      "hash": "0xf0db63ac02bce9114b2116b0c7c23c20c1d6cb394098f15fdade834590cf797f",
+      "kind": "cctp-attestation-http",
+      "bytes": 124
+    },
+    {
+      "hash": "0xf1272173d89b5730b3c40fb9c0d2e16ae4822c9b1aa479ded4538373d70d66cb",
+      "kind": "sepolia-schedule-funding-included",
+      "bytes": 2306
+    },
+    {
+      "hash": "0xf23ebe83a28ca510d78d87972823018e88c6dd2dcd8615b7b76631d3365d1722",
+      "kind": "arc-schedule-funding-included",
+      "bytes": 2924
+    },
+    {
+      "hash": "0xf6c19c9c149a95ebc114a18069a7823145e5e3f859ca6764da3c265b181a6f97",
+      "kind": "arc-to-sepolia-burn-included",
+      "bytes": 6575
+    },
+    {
+      "hash": "0xfa87e311864936457d84437f0b2269b72d3c4dc528697fc2f0797f6ff03b1079",
+      "kind": "arc-to-sepolia-fee-response",
+      "bytes": 156
+    },
+    {
+      "hash": "0xfb7865a121369e46e88a52703bfe53f555b6a510d65aeee33daf3a7127ba80a9",
+      "kind": "arc-to-sepolia-duplicate-mint-rejected",
+      "bytes": 1151
+    },
+    {
+      "hash": "0xfce88653a58a514fc127b75ef1ee5ca2c1aae73d55ce0ea5dbcc345e808a0006",
+      "kind": "arc-to-sepolia-attestation",
+      "bytes": 2685
+    }
+  ]
+}

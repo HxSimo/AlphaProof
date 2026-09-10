@@ -1,6 +1,6 @@
 {
   "schemaVersion": "proof-of-alpha/instrument-manifest/v1",
-  "manifestVersion": "0.3.0",
+  "manifestVersion": "0.5.1",
   "instruments": [
     {
       "instrumentId": "eth-cash-usdc",
@@ -202,25 +202,47 @@
       "adapterId": "cash-ethereum-sepolia",
       "adapterVersion": "1.0.0",
       "contractAddress": "0x1c7d4b196cb0c7b01d743fbc6116a902379c7238",
-      "codeHash": null,
+      "codeHash": "0xcd3f29e2ea9c61dadd48bfeaf8b2884b6de9dfee7bf45329452c4c33d0868ceb",
       "factSheet": "docs/instrument-catalog/sepolia-cash-usdc.md",
       "candidateName": "Sepolia test USDC cash",
       "verification": {
-        "status": "TO_VERIFY",
-        "enabled": false,
-        "checkedAt": "2026-09-09T00:00:00.000Z",
-        "checkedBy": "codex-m5-source-review",
+        "status": "VERIFIED_FOR_TESTNET",
+        "enabled": true,
+        "checkedAt": "2026-09-10T04:04:20.287Z",
+        "checkedBy": "codex-m5-live-evidence-verifier",
         "requiredEvidence": [
           "OFFICIAL_SOURCE",
           "ONCHAIN_CODE",
           "ARCHIVE_READ",
           "REPLAY"
         ],
-        "evidence": [],
-        "blockers": [
-          "Official token address and scale are source-reviewed; matching-chain bytecode remains outstanding.",
-          "Resolve USDC token/interface and decimals, verify bytecode and balance reads. For Arc compare native and ERC-20 views at one block, normalize with retained dust and alias one economic balance. Verify USDT separately where listed."
-        ]
+        "evidence": [
+          {
+            "kind": "OFFICIAL_SOURCE",
+            "uri": "docs/evidence/m5-live-index.json",
+            "contentHash": "0xd425cac12d0d28839cd245fb3f08d90a1993bec39bc22b6dc12fc83369a71527",
+            "observedAt": "2026-09-10T04:04:20.287Z"
+          },
+          {
+            "kind": "ONCHAIN_CODE",
+            "uri": "docs/evidence/m5-live-index.json",
+            "contentHash": "0xd425cac12d0d28839cd245fb3f08d90a1993bec39bc22b6dc12fc83369a71527",
+            "observedAt": "2026-09-10T04:04:20.287Z"
+          },
+          {
+            "kind": "ARCHIVE_READ",
+            "uri": "docs/evidence/m5-live-index.json",
+            "contentHash": "0xd425cac12d0d28839cd245fb3f08d90a1993bec39bc22b6dc12fc83369a71527",
+            "observedAt": "2026-09-10T04:04:20.287Z"
+          },
+          {
+            "kind": "REPLAY",
+            "uri": "docs/evidence/m5-live-index.json",
+            "contentHash": "0xd425cac12d0d28839cd245fb3f08d90a1993bec39bc22b6dc12fc83369a71527",
+            "observedAt": "2026-09-10T04:04:20.287Z"
+          }
+        ],
+        "blockers": []
       }
     },
     {
@@ -231,15 +253,15 @@
       "protocolId": "poa-demo",
       "adapterId": "demo-vault-ethereum-sepolia",
       "adapterVersion": "1.0.0",
-      "contractAddress": null,
-      "codeHash": null,
+      "contractAddress": "0x054e385a6e5e6e5f438f99ea139e8a06af0f4eb8",
+      "codeHash": "0x564bfa8ffe631dfb8a0b5049df6886cd4a4ed854c6400087952175189bbb916e",
       "factSheet": "docs/instrument-catalog/sepolia-vault-usdc.md",
       "candidateName": "Sepolia technical passive test reference",
       "verification": {
-        "status": "TO_VERIFY",
-        "enabled": false,
-        "checkedAt": null,
-        "checkedBy": null,
+        "status": "VERIFIED_FOR_TESTNET",
+        "enabled": true,
+        "checkedAt": "2026-09-10T04:04:20.287Z",
+        "checkedBy": "codex-m5-live-evidence-verifier",
         "requiredEvidence": [
           "OFFICIAL_SOURCE",
           "DEPLOYMENT",
@@ -247,11 +269,39 @@
           "LIVE_ROUND_TRIP",
           "REPLAY"
         ],
-        "evidence": [],
-        "blockers": [
-          "No vault deployment exists; address, bytecode and live round trip remain outstanding.",
-          "Deploy or select an ERC-4626 test USDC vault. Archive deployment bytecode/address, admin powers and decimals. Publish finite funded test-yield budget/schedule before X. Record actual deposit/withdraw test-token receipts and limits/rounding fixtures; no commercial APY claim."
-        ]
+        "evidence": [
+          {
+            "kind": "OFFICIAL_SOURCE",
+            "uri": "docs/evidence/m5-live-index.json",
+            "contentHash": "0xd425cac12d0d28839cd245fb3f08d90a1993bec39bc22b6dc12fc83369a71527",
+            "observedAt": "2026-09-10T04:04:20.287Z"
+          },
+          {
+            "kind": "DEPLOYMENT",
+            "uri": "docs/evidence/m5-live-index.json",
+            "contentHash": "0xd425cac12d0d28839cd245fb3f08d90a1993bec39bc22b6dc12fc83369a71527",
+            "observedAt": "2026-09-10T04:04:20.287Z"
+          },
+          {
+            "kind": "ONCHAIN_CODE",
+            "uri": "docs/evidence/m5-live-index.json",
+            "contentHash": "0xd425cac12d0d28839cd245fb3f08d90a1993bec39bc22b6dc12fc83369a71527",
+            "observedAt": "2026-09-10T04:04:20.287Z"
+          },
+          {
+            "kind": "LIVE_ROUND_TRIP",
+            "uri": "docs/evidence/m5-live-index.json",
+            "contentHash": "0xd425cac12d0d28839cd245fb3f08d90a1993bec39bc22b6dc12fc83369a71527",
+            "observedAt": "2026-09-10T04:04:20.287Z"
+          },
+          {
+            "kind": "REPLAY",
+            "uri": "docs/evidence/m5-live-index.json",
+            "contentHash": "0xd425cac12d0d28839cd245fb3f08d90a1993bec39bc22b6dc12fc83369a71527",
+            "observedAt": "2026-09-10T04:04:20.287Z"
+          }
+        ],
+        "blockers": []
       }
     },
     {
@@ -263,25 +313,47 @@
       "adapterId": "cash-arc-testnet",
       "adapterVersion": "1.0.0",
       "contractAddress": "0x3600000000000000000000000000000000000000",
-      "codeHash": null,
+      "codeHash": "0xc9987bd3af6b26a030951faa7eacc017b68343aeedf3ce5fe68f821c4b93939d",
       "factSheet": "docs/instrument-catalog/arc-test-cash-usdc.md",
       "candidateName": "Arc test USDC cash; native and ERC-20 views alias",
       "verification": {
-        "status": "TO_VERIFY",
-        "enabled": false,
-        "checkedAt": "2026-09-09T00:00:00.000Z",
-        "checkedBy": "codex-m5-source-review",
+        "status": "VERIFIED_FOR_TESTNET",
+        "enabled": true,
+        "checkedAt": "2026-09-10T04:04:20.287Z",
+        "checkedBy": "codex-m5-live-evidence-verifier",
         "requiredEvidence": [
           "OFFICIAL_SOURCE",
           "ONCHAIN_CODE",
           "ARCHIVE_READ",
           "REPLAY"
         ],
-        "evidence": [],
-        "blockers": [
-          "Official token address, scale and alias behavior are source-reviewed; matching-chain bytecode remains outstanding.",
-          "Resolve USDC token/interface and decimals, verify bytecode and balance reads. For Arc compare native and ERC-20 views at one block, normalize with retained dust and alias one economic balance. Verify USDT separately where listed."
-        ]
+        "evidence": [
+          {
+            "kind": "OFFICIAL_SOURCE",
+            "uri": "docs/evidence/m5-live-index.json",
+            "contentHash": "0xd425cac12d0d28839cd245fb3f08d90a1993bec39bc22b6dc12fc83369a71527",
+            "observedAt": "2026-09-10T04:04:20.287Z"
+          },
+          {
+            "kind": "ONCHAIN_CODE",
+            "uri": "docs/evidence/m5-live-index.json",
+            "contentHash": "0xd425cac12d0d28839cd245fb3f08d90a1993bec39bc22b6dc12fc83369a71527",
+            "observedAt": "2026-09-10T04:04:20.287Z"
+          },
+          {
+            "kind": "ARCHIVE_READ",
+            "uri": "docs/evidence/m5-live-index.json",
+            "contentHash": "0xd425cac12d0d28839cd245fb3f08d90a1993bec39bc22b6dc12fc83369a71527",
+            "observedAt": "2026-09-10T04:04:20.287Z"
+          },
+          {
+            "kind": "REPLAY",
+            "uri": "docs/evidence/m5-live-index.json",
+            "contentHash": "0xd425cac12d0d28839cd245fb3f08d90a1993bec39bc22b6dc12fc83369a71527",
+            "observedAt": "2026-09-10T04:04:20.287Z"
+          }
+        ],
+        "blockers": []
       }
     },
     {
@@ -292,15 +364,15 @@
       "protocolId": "poa-demo",
       "adapterId": "demo-vault-arc-testnet",
       "adapterVersion": "1.0.0",
-      "contractAddress": null,
-      "codeHash": null,
+      "contractAddress": "0xc5febf4494adfdef2f3a10e46ea8845ec60c0f93",
+      "codeHash": "0x49b1f2d8aa7c8385387e497cc6fab909384a8ea2d5587e017329fdfd2c33b9b7",
       "factSheet": "docs/instrument-catalog/arc-test-vault-usdc.md",
       "candidateName": "Arc demonstration ERC-4626 vault",
       "verification": {
-        "status": "TO_VERIFY",
-        "enabled": false,
-        "checkedAt": null,
-        "checkedBy": null,
+        "status": "VERIFIED_FOR_TESTNET",
+        "enabled": true,
+        "checkedAt": "2026-09-10T04:04:20.287Z",
+        "checkedBy": "codex-m5-live-evidence-verifier",
         "requiredEvidence": [
           "OFFICIAL_SOURCE",
           "DEPLOYMENT",
@@ -308,11 +380,39 @@
           "LIVE_ROUND_TRIP",
           "REPLAY"
         ],
-        "evidence": [],
-        "blockers": [
-          "Exact contract, code and asset verification outstanding.",
-          "Deploy or select an ERC-4626 test USDC vault. Archive deployment bytecode/address, admin powers and decimals. Publish finite funded test-yield budget/schedule before X. Record actual deposit/withdraw test-token receipts and limits/rounding fixtures; no commercial APY claim."
-        ]
+        "evidence": [
+          {
+            "kind": "OFFICIAL_SOURCE",
+            "uri": "docs/evidence/m5-live-index.json",
+            "contentHash": "0xd425cac12d0d28839cd245fb3f08d90a1993bec39bc22b6dc12fc83369a71527",
+            "observedAt": "2026-09-10T04:04:20.287Z"
+          },
+          {
+            "kind": "DEPLOYMENT",
+            "uri": "docs/evidence/m5-live-index.json",
+            "contentHash": "0xd425cac12d0d28839cd245fb3f08d90a1993bec39bc22b6dc12fc83369a71527",
+            "observedAt": "2026-09-10T04:04:20.287Z"
+          },
+          {
+            "kind": "ONCHAIN_CODE",
+            "uri": "docs/evidence/m5-live-index.json",
+            "contentHash": "0xd425cac12d0d28839cd245fb3f08d90a1993bec39bc22b6dc12fc83369a71527",
+            "observedAt": "2026-09-10T04:04:20.287Z"
+          },
+          {
+            "kind": "LIVE_ROUND_TRIP",
+            "uri": "docs/evidence/m5-live-index.json",
+            "contentHash": "0xd425cac12d0d28839cd245fb3f08d90a1993bec39bc22b6dc12fc83369a71527",
+            "observedAt": "2026-09-10T04:04:20.287Z"
+          },
+          {
+            "kind": "REPLAY",
+            "uri": "docs/evidence/m5-live-index.json",
+            "contentHash": "0xd425cac12d0d28839cd245fb3f08d90a1993bec39bc22b6dc12fc83369a71527",
+            "observedAt": "2026-09-10T04:04:20.287Z"
+          }
+        ],
+        "blockers": []
       }
     },
     {

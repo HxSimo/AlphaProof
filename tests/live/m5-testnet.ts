@@ -3,6 +3,7 @@ import { resolve } from 'node:path';
 import {
   createPublicClient,
   createWalletClient,
+  decodeFunctionData,
   defineChain,
   encodeFunctionData,
   http,
@@ -29,13 +30,20 @@ const required = (name: string) => {
   if (!value) throw new Error(`LIVE_TESTNET_CONFIGURATION_MISSING: ${name}`);
   return value;
 };
+const privateKey = (name: string): Hex => {
+  const value = required(name);
+  const normalized = value.startsWith('0x') ? value : `0x${value}`;
+  if (!/^0x[0-9a-fA-F]{64}$/.test(normalized))
+    throw new Error(`LIVE_TESTNET_CONFIGURATION_INVALID: ${name}`);
+  return normalized as Hex;
+};
 const sepoliaRpc = required('ETHEREUM_SEPOLIA_RPC_URL');
 const arcRpc = required('ARC_TESTNET_RPC_URL');
 const deployer = privateKeyToAccount(
-  required('POA_TESTNET_DEPLOYER_PRIVATE_KEY') as Hex,
+  privateKey('POA_TESTNET_DEPLOYER_PRIVATE_KEY'),
 );
 const relayer = privateKeyToAccount(
-  required('POA_TESTNET_RELAYER_PRIVATE_KEY') as Hex,
+  privateKey('POA_TESTNET_RELAYER_PRIVATE_KEY'),
 );
 const evidenceDir = resolve(required('POA_LIVE_EVIDENCE_DIR'));
 const outboundTransferAmount = BigInt(
@@ -47,6 +55,8 @@ const returnTransferAmount = BigInt(
 const vaultDeposit = BigInt(required('POA_LIVE_VAULT_DEPOSIT_MINOR'));
 const yieldBudget = BigInt(required('POA_LIVE_YIELD_BUDGET_MINOR'));
 const experimentStart = BigInt(required('POA_TESTNET_EXPERIMENT_START_EPOCH'));
+const resumeOutboundBurnHash = process.env
+  .POA_LIVE_RESUME_OUTBOUND_BURN_HASH as Hex | undefined;
 if (
   outboundTransferAmount <= 0n ||
   returnTransferAmount <= 0n ||
@@ -55,6 +65,11 @@ if (
 )
   throw new Error(
     'LIVE_TESTNET_CONFIGURATION_INVALID: amounts must be positive',
+  );
+const runnerStartedAt = BigInt(Math.floor(Date.now() / 1000));
+if (experimentStart <= runnerStartedAt + 10_800n)
+  throw new Error(
+    'LIVE_SCHEDULE_NOT_PROSPECTIVE: experiment start must be at least three hours ahead',
   );
 
 const ARC_USDC = '0x3600000000000000000000000000000000000000' as Address;
@@ -107,6 +122,7 @@ const transmitter = parseAbi([
   'function receiveMessage(bytes message,bytes attestation)',
 ]);
 const vaultAbi = parseAbi([
+  'constructor(address asset_,address owner_)',
   'function freezeYieldSchedule(uint64 start,uint64 end,uint256 budget)',
   'function deposit(uint256 assets,address receiver) returns (uint256)',
   'function redeem(uint256 shares,address receiver,address owner) returns (uint256)',
@@ -130,6 +146,13 @@ const serializable = (value: unknown): unknown => {
   return value;
 };
 const captured: unknown[] = [];
+type PendingFinalityReceipt = {
+  client: typeof sp | typeof ap;
+  expectedStatus: 'success' | 'reverted';
+  kind: string;
+  receipt: Awaited<ReturnType<typeof sp.waitForTransactionReceipt>>;
+};
+const pendingFinalityReceipts: PendingFinalityReceipt[] = [];
 async function record(kind: string, value: unknown) {
   const capturedAt = new Date().toISOString();
   const descriptor = await archiveJson(
@@ -141,6 +164,7 @@ async function record(kind: string, value: unknown) {
   return descriptor;
 }
 async function receipt(client: typeof sp | typeof ap, hash: Hex, kind: string) {
+  await record(`${kind}-submitted`, { transactionHash: hash });
   const value = await client.waitForTransactionReceipt({
     hash,
     confirmations: 1,
@@ -148,19 +172,12 @@ async function receipt(client: typeof sp | typeof ap, hash: Hex, kind: string) {
   });
   if (value.status !== 'success')
     throw new Error(`LIVE_TRANSACTION_REVERTED: ${kind} ${hash}`);
-  const deadline = Date.now() + 1_800_000;
-  let finalizedBlock = 0n;
-  while (Date.now() < deadline) {
-    finalizedBlock = (await client.getBlock({ blockTag: 'finalized' })).number;
-    if (finalizedBlock >= value.blockNumber) break;
-    await new Promise((done) => setTimeout(done, 10_000));
-  }
-  if (finalizedBlock < value.blockNumber)
-    throw new Error(`LIVE_FINALITY_TIMEOUT: ${kind} ${hash}`);
-  await record(kind, {
+  await record(`${kind}-included`, { receipt: value });
+  pendingFinalityReceipts.push({
+    client,
+    expectedStatus: 'success',
+    kind,
     receipt: value,
-    finality: 'FINALIZED',
-    finalizedBlock,
   });
   return value;
 }
@@ -169,6 +186,7 @@ async function revertedReceipt(
   hash: Hex,
   kind: string,
 ) {
+  await record(`${kind}-submitted`, { transactionHash: hash });
   const value = await client.waitForTransactionReceipt({
     hash,
     confirmations: 1,
@@ -176,22 +194,51 @@ async function revertedReceipt(
   });
   if (value.status !== 'reverted')
     throw new Error(`LIVE_DUPLICATE_SETTLEMENT_SUCCEEDED: ${kind} ${hash}`);
-  const deadline = Date.now() + 1_800_000;
-  let finalizedBlock = 0n;
-  while (Date.now() < deadline) {
-    finalizedBlock = (await client.getBlock({ blockTag: 'finalized' })).number;
-    if (finalizedBlock >= value.blockNumber) break;
-    await new Promise((done) => setTimeout(done, 10_000));
-  }
-  if (finalizedBlock < value.blockNumber)
-    throw new Error(`LIVE_FINALITY_TIMEOUT: ${kind} ${hash}`);
-  await record(kind, {
+  await record(`${kind}-included`, {
     receipt: value,
     expectedStatus: 'reverted',
-    finality: 'FINALIZED',
-    finalizedBlock,
+  });
+  pendingFinalityReceipts.push({
+    client,
+    expectedStatus: 'reverted',
+    kind,
+    receipt: value,
   });
   return value;
+}
+async function finalizeReceipts() {
+  for (const client of [sp, ap] as const) {
+    const receipts = pendingFinalityReceipts.filter(
+      (item) => item.client === client,
+    );
+    if (receipts.length === 0) continue;
+    const requiredBlock = receipts.reduce(
+      (maximum, item) =>
+        item.receipt.blockNumber > maximum ? item.receipt.blockNumber : maximum,
+      0n,
+    );
+    const deadline = Date.now() + 1_800_000;
+    let finalizedBlock = 0n;
+    while (Date.now() < deadline) {
+      finalizedBlock = (await client.getBlock({ blockTag: 'finalized' }))
+        .number;
+      if (finalizedBlock >= requiredBlock) break;
+      await new Promise((done) => setTimeout(done, 10_000));
+    }
+    if (finalizedBlock < requiredBlock)
+      throw new Error(
+        `LIVE_FINALITY_TIMEOUT: required block ${requiredBlock.toString()}`,
+      );
+    for (const item of receipts)
+      await record(item.kind, {
+        receipt: item.receipt,
+        ...(item.expectedStatus === 'reverted'
+          ? { expectedStatus: 'reverted' }
+          : {}),
+        finality: 'FINALIZED',
+        finalizedBlock,
+      });
+  }
 }
 async function bytecode(
   client: typeof sp | typeof ap,
@@ -264,11 +311,6 @@ async function deployVault(
     owner.toLowerCase() !== deployer.address.toLowerCase()
   )
     throw new Error(`LIVE_VAULT_IDENTITY_MISMATCH: ${label}`);
-  const now = BigInt(Math.floor(Date.now() / 1000));
-  if (experimentStart <= now + 10_800n)
-    throw new Error(
-      'LIVE_SCHEDULE_NOT_PROSPECTIVE: experiment start must be at least three hours ahead',
-    );
   const scheduleStart = experimentStart + 60n;
   const depositorBefore = await client.readContract({
     address: token,
@@ -422,6 +464,28 @@ type Attestation = {
     decodedMessageBody?: { amount?: string; mintRecipient?: string };
   };
 };
+const hexSlice = (value: Hex, offset: number, length: number): Hex => {
+  const start = 2 + offset * 2;
+  const end = start + length * 2;
+  if (value.length < end) throw new Error('LIVE_ATTESTATION_MESSAGE_TRUNCATED');
+  return `0x${value.slice(start, end)}` as Hex;
+};
+const uintAt = (value: Hex, offset: number, length: number) =>
+  BigInt(hexSlice(value, offset, length));
+const addressAt = (value: Hex, offset: number) =>
+  `0x${hexSlice(value, offset, 32).slice(-40)}`.toLowerCase();
+const decodedRecipientMatches = (value: string | undefined) =>
+  value !== undefined &&
+  `0x${value.slice(-40)}`.toLowerCase() === deployer.address.toLowerCase();
+const decodeMessageBindings = (message: Hex) => {
+  const messageBodyOffset = 148;
+  return {
+    sourceDomain: Number(uintAt(message, 4, 4)),
+    destinationDomain: Number(uintAt(message, 8, 4)),
+    mintRecipient: addressAt(message, messageBodyOffset + 36),
+    amount: uintAt(message, messageBodyOffset + 68, 32),
+  };
+};
 async function waitAttestation(sourceDomain: number, burnHash: Hex) {
   const deadline = Date.now() + 7_200_000;
   while (Date.now() < deadline) {
@@ -455,6 +519,7 @@ async function bridge(input: {
   destinationClient: typeof sp | typeof ap;
   label: string;
   amountUsdcMinor: bigint;
+  resumeBurnHash?: Hex;
 }) {
   const feeResponse = await fetch(
     `${iris}/v2/burn/USDC/fees/${input.sourceDomain}/${input.destinationDomain}`,
@@ -484,40 +549,74 @@ async function bridge(input: {
     functionName: 'balanceOf',
     args: [deployer.address],
   });
-  await approve(
-    input.sourceWallet,
-    input.sourceClient,
-    input.token,
-    TOKEN_MESSENGER,
-    input.amountUsdcMinor,
-    `${input.label}-approval`,
-  );
-  const burnHash = await (input.sourceWallet as typeof sw).sendTransaction({
-    to: TOKEN_MESSENGER,
-    data: encodeFunctionData({
+  let burnHash: Hex;
+  if (input.resumeBurnHash) {
+    const transaction = await input.sourceClient.getTransaction({
+      hash: input.resumeBurnHash,
+    });
+    const decoded = decodeFunctionData({
       abi: messenger,
-      functionName: 'depositForBurn',
-      args: [
-        input.amountUsdcMinor,
-        input.destinationDomain,
-        pad(deployer.address, { size: 32 }),
-        input.token,
-        pad('0x', { size: 32 }),
-        0n,
-        2000,
-      ],
-    }),
-  });
+      data: transaction.input,
+    });
+    const args = decoded.args;
+    if (
+      transaction.from.toLowerCase() !== deployer.address.toLowerCase() ||
+      transaction.to?.toLowerCase() !== TOKEN_MESSENGER.toLowerCase() ||
+      decoded.functionName !== 'depositForBurn' ||
+      !args ||
+      args[0] !== input.amountUsdcMinor ||
+      args[1] !== input.destinationDomain ||
+      args[2].toLowerCase() !==
+        pad(deployer.address, { size: 32 }).toLowerCase() ||
+      args[3].toLowerCase() !== input.token.toLowerCase() ||
+      args[4].toLowerCase() !== pad('0x', { size: 32 }).toLowerCase() ||
+      args[5] !== 0n ||
+      args[6] !== 2000
+    )
+      throw new Error(`LIVE_RESUME_BURN_MISMATCH: ${input.label}`);
+    burnHash = input.resumeBurnHash;
+  } else {
+    await approve(
+      input.sourceWallet,
+      input.sourceClient,
+      input.token,
+      TOKEN_MESSENGER,
+      input.amountUsdcMinor,
+      `${input.label}-approval`,
+    );
+    burnHash = await (input.sourceWallet as typeof sw).sendTransaction({
+      to: TOKEN_MESSENGER,
+      data: encodeFunctionData({
+        abi: messenger,
+        functionName: 'depositForBurn',
+        args: [
+          input.amountUsdcMinor,
+          input.destinationDomain,
+          pad(deployer.address, { size: 32 }),
+          input.token,
+          pad('0x', { size: 32 }),
+          0n,
+          2000,
+        ],
+      }),
+    });
+  }
   await receipt(input.sourceClient, burnHash, `${input.label}-burn`);
   const attestation = await waitAttestation(input.sourceDomain, burnHash);
+  const messageBindings = decodeMessageBindings(attestation.message);
   if (
     Number(attestation.decodedMessage?.sourceDomain) !== input.sourceDomain ||
     Number(attestation.decodedMessage?.destinationDomain) !==
       input.destinationDomain ||
     BigInt(attestation.decodedMessage?.decodedMessageBody?.amount ?? '-1') !==
       input.amountUsdcMinor ||
-    attestation.decodedMessage?.decodedMessageBody?.mintRecipient?.toLowerCase() !==
-      pad(deployer.address, { size: 32 }).toLowerCase()
+    !decodedRecipientMatches(
+      attestation.decodedMessage?.decodedMessageBody?.mintRecipient,
+    ) ||
+    messageBindings.sourceDomain !== input.sourceDomain ||
+    messageBindings.destinationDomain !== input.destinationDomain ||
+    messageBindings.amount !== input.amountUsdcMinor ||
+    messageBindings.mintRecipient !== deployer.address.toLowerCase()
   )
     throw new Error(`LIVE_ATTESTATION_BINDING_MISMATCH: ${input.label}`);
   const messageIdentity = keccak256(attestation.message);
@@ -638,6 +737,7 @@ const outbound = await bridge({
   destinationClient: ap,
   label: 'sepolia-to-arc',
   amountUsdcMinor: outboundTransferAmount,
+  ...(resumeOutboundBurnHash ? { resumeBurnHash: resumeOutboundBurnHash } : {}),
 });
 const arcAliasBlock = await ap.getBlockNumber();
 const [arcDeployerNative, arcDeployerUsdc] = await Promise.all([
@@ -677,6 +777,7 @@ const inbound = await bridge({
   label: 'arc-to-sepolia',
   amountUsdcMinor: returnTransferAmount,
 });
+await finalizeReceipts();
 console.log(
   JSON.stringify({
     status: 'PASS',

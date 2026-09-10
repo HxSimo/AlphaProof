@@ -1,0 +1,1 @@
+{"kind":"sepolia-frozen-yield-schedule","payload":{"experimentStart":"1789032156","frozenBeforeExperimentStart":true,"scheduleEnd":"1789118616","scheduleStart":"1789032216","vault":"0xe5d75b3186f1cef2a9c7a44de5755c03540383ef","yieldBudget":"100000"}}

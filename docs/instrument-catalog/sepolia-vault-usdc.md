@@ -1,15 +1,15 @@
 # Instrument fact sheet — sepolia-vault-usdc
 
-Adapted from the authoritative instrument-fact-sheet template. Version 0.3.0.
+Adapted from the authoritative instrument-fact-sheet template. Version 0.5.1.
 
 ## Status
 
-- Verification: `TO_VERIFY`; disabled.
-- Environment and chain: ethereum-sepolia; see `config/v1/networks.json` for documented identity. RPC verification outstanding.
-- Contract address and code/version evidence: unresolved (`null`); no deployment claimed.
-- Asset and decimals: official Sepolia USDC candidate `0x1c7d4b196cb0c7b01d743fbc6116a902379c7238`, 6 decimals; matching-chain bytecode remains unverified.
-- Date checked and official sources: source review 2026-09-09; no on-chain check. https://developers.circle.com/stablecoins/usdc-contract-addresses; https://eips.ethereum.org/EIPS/eip-4626
-- Adapter and manifest versions: demo-vault-ethereum-sepolia 1.0.0; manifest 0.3.0.
+- Verification: `VERIFIED_FOR_TESTNET`; adapter enabled only for testnet evidence.
+- Environment and chain: ethereum-sepolia, chain `11155111`; finalized RPC and pinned historical reads passed.
+- Contract address and code/version evidence: `0x054e385a6e5e6e5f438f99ea139e8a06af0f4eb8`; code hash `0x564bfa8ffe631dfb8a0b5049df6886cd4a4ed854c6400087952175189bbb916e`.
+- Asset and decimals: Sepolia USDC `0x1c7d4b196cb0c7b01d743fbc6116a902379c7238`, 6 decimals, verified at the finalized deployment block.
+- Date checked and official sources: 2026-09-10; sources are listed in the live evidence index.
+- Adapter and manifest versions: demo-vault-ethereum-sepolia 1.0.0; manifest 0.5.1.
 
 ## Economic mechanics
 
@@ -37,19 +37,19 @@ Adapted from the authoritative instrument-fact-sheet template. Version 0.3.0.
 - Execution reads/quotes: Deploy or select an ERC-4626 test USDC vault. Archive deployment bytecode/address, admin powers and decimals. Publish finite funded test-yield budget/schedule before X. Record actual deposit/withdraw test-token receipts and limits/rounding fixtures; no commercial APY claim.
 - Indexed sources: optional analytics only, with indexing block and lag.
 - Block/hash/freshness: chain-specific fixed block and raw inputs; no last-price fallback.
-- Raw responses archived: required before activation; none captured in M0.
-- Historical access: TO_VERIFY.
+- Raw responses archived: retained under `.local-evidence/m5/raw/keccak256` and indexed in `docs/evidence/m5-live-index.json`.
+- Historical access: pinned deployment-block header, token/vault bytecode and decimals read passed.
 - Valuation/liquidation: distinct mark and net recoverable USDC values; quotes do not mutate cash.
 
 ## Test evidence
 
 - Unit/fixture: Foundry validates finite funding, pre-start schedule, linear vesting, immutable schedule, all three capital amounts, floor/ceiling rounding and local round trip.
-- Live deposit/withdraw, deployment, bytecode and gas: implemented by `pnpm test:live:testnet`; not run because the credential gate is unavailable.
-- Latest evidence links/hashes: none; `verification.evidence` is empty.
+- Live deposit/withdraw, deployment, bytecode and gas: finalized credentialed round trip passed.
+- Latest evidence: `docs/evidence/m5-live-index.json`, keccak256 `0xd425cac12d0d28839cd245fb3f08d90a1993bec39bc22b6dc12fc83369a71527`.
 
 ## Activation decision
 
-- Enabled profiles: none.
+- Enabled profiles: none; the instrument gate is enabled for testnet evidence but the containing profile still has M6 blockers.
 - Locked assumptions: no auto funding; prospective receipt; separated provenance; same global capital across chains.
-- Remaining blockers: actual Sepolia deployment and finalized bytecode, schedule funding, deposit and withdrawal evidence from the M5 runbook.
+- Remaining blockers: none for this M5 instrument gate; testnet provenance remains permanently ineligible for real capital.
 - Decision: ADR-0013. New manifest/profile version before X; never rewrite an experiment.
