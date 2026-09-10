@@ -1,6 +1,6 @@
 # Instrument fact sheet — sepolia-vault-usdc
 
-Adapted from the authoritative instrument-fact-sheet template. Version 0.5.1.
+Adapted from the authoritative instrument-fact-sheet template. Version 0.6.0.
 
 ## Status
 
@@ -9,7 +9,7 @@ Adapted from the authoritative instrument-fact-sheet template. Version 0.5.1.
 - Contract address and code/version evidence: `0x054e385a6e5e6e5f438f99ea139e8a06af0f4eb8`; code hash `0x564bfa8ffe631dfb8a0b5049df6886cd4a4ed854c6400087952175189bbb916e`.
 - Asset and decimals: Sepolia USDC `0x1c7d4b196cb0c7b01d743fbc6116a902379c7238`, 6 decimals, verified at the finalized deployment block.
 - Date checked and official sources: 2026-09-10; sources are listed in the live evidence index.
-- Adapter and manifest versions: demo-vault-ethereum-sepolia 1.0.0; manifest 0.5.1.
+- Adapter and manifest versions: demo-vault-ethereum-sepolia 1.0.0; manifest 0.6.0.
 
 ## Economic mechanics
 
@@ -17,14 +17,14 @@ Adapted from the authoritative instrument-fact-sheet template. Version 0.5.1.
 - Deposit/input assets: USDC; no borrowing or leverage.
 - Position/share representation: ERC-4626 shares with explicit conversion and rounding.
 - Yield source and accrual: repository `FiniteYieldVault` accepts one finite test-USDC budget and immutable linear schedule before X. Unvested budget is excluded from `totalAssets`. This is test mechanics, not an APY.
-- Fees and rounding: capture applicable gas and protocol fees once; integer units, floor outputs/ceil obligations with retained remainder. Calibration outstanding.
-- Entry limits/capacity: local contract exposes synchronous ERC-4626 previews/max methods; live balance, bytecode and gas remain `TO_VERIFY`.
-- Exit mechanics/blocked states: synchronous redeem/withdraw is implemented and locally tested; actual Sepolia exit evidence is absent.
+- Fees and rounding: the vault bytecode charges no protocol fee; retained live receipts record transaction gas. Integer units use floor outputs and ceil obligations with retained remainder. The testnet gas-to-USDC economic ratio remains explicitly synthetic.
+- Entry limits/capacity: synchronous ERC-4626 previews/max methods are covered in Foundry. A finalized 1 USDC live deposit passed; capacity beyond observed test amounts is not claimed.
+- Exit mechanics/blocked states: synchronous redeem passed in the finalized Sepolia round trip. Future availability is not inferred from that receipt.
 - Amount-dependent effects: each capital size has separate costs, limits and quotes.
 
 ## Risk and dependency map
 
-- Contracts/admin/upgrade powers: immutable asset and schedule owner; schedule can be frozen once and cannot be changed. Contract is not upgradeable. Actual deployment identity remains `TO_VERIFY`.
+- Contracts/admin/upgrade powers: immutable asset and schedule owner; schedule can be frozen once and cannot be changed. Contract is not upgradeable. Deployment address, runtime code and owner reads are retained in M5 evidence.
 - Underlying protocol: poa-demo; common protocol exposure aggregates across instruments/chains.
 - Asset/depeg exposure: USDC; canonical USDC accounting does not reveal USDC/USD losses.
 - Liquidity: cash availability or protocol withdrawal capacity; no assumption of virtual ownership on-chain.
@@ -49,7 +49,7 @@ Adapted from the authoritative instrument-fact-sheet template. Version 0.5.1.
 
 ## Activation decision
 
-- Enabled profiles: none; the instrument gate is enabled for testnet evidence but the containing profile still has M6 blockers.
+- Enabled profiles: none; the instrument gate is verified for testnet evidence, while the containing profile remains disabled by its explicit profile gate and `archive-storage`.
 - Locked assumptions: no auto funding; prospective receipt; separated provenance; same global capital across chains.
 - Remaining blockers: none for this M5 instrument gate; testnet provenance remains permanently ineligible for real capital.
 - Decision: ADR-0013. New manifest/profile version before X; never rewrite an experiment.

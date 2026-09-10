@@ -1,6 +1,6 @@
 # Instrument fact sheet — arc-test-cash-usdc
 
-Adapted from the authoritative instrument-fact-sheet template. Version 0.5.1.
+Adapted from the authoritative instrument-fact-sheet template. Version 0.6.0.
 
 ## Status
 
@@ -9,7 +9,7 @@ Adapted from the authoritative instrument-fact-sheet template. Version 0.5.1.
 - Contract address and code/version evidence: `0x3600000000000000000000000000000000000000`; code hash `0xc9987bd3af6b26a030951faa7eacc017b68343aeedf3ce5fe68f821c4b93939d`.
 - Asset and decimals: USDC, 6-decimal ERC-20 interface and 18-decimal native view of one economic balance.
 - Date checked and official sources: 2026-09-10; sources are listed in the live evidence index.
-- Adapter and manifest versions: cash-arc-testnet 1.0.0; manifest 0.5.1.
+- Adapter and manifest versions: cash-arc-testnet 1.0.0; manifest 0.6.0.
 
 ## Economic mechanics
 

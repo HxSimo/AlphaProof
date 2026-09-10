@@ -49,6 +49,12 @@ export const ERROR_CODES = [
   'QUOTA_EXCEEDED',
   'PAYLOAD_TOO_LARGE',
   'JOB_LEASE_LOST',
+  'COMMITMENT_INVALID',
+  'BATCH_CONTINUITY',
+  'PUBLICATION_REORGED',
+  'EXPORT_INCOMPLETE',
+  'VERSION_DRIFT',
+  'PROVENANCE_SPLICE',
 ] as const;
 export type ErrorCode = (typeof ERROR_CODES)[number];
 export class PoaError extends Error {

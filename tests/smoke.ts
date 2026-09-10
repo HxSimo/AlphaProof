@@ -28,7 +28,8 @@ assert.ok(
 );
 for (const profile of data.profiles)
   assert.ok(html.includes(profile.resultProvenance));
-assert.ok(html.includes('External profiles remain closed'));
+assert.ok(html.includes('CANONICAL READ-ONLY DASHBOARD'));
+assert.ok(html.includes('No canonical demo experiment is configured'));
 console.log(
-  'PASS: API database readiness, validated disabled catalog, web renders API hash/provenance/limitations',
+  'PASS: API database readiness, validated disabled catalog, web renders canonical hash/provenance and explicit missing-dashboard state',
 );

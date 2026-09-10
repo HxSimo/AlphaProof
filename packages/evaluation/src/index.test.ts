@@ -6,7 +6,7 @@ import {
   createScenarioCheckpoint,
   makeReferences,
 } from '@poa/valuation';
-import { evaluateScenario, replayM4 } from './index.js';
+import { evaluateEligibility, evaluateScenario, replayM4 } from './index.js';
 
 it('reports descriptive drawdown, fixed-reference availability and one correlated policy sample', () => {
   const at0 = '2026-09-09T10:00:00.000Z';
@@ -95,4 +95,50 @@ it('reports descriptive drawdown, fixed-reference availability and one correlate
       expectedEvaluation: evaluation,
     }).evaluation.evaluationHash,
   ).toBe(evaluation.evaluationHash);
+});
+
+it.each([
+  ['HISTORICAL_REPLAY', 'ETHEREUM_MAINNET_FORWARD'],
+  ['SYNTHETIC_TEST', 'ETHEREUM_MAINNET_FORWARD'],
+  ['CROSS_CHAIN_TESTNET', 'CROSS_CHAIN_TESTNET'],
+  ['MIXED_DIAGNOSTIC', 'MIXED_DIAGNOSTIC'],
+] as const)(
+  'excludes %s before otherwise-passing criteria',
+  (provenance, profile) => {
+    const receipt = evaluateEligibility({
+      experimentId: 'eligibility-experiment',
+      scenarioId: 'capital-1k',
+      policyHash: contentHash('policy'),
+      checkpointHash: contentHash('checkpoint'),
+      resultProvenance: provenance,
+      networkProfile: profile,
+      operationalStatus: 'COMPLIANT',
+      economicStatus: 'CRITERIA_MET',
+      statisticalStatus: 'CRITERION_MET',
+      statisticalMethodVersion: '1.0.0',
+    });
+    expect(receipt.overallStatus).toBe('NOT_ELIGIBLE_FOR_REAL_CAPITAL');
+    expect(receipt.reasonCodes[0]).toBe(`PROVENANCE_${provenance}`);
+    expect(receipt.automaticFundingEnabled).toBe(false);
+  },
+);
+
+it('keeps compliance, economics and disabled inference separate', () => {
+  const receipt = evaluateEligibility({
+    experimentId: 'eligibility-experiment',
+    scenarioId: 'capital-1k',
+    policyHash: contentHash('policy'),
+    checkpointHash: contentHash('checkpoint'),
+    resultProvenance: 'FORWARD_SHADOW',
+    networkProfile: 'ETHEREUM_MAINNET_FORWARD',
+    operationalStatus: 'COMPLIANT',
+    economicStatus: 'CRITERIA_MET',
+    statisticalStatus: 'NOT_ASSESSED',
+    statisticalMethodVersion: null,
+  });
+  expect(receipt.operationalStatus).toBe('COMPLIANT');
+  expect(receipt.economicStatus).toBe('CRITERIA_MET');
+  expect(receipt.statisticalStatus).toBe('NOT_ASSESSED');
+  expect(receipt.overallStatus).toBe('INSUFFICIENT_EVIDENCE');
+  expect(receipt.reasonCodes).toContain('INFERENCE_DISABLED');
 });

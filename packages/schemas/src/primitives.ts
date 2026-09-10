@@ -84,3 +84,6 @@ export const Allocation = z
           'Allocation must be unique and sorted by networkId/instrumentId',
       });
   });
+
+export type NetworkProfileData = z.infer<typeof NetworkProfile>;
+export type ProvenanceData = z.infer<typeof Provenance>;

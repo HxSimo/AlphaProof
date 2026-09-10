@@ -3,11 +3,14 @@ import {
   M4ReplayBundle,
   ScenarioCheckpoint,
   ScenarioEvaluation,
+  EvaluationReceipt,
   type CheckpointPortfolioData,
   type DescriptivePortfolioMetricsData,
   type M4ReplayBundleData,
   type ScenarioCheckpointData,
   type ScenarioEvaluationData,
+  type NetworkProfileData,
+  type ProvenanceData,
 } from '@poa/schemas';
 import {
   checkpointPortfolio,
@@ -113,6 +116,91 @@ export function evaluateScenario(
   return ScenarioEvaluation.parse({
     ...body,
     evaluationHash: contentHash(body),
+  });
+}
+
+export interface EligibilityInput {
+  experimentId: string;
+  scenarioId: string;
+  policyHash: `0x${string}`;
+  checkpointHash: `0x${string}`;
+  resultProvenance: ProvenanceData;
+  networkProfile: NetworkProfileData;
+  operationalStatus: 'COMPLIANT' | 'VIOLATION' | 'UNASSESSABLE';
+  economicStatus: 'CRITERIA_MET' | 'CRITERIA_NOT_MET' | 'UNASSESSABLE';
+  statisticalStatus:
+    | 'NOT_ASSESSED'
+    | 'INSUFFICIENT_EVIDENCE'
+    | 'CRITERION_NOT_MET'
+    | 'CRITERION_MET';
+  statisticalMethodVersion: string | null;
+  dimensionReasonCodes?: readonly string[];
+  supersedesHash?: `0x${string}` | null;
+}
+
+/** Applies the immutable provenance exclusion before any policy criterion.
+ * The result describes eligibility only; it never authorizes funding. */
+export function evaluateEligibility(input: EligibilityInput) {
+  const excluded =
+    input.resultProvenance !== 'FORWARD_SHADOW' ||
+    !['ETHEREUM_MAINNET_FORWARD', 'CROSS_CHAIN_MAINNET_FORWARD'].includes(
+      input.networkProfile,
+    );
+  let overallStatus:
+    | 'NOT_ELIGIBLE_FOR_REAL_CAPITAL'
+    | 'UNASSESSABLE'
+    | 'CRITERIA_NOT_MET'
+    | 'INSUFFICIENT_EVIDENCE'
+    | 'ELIGIBLE_UNDER_POLICY';
+  const reasons = [...(input.dimensionReasonCodes ?? [])];
+  if (excluded) {
+    overallStatus = 'NOT_ELIGIBLE_FOR_REAL_CAPITAL';
+    reasons.unshift(`PROVENANCE_${input.resultProvenance}`);
+  } else if (
+    input.operationalStatus === 'UNASSESSABLE' ||
+    input.economicStatus === 'UNASSESSABLE'
+  ) {
+    overallStatus = 'UNASSESSABLE';
+    reasons.unshift('REQUIRED_EVIDENCE_UNASSESSABLE');
+  } else if (
+    input.operationalStatus === 'VIOLATION' ||
+    input.economicStatus === 'CRITERIA_NOT_MET' ||
+    input.statisticalStatus === 'CRITERION_NOT_MET'
+  ) {
+    overallStatus = 'CRITERIA_NOT_MET';
+    reasons.unshift('POLICY_CRITERION_NOT_MET');
+  } else if (
+    !input.statisticalMethodVersion ||
+    input.statisticalStatus === 'NOT_ASSESSED' ||
+    input.statisticalStatus === 'INSUFFICIENT_EVIDENCE'
+  ) {
+    overallStatus = 'INSUFFICIENT_EVIDENCE';
+    reasons.unshift(
+      input.statisticalStatus === 'NOT_ASSESSED'
+        ? 'INFERENCE_DISABLED'
+        : 'INSUFFICIENT_STATISTICAL_EVIDENCE',
+    );
+  } else {
+    overallStatus = 'ELIGIBLE_UNDER_POLICY';
+    reasons.unshift('ALL_FROZEN_CRITERIA_MET');
+  }
+  reasons.push('AUTOMATIC_FUNDING_DISABLED');
+  return EvaluationReceipt.parse({
+    schemaVersion: 'proof-of-alpha/evaluation-receipt/v1',
+    experimentId: input.experimentId,
+    scenarioId: input.scenarioId,
+    policyHash: input.policyHash,
+    checkpointHash: input.checkpointHash,
+    resultProvenance: input.resultProvenance,
+    networkProfile: input.networkProfile,
+    operationalStatus: input.operationalStatus,
+    economicStatus: input.economicStatus,
+    statisticalStatus: input.statisticalStatus,
+    statisticalMethodVersion: input.statisticalMethodVersion,
+    overallStatus,
+    reasonCodes: [...new Set(reasons)],
+    supersedesHash: input.supersedesHash ?? null,
+    automaticFundingEnabled: false,
   });
 }
 

@@ -31,7 +31,7 @@ export async function migrate(
       'CREATE TABLE IF NOT EXISTS schema_migrations (name text PRIMARY KEY, content_hash text NOT NULL, applied_at timestamptz NOT NULL DEFAULT clock_timestamp())',
     );
     for (const name of readdirSync(directory)
-      .filter((x) => /^\d{4}_[a-z_]+\.sql$/.test(x))
+      .filter((x) => /^\d{4}_[a-z0-9_]+\.sql$/.test(x))
       .sort()) {
       const sql = readFileSync(join(directory, name), 'utf8');
       const hash = contentHash(sql);
@@ -79,3 +79,4 @@ export async function archiveConfiguration(pool: Pool, payload: unknown) {
 export type { Pool } from 'pg';
 export * from './m3.js';
 export * from './m5.js';
+export * from './m6.js';

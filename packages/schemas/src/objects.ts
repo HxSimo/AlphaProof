@@ -488,3 +488,7 @@ export const CommitmentBatch = z
           'Confirmed publication requires finalized transaction evidence',
       });
   });
+
+export type EvaluationReceiptData = z.infer<typeof EvaluationReceipt>;
+export type AuditEventData = z.infer<typeof AuditEvent>;
+export type CommitmentBatchData = z.infer<typeof CommitmentBatch>;

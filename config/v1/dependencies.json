@@ -1,6 +1,6 @@
 {
   "schemaVersion": "proof-of-alpha/dependency-manifest/v1",
-  "manifestVersion": "0.5.1",
+  "manifestVersion": "0.6.0",
   "dependencies": [
     {
       "dependencyId": "rpc-ethereum-mainnet",
@@ -875,10 +875,10 @@
       "instructions": "Build/test registry in M6, deploy to Arc Testnet and archive address, code hash, publisher role, chain ID, finality, source and deployment receipt. Bind EIP-712 domain to this exact registry; publication must preserve batch continuity and old roots.",
       "fixture": "tests/fixtures/dependency-unavailable.json",
       "verification": {
-        "status": "TO_VERIFY",
-        "enabled": false,
-        "checkedAt": null,
-        "checkedBy": null,
+        "status": "VERIFIED_FOR_TESTNET",
+        "enabled": true,
+        "checkedAt": "2026-09-10T05:52:17.744Z",
+        "checkedBy": "codex-m6-registry-evidence-verifier",
         "requiredEvidence": [
           "OFFICIAL_SOURCE",
           "DEPLOYMENT",
@@ -886,10 +886,39 @@
           "FINALITY",
           "REPLAY"
         ],
-        "evidence": [],
-        "blockers": [
-          "Build/test registry in M6, deploy to Arc Testnet and archive address, code hash, publisher role, chain ID, finality, source and deployment receipt. Bind EIP-712 domain to this exact registry; publication must preserve batch continuity and old roots."
-        ]
+        "evidence": [
+          {
+            "kind": "OFFICIAL_SOURCE",
+            "uri": "docs/evidence/m6-registry-publication.json",
+            "contentHash": "0x8ef4b6ae9635e609ca84859b14709ea1745860002e6ecfc125023575d7c9d625",
+            "observedAt": "2026-09-10T05:52:17.744Z"
+          },
+          {
+            "kind": "DEPLOYMENT",
+            "uri": "docs/evidence/m6-registry-publication.json",
+            "contentHash": "0x8ef4b6ae9635e609ca84859b14709ea1745860002e6ecfc125023575d7c9d625",
+            "observedAt": "2026-09-10T05:52:17.744Z"
+          },
+          {
+            "kind": "ONCHAIN_CODE",
+            "uri": "docs/evidence/m6-registry-publication.json",
+            "contentHash": "0x8ef4b6ae9635e609ca84859b14709ea1745860002e6ecfc125023575d7c9d625",
+            "observedAt": "2026-09-10T05:52:17.744Z"
+          },
+          {
+            "kind": "FINALITY",
+            "uri": "docs/evidence/m6-registry-publication.json",
+            "contentHash": "0x8ef4b6ae9635e609ca84859b14709ea1745860002e6ecfc125023575d7c9d625",
+            "observedAt": "2026-09-10T05:52:17.744Z"
+          },
+          {
+            "kind": "REPLAY",
+            "uri": "docs/evidence/m6-registry-publication.json",
+            "contentHash": "0x8ef4b6ae9635e609ca84859b14709ea1745860002e6ecfc125023575d7c9d625",
+            "observedAt": "2026-09-10T05:52:17.744Z"
+          }
+        ],
+        "blockers": []
       }
     },
     {

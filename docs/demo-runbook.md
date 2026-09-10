@@ -10,6 +10,16 @@
 
 If the API is unavailable, the page displays that state instead of cached or synthetic success. Stop the stack with `docker compose down`; preserve the volume.
 
+## M6 proof and dashboard review (about four minutes)
+
+1. Run `pnpm test:e2e:export-proof`. Explain that a fresh process reloads the complete versioned export, recomputes the selected corrected eligibility receipt and verifies every audit event, leaf, proof, batch link and registry receipt.
+2. Open `docs/evidence/m6-registry-publication.json`. Show Arc Testnet registry `0xc391ad7e4826a2c1ecc56e845098b8c1b580eebd`, the separate owner/publisher accounts and the finalized sequence-16 publication. Then open `m6-registry-publication-v1.json` to show that the original publication remains available.
+3. With an Arc archive RPC configured, run `POA_RUN_LIVE_M6_VERIFY=1 pnpm test:evidence:m6`. Show the registry head with two predecessor-linked batches. State that this is a post-execution integrity anchor, not independent proof that receipt preceded execution.
+4. Start API/web against a canonical database experiment selected by `POA_DEMO_EXPERIMENT_ID`. Show the three capital cards as correlated policy views (`n = 1`), both references, mark/liquidation, cash, positions, transit, blocked value, costs and drawdown. Show compliance, economics, statistics and overall eligibility separately.
+5. Open the evidence and limitations panels. Synthetic/testnet/replay/mixed output is excluded before criteria, inference remains disabled, and automatic funding remains off. If canonical backend data is absent, retain the explicit unavailable screen.
+
+The exact commands, evidence hashes and interrupted-publication resume variables are in [the M6 runbook](runbooks/m6-export-proof.md). Production object-store retention remains `TO_VERIFY`, so the external profiles remain disabled.
+
 ## M7 target narrative and data plan
 
 | Evidence stream          | Source and start                                                                         | Allowed claim                                                           | Prohibited use                                                                     |

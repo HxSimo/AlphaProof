@@ -7,13 +7,14 @@ import {
   AgentVersionRegistration,
   ExperimentCreateRequest,
 } from '@poa/schemas';
-import type { ExperimentRepository } from '@poa/storage';
+import type { ExperimentRepository, M6Repository } from '@poa/storage';
 
 export function createServer(
   checkDatabase: () => Promise<void> = async () => {
     throw new Error('Database not configured');
   },
   repository?: ExperimentRepository,
+  m6Repository?: M6Repository,
 ) {
   const config = catalog();
   const app = Fastify({ bodyLimit: 65536, logger: false });
@@ -58,7 +59,7 @@ export function createServer(
       message: 'Request could not be completed',
     });
   });
-  app.get('/health/live', async () => ({ status: 'ok', milestone: 'M4' }));
+  app.get('/health/live', async () => ({ status: 'ok', milestone: 'M6' }));
   app.get('/health/ready', async (_, reply) => {
     try {
       await checkDatabase();
@@ -70,6 +71,34 @@ export function createServer(
     }
   });
   app.get('/v1/profiles', async () => config);
+  if (m6Repository) {
+    app.get<{ Params: { experimentId: string } }>(
+      '/v1/experiments/:experimentId/eligibility',
+      async (request) =>
+        m6Repository.getEligibility(request.params.experimentId),
+    );
+    app.get<{ Params: { experimentId: string } }>(
+      '/v1/experiments/:experimentId/audit-events',
+      async (request) => m6Repository.auditEvents(request.params.experimentId),
+    );
+    app.get<{ Params: { experimentId: string } }>(
+      '/v1/experiments/:experimentId/commitments',
+      async (request) => m6Repository.getBatches(request.params.experimentId),
+    );
+    app.get<{ Params: { batchId: string; leafHash: string } }>(
+      '/v1/commitments/:batchId/proofs/:leafHash',
+      async (request) =>
+        m6Repository.getProof(request.params.batchId, request.params.leafHash),
+    );
+    app.get<{ Params: { exportId: string } }>(
+      '/v1/exports/:exportId',
+      async (request) => m6Repository.getExport(request.params.exportId),
+    );
+    app.get<{ Params: { experimentId: string } }>(
+      '/v1/experiments/:experimentId/dashboard',
+      async (request) => m6Repository.dashboard(request.params.experimentId),
+    );
+  }
   if (!repository) return app;
   app.post('/v1/agents', async (request, reply) =>
     reply

@@ -1,6 +1,6 @@
 # Instrument fact sheet — sepolia-cash-usdc
 
-Adapted from the authoritative instrument-fact-sheet template. Version 0.5.1.
+Adapted from the authoritative instrument-fact-sheet template. Version 0.6.0.
 
 ## Status
 
@@ -9,7 +9,7 @@ Adapted from the authoritative instrument-fact-sheet template. Version 0.5.1.
 - Contract address and code/version evidence: `0x1c7d4b196cb0c7b01d743fbc6116a902379c7238`; code hash `0xcd3f29e2ea9c61dadd48bfeaf8b2884b6de9dfee7bf45329452c4c33d0868ceb`.
 - Asset and decimals: USDC, 6 decimals.
 - Date checked and official sources: 2026-09-10; sources are listed in the live evidence index.
-- Adapter and manifest versions: cash-ethereum-sepolia 1.0.0; manifest 0.5.1.
+- Adapter and manifest versions: cash-ethereum-sepolia 1.0.0; manifest 0.6.0.
 
 ## Economic mechanics
 

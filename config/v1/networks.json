@@ -1,6 +1,6 @@
 {
   "schemaVersion": "proof-of-alpha/network-manifest/v1",
-  "manifestVersion": "0.5.1",
+  "manifestVersion": "0.6.0",
   "networks": [
     {
       "networkId": "ethereum-mainnet",
@@ -173,7 +173,7 @@
       ],
       "contracts": {
         "demoVault": "0xc5febf4494adfdef2f3a10e46ea8845ec60c0f93",
-        "commitmentRegistry": null
+        "commitmentRegistry": "0xc391ad7e4826a2c1ecc56e845098b8c1b580eebd"
       },
       "cctp": {
         "domain": "26",

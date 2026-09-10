@@ -1,5 +1,11 @@
 import assert from 'node:assert/strict';
-import { mkdtempSync, readFileSync, writeFileSync, rmSync } from 'node:fs';
+import {
+  mkdtempSync,
+  readFileSync,
+  readdirSync,
+  writeFileSync,
+  rmSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { createPool, migrate } from '@poa/storage';
@@ -16,11 +22,14 @@ const scoped = new URL(url);
 scoped.searchParams.set('options', `-c search_path=${schema}`);
 let pool = createPool(scoped.toString());
 const directory = mkdtempSync(join(tmpdir(), 'poa-migrations-'));
+const expectedMigrationCount = readdirSync('db/migrations').filter((name) =>
+  /^\d{4}_[a-z0-9_]+\.sql$/.test(name),
+).length;
 try {
   await Promise.all([migrate(pool), migrate(pool)]);
   assert.equal(
     (await pool.query('SELECT * FROM schema_migrations')).rowCount,
-    4,
+    expectedMigrationCount,
   );
   const results = await Promise.all(
     Array.from({ length: 8 }, () => runFoundationCheck(pool)),
@@ -65,7 +74,7 @@ try {
   );
   assert.equal(
     (await pool.query('SELECT * FROM schema_migrations')).rowCount,
-    4,
+    expectedMigrationCount,
   );
   console.log(
     'PASS: concurrent migrations; duplicate worker delivery; reconnect/restart; snapshot hash; append-only UPDATE/DELETE/TRUNCATE; migration drift; failure rollback (8 checks)',

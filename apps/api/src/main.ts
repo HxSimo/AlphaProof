@@ -3,6 +3,7 @@ import {
   createPool,
   databaseReady,
   ExperimentRepository,
+  M6Repository,
   migrate,
 } from '@poa/storage';
 import { createServer } from './server.js';
@@ -15,7 +16,11 @@ const repository = new ExperimentRepository(pool, {
   bundleHash: config.seal.bundleHash,
   allowSynthetic: process.env.POA_ENABLE_SYNTHETIC_M3 === '1',
 });
-const app = createServer(() => databaseReady(pool), repository);
+const app = createServer(
+  () => databaseReady(pool),
+  repository,
+  new M6Repository(pool),
+);
 for (const signal of ['SIGINT', 'SIGTERM'])
   process.once(signal, async () => {
     await app.close();
@@ -28,7 +33,7 @@ await app.listen({
 console.log(
   JSON.stringify({
     service: 'api',
-    milestone: 'M3',
+    milestone: 'M6',
     address: app.server.address(),
   }),
 );

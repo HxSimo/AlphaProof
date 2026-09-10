@@ -290,6 +290,23 @@ export class ExperimentRepository {
       ];
       const adapterSetHash = contentHash(adapters);
       const parserSetHash = contentHash(parserSet);
+      const registryNetwork = this.options.bundle.networks.networks.find(
+        (network) => network.networkId === profile.registryNetworkId,
+      );
+      const signingDomain =
+        profile.profileId === SYNTHETIC_PROFILE_ID
+          ? {
+              name: 'Proof of Alpha' as const,
+              version: '1' as const,
+              chainId: '31337',
+              verifyingContract: ZERO_ADDRESS,
+            }
+          : {
+              name: 'Proof of Alpha' as const,
+              version: '1' as const,
+              chainId: registryNetwork!.chainId,
+              verifyingContract: registryNetwork!.contracts.commitmentRegistry!,
+            };
       const configurationHash = contentHash({
         manifestBundleHash: this.options.bundleHash,
         profileHash,
@@ -333,12 +350,7 @@ export class ExperimentRepository {
                 sourceHash: contentHash('synthetic-m3@1.0.0'),
               },
             ],
-        signingDomain: {
-          name: 'Proof of Alpha',
-          version: '1',
-          chainId: '31337',
-          verifyingContract: ZERO_ADDRESS,
-        },
+        signingDomain,
         automaticFundingEnabled: false,
       });
       const policyHash = contentHash(policy);

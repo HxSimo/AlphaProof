@@ -20,6 +20,7 @@
     "@poa/valuation": "workspace:*",
     "@poa/evaluation": "workspace:*",
     "@poa/transfers": "workspace:*",
+    "@poa/commitments": "workspace:*",
     "pg": "8.23.0"
   }
 }
